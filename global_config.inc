@@ -1,5 +1,4 @@
 <?php
-    // Dev: Change this value everytime you add an option to this file, as well as the value in common.inc. When version in config and common.inc don't match, a warning is triggered.
 
     $config_version = "2019121201";
 
@@ -21,8 +20,14 @@
         "services"        => "services",
         "plugins"         => "plugins",
         "htdocs"          => "htdocs",
-        "var"             => "var"
+        "var"             => "var",
+        "theme"           => "refracted"
     );
+
+    $config["curenttheme"] = $config["templates"] . "/" . $config["theme"];
+    $config["passwordfile"] = $config["basedir"] . "/etc/users/htpasswd";
+    $config["adminlist"] = $config["basedir"] . "/etc/users/admin.inc";
+    $config["courselist"] = $config["basedir"] . "etc/users/courselist.php";
 
     $recorder_modules = array(
         array(
@@ -58,5 +63,28 @@
         "logs_sync" => false
     );
 
+    $languagesList = array(
+        "fr" => array(
+            "enabled" => true,
+            "file" => "francais.php",
+            "name" => "Français"
+        ),
+        "en" => array(
+            "enabled" => true,
+            "file" => "english.php",
+            "name" => "English"
+        ),
+        "nl" => array(
+            "enabled" => true,
+            "file" => "dutch.php",
+            "name" => "Dutch"
+        ),
+    );
+    include $config["lib"] . "/system.php";
+    $system = new System();
+
     include $config["lib"] . "/ffmpeg.php";
+    include $config["templates"] . "/template.class.php";
+    include $config["lib"] . "/authentification.class.php";
+
 ?>

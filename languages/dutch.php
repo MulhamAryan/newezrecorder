@@ -1,6 +1,6 @@
 <?php
     $lang = array();
-    $lang["lang"] = "Français";
+    $lang["lang"] = "English";
     $lang["title"] = "Recorder - ULB Podcast";
     $lang["netid"] = "NetID";
     $lang["password"] = "Mot de passe";
@@ -9,6 +9,4 @@
     $lang["not_in_admin_list"] = "n'est pas dans la liste des administrateurs";
     $lang["wrong_password"] = "Erreur mot de passe est incorrect!";
     $lang["no_login_found"] = "Votre NetID est incorrect !";
-    $lang["help"] = "Aide";
-    $lang["forgot_password_text"] = "forgot password text";
 ?>
