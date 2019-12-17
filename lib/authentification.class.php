@@ -93,5 +93,32 @@
                 return false;
             }
         }
+
+        function getLoggedUser(){
+            if(!empty($_SESSION["user_login"]))
+                return $_SESSION["user_login"];
+            else
+                return false;
+        }
+
+        function getUserCourses($user = ""){
+            global $logger;
+            global $config;
+
+            include $config["courselist"];
+
+            if(empty($user))
+                $user = $this->getLoggedUser();
+
+            if(!isset($course)) {
+                //$logger->log(EventType::RECORDER_LOGIN, LogLevel::WARNING, "Could not get any course from file $config["courselist"]. Did the server pushed the course list?", array('auth_file_user_courselist_get'));
+                return array();
+            }
+
+            if(isset($course[$user]))
+                return $course[$user];
+
+            return array();
+        }
     }
 ?>

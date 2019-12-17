@@ -38,8 +38,11 @@
             "quality"   => array(
                 "hd"        => "10.0.2.102:554/1",
                 "sd"        => "10.0.2.102:554/2"
-            )
+            ),
+            "icon"      => "film",
+            "tempname"  => "Camera"
         ),
+
         array(
             "enabled"   => true,
             "module"    => "sliderecord",
@@ -48,8 +51,11 @@
             "quality"   => array(
                 "hd"        => "10.0.2.102:554/1",
                 "sd"        => "10.0.2.102:554/2"
-            )
+            ),
+            "icon"      => "image",
+            "tempname"  => "Slide"
         )
+
     );
 
     $plugins = array(
@@ -86,5 +92,5 @@
     include $config["lib"] . "/ffmpeg.php";
     include $config["templates"] . "/template.class.php";
     include $config["lib"] . "/authentification.class.php";
-
+    $auth = new authentification();
 ?>

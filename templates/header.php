@@ -11,9 +11,8 @@
 
     <script src="<?php echo $config["curenttheme"];?>/js/jquery.js"></script>
     <script src="<?php echo $config["curenttheme"];?>/js/ezrecorder.js"></script>
-    <script>
+    <script src="<?php echo $config["curenttheme"];?>/js/player/hls.js"></script>
 
-    </script>
     <link rel="stylesheet" href="<?php echo $config["curenttheme"];?>/css/bootstrap.min.css">
     <link rel="stylesheet" href="<?php echo $config["curenttheme"];?>/css/fontawesome/css/all.min.css">
     <link rel="stylesheet" href="<?php echo $config["curenttheme"];?>/css/ezrecorder.css">

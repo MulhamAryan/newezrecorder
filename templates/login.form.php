@@ -28,7 +28,7 @@
                     <label for="userpassword"><i class="fas fa-lock"></i> <?php echo $lang["password"];?> : </label>
                     <input type="password" name="userpassword" autofocus="false"  autocapitalize="off" autocorrect="off" tabindex="2" id="userpassword" placeholder="<?php echo $lang["password"];?>">
                 </div>
-                <input type="submit" name="userlogin" value="<?php echo $lang["login"];?>">
+                <input type="submit" name="userlogin" value="<?php echo $lang["login"];?>" class="btn btn-success">
                 <br><br>
                 <div class="float-left">
                     <i class="fas fa-globe-europe"></i>
