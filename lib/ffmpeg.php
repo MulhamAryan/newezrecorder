@@ -23,10 +23,10 @@
             $this->isRecording = array();
             $this->isRecordingFile = "recording.json";
             $this->folders = array(
-                "local_processing" => $this->recordingDir . "local_processing/",
-                "trash"            => $this->recordingDir . "trash/",
-                "upload_to_server" => $this->recordingDir . "upload_to_server/",
-                "upload_ok"        => $this->recordingDir . "upload_ok/"
+                "local_processing" => $this->recordingDir . $config["local_processing"]. "/",
+                "trash"            => $this->recordingDir . $config["trash"] . "/",
+                "upload_to_server" => $this->recordingDir . $config["upload_to_server"] . "/",
+                "upload_ok"        => $this->recordingDir . $config["upload_ok"]. "/"
             );
 
             $this->assetDir = $this->folders["local_processing"] . $this->asset . "/";
@@ -59,6 +59,7 @@
 
                     // Generate an start recording commands with different qualities
                     $this->recordingLaunch($this->asset, $recorderInfo["type"], $recorderInfo["module"], $qualityKey, $qualityValue);
+                    sleep(1);
                 }
 
                 // Generate _cut_list.txt file for every recorder and quality
@@ -67,8 +68,7 @@
             }
 
             file_put_contents($this->assetDir . "/" . $this->isRecordingFile, json_encode($this->isRecording), LOCK_EX);
-            //$this->setStatus("open", "status"); // set status open for record
-            //$this->setStatus("init", "status");
+            sleep(2);
         }
 
         function generateConcatFile(){
@@ -121,7 +121,6 @@
             $ffmpeg_log = $this->assetDir . $module;
 
             file_put_contents($ffmpeg_log . "/$quality/init.pid", "", FILE_APPEND | LOCK_EX);
-
             file_put_contents($ffmpeg_log . "/$quality/ffmpeg.log", "", FILE_APPEND | LOCK_EX);
         }
 
@@ -159,14 +158,10 @@
             if(in_array($status, $validate)){
                 $recordingFileInfo = $this->getIsRecFileContent();
                 foreach ($recordingFileInfo as $recorder=>$quality){
-                    foreach ($quality as $recordingQuality) {
-                        $dir = $this->assetDir . $recorder . "/" . $recordingQuality;
-                        $this->cutListFile($dir,$status . ":" . time() . ":" . date("Y_m_d_H\hi\ms", time()));
-                    }
+                     $dir = $this->assetDir . $recorder;
+                     $this->cutListFile($dir,$status . ":" . time() . ":" . date("Y_m_d_H\hi\ms", time()));
                     file_put_contents($this->assetDir . $recorder . "/init.log", "-- [" . date("d/m/Y - H:i:s",time()) ."] : Setting $status for the recording" . PHP_EOL, FILE_APPEND | LOCK_EX);
                 }
-                //$this->setStatus("recording","status");
-                //$this->setStatus("recording","rec_status");
             }
         }
 
@@ -180,10 +175,6 @@
         function killPid($pidFile){
             $pid = $this->getFfmpegPid($pidFile);
             posix_kill($pid,9);
-        }
-
-        function setStatus($status,$file){
-            $this->editFile($this->module_path . "/var/" . $file,$status);
         }
 
         function mergeRecordPerFile($recorder,$quality){
@@ -215,7 +206,7 @@
                 $counter = 1;
             }
             else{
-                $cmd = "ls -Art $dir | grep .ts | tail -1"; // GET Last ffmpegmovie*.ts file
+                $cmd = "ls -Art $dir/hd | grep .ts | tail -1"; // GET Last ffmpegmovie*.ts file
                 exec($cmd, $cmdout);
                 preg_match_all('!\d+!', $cmdout[0], $matches);
                 $counter = $matches[0][0];

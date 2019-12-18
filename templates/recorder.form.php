@@ -1,3 +1,8 @@
+<script>
+    function offline_alert() {
+        window.alert("Warning: This action could not be executed.\n\n Verify that you are still connected to PODC and refresh the page in your web browser (ctrl+R / cmd+R) before retrying.");
+    }
+</script>
 <div class="recorder">
     <div class="indiv">
         <form method="post" action="?action=init_recording">
@@ -73,7 +78,7 @@
             <hr>
             <div class="float-right">
                 <input type="submit" name="init_record" value="<?php echo $lang["continue"];?>" class="btn btn-success">
-                <input type="submit" name="cancel" value="<?php echo $lang["cancel"];?>" class="btn btn-secondary">
+                <input type="reset" name="cancel" value="<?php echo $lang["cancel"];?>" class="btn btn-secondary" onclick="location.href='?action=logout';">
             </div>
             <div class="float-left">
                 <label for="streaming"><input type="checkbox" id="streaming" name="streaming" value="1"> <?php echo $lang["enable_streaming"];?></label>

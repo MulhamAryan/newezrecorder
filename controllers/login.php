@@ -8,7 +8,7 @@
             $login = $auth->checkUserInfo($usernetid,$userpassword);
             if($login["success"] == 1){
                 $success = 1;
-                $_SESSION["user_login"] = $login["success"];
+                $_SESSION["user_login"] = $login["user_login"];
                 $_SESSION["recorder_logged"] = true;
                 header("LOCATION:?");
             }

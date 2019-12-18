@@ -106,7 +106,6 @@
             global $config;
 
             include $config["courselist"];
-
             if(empty($user))
                 $user = $this->getLoggedUser();
 
@@ -119,6 +118,15 @@
                 return $course[$user];
 
             return array();
+        }
+
+        function getUserInfo($netid,$info){
+            global $config;
+            $users = array();
+
+            require_once $config["courselist"];
+
+            return $users[$netid][$info];
         }
     }
 ?>

@@ -26,4 +26,8 @@
     $lang["pause_recording"] = "Interrompre l'enregistrement";
     $lang["stop_recording"] = "Arrêter l'enregistrement";
     $lang["cam_position"] = "Position <br> caméra";
+    $lang["auto_stop_actived"] = "Options automatiques activés";
+    $lang["auto_stop_at"] = "l'enregistrement s'arrêtera dans : ";
+    $lang["auto_stop_to"] = "l'enregistrement s'arrêtera à : ";
+    $lang["and"] = "et";
 ?>

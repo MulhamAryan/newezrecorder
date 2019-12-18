@@ -18,25 +18,22 @@
         $action = $input['action'];
     }
 
-    include $config["templates"] . "/header.php";
     if($auth->userIsLoged() == true) {
         switch ($action) {
             case $action:
-                if (file_exists($config["basedir"] . $config["controllers"] . "/" . $action . ".php"))
-                    include $config["basedir"] . $config["controllers"] . "/" . $action . ".php";
+                if (file_exists($config["ajax"] . "/" . $action . ".php"))
+                    include $config["ajax"] . "/" . $action . ".php";
                 else
-                    include $config["basedir"] . $config["controllers"] . "/index.php";
+                    return false;
                 break;
 
             default:
-                include $config["basedir"] . $config["controllers"] . "/index.php";
+                return false;
                 break;
 
         }
     }
     else{
-        include $config["basedir"] . $config["controllers"] . "/login.php";
+        return false;
     }
-    include $config["basedir"] . $config["templates"] . "/footer.php";
-
 ?>

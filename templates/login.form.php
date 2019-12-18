@@ -3,7 +3,7 @@
         <div class="fields">
             <div class="divlogo">
                 <span class="ez">EZ</span>
-                <span class="recorder">recorder</span>
+                <span class="recorderlogo">recorder</span>
             </div>
             <hr>
             <?php

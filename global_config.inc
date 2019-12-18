@@ -5,7 +5,12 @@
     $config = array(
         "classroom"       => "firstnewgeneration",
         "recorderip"      => "127.0.0.1",
+        "recorderurl"     => "http://localhost/newezrecorder",
         "recordermaindir" => "/Users/mulham/Movies/",
+        "local_processing"=> "local_processing",
+        "trash"           => "trash",
+        "upload_to_server"=> "upload_to_server",
+        "upload_ok"       => "upload_ok",
         "basedir"         => __DIR__ . "/",
         "webbasedir"      => "/Library/WebServer/Documents/ezrecorder/",
         "userweb"         => "_www",
@@ -14,6 +19,7 @@
         "phpcli"          => "/usr/bin/php",
         "ffmpegcli"       => "/usr/local/bin/ffmpeg",
         "controllers"     => "controllers",
+        "ajaxdir"         => "ajax",
         "lib"             => "lib",
         "templates"       => "templates",
         "languages"       => "languages",
@@ -21,13 +27,16 @@
         "plugins"         => "plugins",
         "htdocs"          => "htdocs",
         "var"             => "var",
-        "theme"           => "refracted"
+        "theme"           => "refracted",
+        "statusfile"      => "recording.json"
+
     );
 
     $config["curenttheme"] = $config["templates"] . "/" . $config["theme"];
     $config["passwordfile"] = $config["basedir"] . "/etc/users/htpasswd";
     $config["adminlist"] = $config["basedir"] . "/etc/users/admin.inc";
     $config["courselist"] = $config["basedir"] . "etc/users/courselist.php";
+    $config["ajax"] = $config["basedir"] . "/" . $config["controllers"] . "/" . $config["ajaxdir"];
 
     $recorder_modules = array(
         array(
@@ -36,8 +45,8 @@
             "ip"        => "192.168.100.103",
             "type"      => "rtsp",
             "quality"   => array(
-                "hd"        => "10.0.2.102:554/1",
-                "sd"        => "10.0.2.102:554/2"
+                "hd"        => "10.0.2.102:554/1"
+                //"sd"        => "10.0.2.102:554/2"
             ),
             "icon"      => "film",
             "tempname"  => "Camera"
@@ -49,8 +58,8 @@
             "ip"        => "192.168.100.103",
             "type"      => "rtsp",
             "quality"   => array(
-                "hd"        => "10.0.2.102:554/1",
-                "sd"        => "10.0.2.102:554/2"
+                "hd"        => "10.0.2.102:554/1"
+                //"sd"        => "10.0.2.102:554/2"
             ),
             "icon"      => "image",
             "tempname"  => "Slide"
