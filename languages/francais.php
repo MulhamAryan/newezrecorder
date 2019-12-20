@@ -30,4 +30,10 @@
     $lang["auto_stop_at"] = "l'enregistrement s'arrêtera dans : ";
     $lang["auto_stop_to"] = "l'enregistrement s'arrêtera à : ";
     $lang["and"] = "et";
+    $lang["stop_recording_message"] = "Êtes-vous sûr de vouloir arrêter l'enregistrement ?";
+    $lang["where_publish"] = "Choisissez où voulez-vous publier votre enregistrement ?";
+    $lang["delete_record"] = "Supprimer l'enregistrement";
+    $lang["publish_in_public"] = "Publier dans l'album publique";
+    $lang["publish_in_private"] = "Publier dans l'album privé";
+
 ?>

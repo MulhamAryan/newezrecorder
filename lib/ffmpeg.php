@@ -1,6 +1,23 @@
 <?php
-    class ffmpeg{
-        function __construct($recorderarray = array(),$asset)
+    class ffmpeg extends System {
+
+        private $recordingDir;
+        private $folders;
+        private $asset;
+        private $thread_queue;
+        private $recorderArray;
+        private $isRecordingFile;
+        private $isRecording;
+        private $common_movie_name;
+        private $logofile;
+        private $ffmpeg_cli;
+        private $logo;
+        private $limit_duration;
+        private $type;
+        private $assetDir;
+        private $recordExtenstion;
+
+        function __construct($recorderarray = array(), $asset)
         {
             global $config;
 
@@ -17,6 +34,7 @@
             $this->exists_video = 0; // Check if video exists
             $this->limit_duration = " -t 12:00:00 "; // Max limit duration of one record
             $this->common_movie_name = "ffmpegmovie";
+            $this->recordExtenstion = ".mov";
             $this->recorderNumber = 0;
             $this->recorderArray = $recorderarray;
             $this->recorderInfo = array();
@@ -142,7 +160,7 @@
 
                 // RTSP FFMPEG Command line
                 $cmd = $this->ffmpeg_cli . $this->limit_duration . $this->type . " " . $insertLogo . " -vcodec copy -acodec aac -ac 1 -hls_time 3 -hls_list_size 0 -hls_wrap 0 -flags output_corrupt -start_number 1 $recording_direcory/$this->common_movie_name.m3u8 > $ffmpeg_log 2>&1 < /dev/null & echo $! > $pid_file";
-                exec($cmd, $output);
+                $this->bashCommandLine($cmd);
 
                 file_put_contents($log_file, "-- [" . date("d/m/Y - H:i:s",time()) ."] : Starting FFMPEG recording for $type $qualityKey successfully" . PHP_EOL, FILE_APPEND | LOCK_EX);
                 //Set the number of recorder after launch
@@ -160,7 +178,7 @@
                 foreach ($recordingFileInfo as $recorder=>$quality){
                      $dir = $this->assetDir . $recorder;
                      $this->cutListFile($dir,$status . ":" . time() . ":" . date("Y_m_d_H\hi\ms", time()));
-                    file_put_contents($this->assetDir . $recorder . "/init.log", "-- [" . date("d/m/Y - H:i:s",time()) ."] : Setting $status for the recording" . PHP_EOL, FILE_APPEND | LOCK_EX);
+                     file_put_contents($this->assetDir . $recorder . "/init.log", "-- [" . date("d/m/Y - H:i:s",time()) ."] : Setting $status for the recording" . PHP_EOL, FILE_APPEND | LOCK_EX);
                 }
             }
         }
@@ -177,12 +195,42 @@
             posix_kill($pid,9);
         }
 
+        function stopRecording(){
+            $recordingFileInfo = $this->getIsRecFileContent();
+            foreach ($recordingFileInfo as $recorder=>$quality){
+                $dir = $this->assetDir . $recorder;
+                foreach ($quality as $qlt) {
+                    $qltDir = $dir . "/" . $qlt;
+                    file_put_contents($this->assetDir . $recorder . "/init.log", "-- [" . date("d/m/Y - H:i:s",time()) ."] : Setting stop for $qlt recording" . PHP_EOL, FILE_APPEND | LOCK_EX);
+                    $this->killPid($qltDir . "/init.pid");
+                }
+            }
+        }
         function mergeRecordPerFile($recorder,$quality){
             file_put_contents($this->assetDir . $recorder . "/init.log", "-- [" . date("d/m/Y - H:i:s",time()) ."] : Starting concat merge video for $recorder and $quality" . PHP_EOL, FILE_APPEND | LOCK_EX);
             $recorderDir = $this->assetDir . $recorder;
-            $ffmpeg_merge_cmd = $this->ffmpeg_cli . " -f concat -safe 0 -i " . $recorderDir . "/" . $quality . "concat.txt -c copy " . $recorderDir . "/" . $quality . $recorder .".mov >" . $recorderDir . "/" . $quality . "merge_movies.log 2>&1";
-            exec($ffmpeg_merge_cmd, $merge_cmd_output);
+            $ffmpeg_merge_cmd = $this->ffmpeg_cli . " -f concat -safe 0 -i " . $recorderDir . "/" . $quality . "concat.txt -c copy " . $recorderDir . "/" . $quality . $recorder . $this->recordExtenstion . " >" . $recorderDir . "/" . $quality . "merge_movies.log 2>&1";
+            $this->bashCommandLine($ffmpeg_merge_cmd);
             file_put_contents($this->assetDir . $recorder . "/init.log", "-- [" . date("d/m/Y - H:i:s",time()) ."] : End concat merge video for $recorder and $quality" . PHP_EOL, FILE_APPEND | LOCK_EX);
+            // This is a temporary patch until we develop the new concept of recording on EZRendrer, EZAdmin and EZManager
+            if($recorder == "camrecord")
+                $file_name = "cam" . $this->recordExtenstion;
+
+            elseif($recorder == "sliderecord")
+                $file_name = "slide" . $this->recordExtenstion;
+
+            else
+                $file_name = "cam" . $this->recordExtenstion;
+
+            rename($recorderDir . "/" . $quality . $recorder . $this->recordExtenstion, $this->assetDir . "/" . $file_name);
+            if(file_exists($this->assetDir . "/" . $file_name)){
+                $message = "Successfully file merged and found -> $file_name";
+            }
+            else{
+                $message = "Error file $file_name not found please check merge log for more details.";
+            }
+            //END OF THE PATCH
+            file_put_contents($this->assetDir . "/post_process.log", "-- [" . date("d/m/Y - H:i:s",time()) ."] : $message " . PHP_EOL, FILE_APPEND | LOCK_EX);
         }
 
         function mergeAllRecord(){
@@ -199,6 +247,10 @@
             return $recordingFileInfo;
         }
 
+        function getRecordingExtension()
+        {
+            return $this->recordExtenstion;
+        }
         // This function is used to modify the _cut_list.txt file
         function cutListFile($dir,$txt){
             $getType = explode(":",$txt);

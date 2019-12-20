@@ -51,21 +51,20 @@
 
             // END OF THE PATCH
             $metaInfo = array(
-                "course_name" => $course,
-                "origin" => $config["classroom"],
-                "title" => $title,
-                "description" => $description,
-                "record_type" => $record_type,
-                "moderation" => false,
-                "author" => $auth->getUserInfo($netid,"full_name"),
-                "netid" => $netid,
-                "record_date" => $date,
-                "streaming" => false,
-                "super_highres" => false
+                "course_name" => "" . $course . "",
+                "origin" => "" . $config["classroom"] . "",
+                "title" => "" . $title . "",
+                "description" => " " . $description . "",
+                "record_type" => "" . $record_type . "",
+                "moderation" => "false",
+                "author" => '' . $auth->getUserInfo($netid,"full_name") . '',
+                "netid" => "" . $netid . "",
+                "record_date" => "" . $date . "",
+                "streaming" => "false",
+                "super_highres" => "false"
             );
             $system->recStatus($recStatusArray);
-            $system->generateMetadataFile($metaInfo);
-            file_put_contents($config["recordermaindir"] . "/" . $config["local_processing"] . "/" . $asset . "/_metadata.xml",$metaInfo,LOCK_EX);
+            $system->generateMetadataFile($metaInfo,$asset);
         }
 
         header("LOCATION:?");

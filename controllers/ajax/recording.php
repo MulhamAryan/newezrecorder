@@ -1,4 +1,5 @@
 <?php
+    // This file need a review to be improved !
     $status = $system->removeCharacters($input["status"]);
     $nowrecording = json_decode($system->getRecordingStatus(),true);
     $posibilites = array("init","play","pause","resume","stop");
@@ -16,6 +17,7 @@
             }
             else{
                 $status = "play";
+                $nowrecording["start_time"] = time();
             }
         }
         elseif($status == "pause"){
@@ -23,6 +25,7 @@
         }
         elseif($status == "stop"){
             $status = "stop";
+            $nowrecording["stop_time"] = time();
         }
         else{
             $status = "init";
@@ -34,15 +37,21 @@
             "course" => $nowrecording["course"],
             "recording_status" => $status,
             "init_time" => $nowrecording["init_time"],
-            "start_time" => time(),
+            "start_time" => $nowrecording["start_time"],
             "auto_stop" => $nowrecording["auto_stop"],
             "stop_time" => $nowrecording["stop_time"],
             "publishin" => $nowrecording["publishin"],
             "recorders" => $nowrecording["recorders"]
         );
+
         $newArrayValue = json_encode($newArrayValue);
         file_put_contents($recordingStatus, $newArrayValue . PHP_EOL, LOCK_EX);
-        $ffmpeg->setMediaStatus($status);
+
+        if($status){
+            $ffmpeg->setMediaStatus($status);
+            if($status == "stop")
+                $ffmpeg->stopRecording();
+        }
         return true;
     }
     else

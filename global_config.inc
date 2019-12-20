@@ -4,6 +4,7 @@
 
     $config = array(
         "classroom"       => "firstnewgeneration",
+        "username"        => "_www",
         "recorderip"      => "127.0.0.1",
         "recorderurl"     => "http://localhost/newezrecorder",
         "recordermaindir" => "/Users/mulham/Movies/",
@@ -12,12 +13,15 @@
         "upload_to_server"=> "upload_to_server",
         "upload_ok"       => "upload_ok",
         "basedir"         => __DIR__ . "/",
+        "clidir"          => "cli",
+        "clipostprocess"  => "cli_post_process.php",
         "webbasedir"      => "/Library/WebServer/Documents/ezrecorder/",
         "userweb"         => "_www",
         "ezmanagerurl"    => "https://podcast.ulb.ac.be/ezmanager/",
         "adminmail"       => "podcast.tech@ulb.ac.be",
         "phpcli"          => "/usr/bin/php",
         "ffmpegcli"       => "/usr/local/bin/ffmpeg",
+        "downloadprotocol"=> "rsync",
         "controllers"     => "controllers",
         "ajaxdir"         => "ajax",
         "lib"             => "lib",
@@ -28,8 +32,8 @@
         "htdocs"          => "htdocs",
         "var"             => "var",
         "theme"           => "refracted",
-        "statusfile"      => "recording.json"
-
+        "statusfile"      => "recording.json",
+        "metadata"        => "metadata.xml"
     );
 
     $config["curenttheme"] = $config["templates"] . "/" . $config["theme"];
@@ -37,16 +41,16 @@
     $config["adminlist"] = $config["basedir"] . "/etc/users/admin.inc";
     $config["courselist"] = $config["basedir"] . "etc/users/courselist.php";
     $config["ajax"] = $config["basedir"] . "/" . $config["controllers"] . "/" . $config["ajaxdir"];
-
+    $config["submit_to_server"] = $config["ezmanagerurl"] . "recorder/index.php";
     $recorder_modules = array(
         array(
             "enabled"   => true,
-            "module"    => "camrecord",
+            "module"    => "camrecord", //This is the first version don't change `camrecord`
             "ip"        => "192.168.100.103",
             "type"      => "rtsp",
             "quality"   => array(
                 "hd"        => "10.0.2.102:554/1"
-                //"sd"        => "10.0.2.102:554/2"
+                //"sd"        => "10.0.2.102:554/2" // First version please don't enable this option and don't add more than on quality (Will be available in next versions)
             ),
             "icon"      => "film",
             "tempname"  => "Camera"
@@ -54,12 +58,12 @@
 
         array(
             "enabled"   => true,
-            "module"    => "sliderecord",
+            "module"    => "sliderecord",  //This is the first version don't change `sliderecord`
             "ip"        => "192.168.100.103",
             "type"      => "rtsp",
             "quality"   => array(
                 "hd"        => "10.0.2.102:554/1"
-                //"sd"        => "10.0.2.102:554/2"
+                //"sd"        => "10.0.2.102:554/2"// First version please don't enable this option and don't add more than on quality (Will be available in next versions)
             ),
             "icon"      => "image",
             "tempname"  => "Slide"
