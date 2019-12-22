@@ -17,6 +17,7 @@
         private $assetDir;
         private $recordExtenstion;
 
+
         function __construct($recorderarray = array(), $asset)
         {
             global $config;
