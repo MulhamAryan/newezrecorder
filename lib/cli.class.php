@@ -80,13 +80,13 @@
                 "record_date" => $record_date,
                 "course_name" => $this->recordingInfo["course"],
                 "php_cli" => $config["phpcli"],
-                "metadata_file" => "/Users/mulham/Movies/upload_to_server/2019_12_20_09h32_PODC-I-000/metadata.xml"
+                "metadata_file" => $assetDir ."/metadata.xml"
             );
             if($camEnabled == true){
                 $cam_info = array(
                     "ip" => $config["recorderip"],
                     "protocol" => $config["downloadprotocol"],
-                    "username" => $config["username"],
+                    "username" => $config["apacheusername"],
                     "filename" => $assetDir . "/cam" . ffmpeg::getRecordingExtension()
                 );
                 $downloadRequestArray["cam_info"] = serialize($cam_info);
@@ -96,7 +96,7 @@
                 $slide_info = array(
                     "ip" => $config["recorderip"],
                     "protocol" => $config["downloadprotocol"],
-                    "username" => $config["username"],
+                    "username" => $config["apacheusername"],
                     "filename" => $assetDir . "/slide" . ffmpeg::getRecordingExtension()
                 );
                 $downloadRequestArray["slide_info"] = serialize($slide_info);

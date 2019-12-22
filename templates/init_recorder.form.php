@@ -1,5 +1,5 @@
 <script>
-    function stop_recording(fnct,asset){
+    function stop_recording(fnct){
         if(window.confirm("<?php echo $lang["stop_recording_message"];?>")) {
             $.ajax({
                 type: 'GET',
@@ -7,7 +7,7 @@
                 cache: false,
                 timeout: 10000,
                 error: function(){
-                    alert("Warning: This action could not be executed.\n\nVerify that you are still connected to PODC and refresh the page in your web browser (ctrl+R / cmd+R) before retrying.");
+                    alert("<?php echo $lang["execution_failed"];?>");
                 },
                 success: function () {
                     $("#recordingNow").fadeOut();
@@ -30,9 +30,9 @@
         <div id="recordingPublish" style="<?php echo $displayPublishOptions;?>">
             <b><i class="fas fa-share-square"></i> <?php echo $lang["where_publish"];?></b>
             <hr>
-            <div class="publish publishDelete"><i class="fas fa-times-circle"></i><br><?php echo $lang["delete_record"]; ?></div>
-            <div class="publish publishPrivate"><i class="fas fa-user-shield"></i><br><?php echo $lang["publish_in_private"]; ?></div>
-            <div class="publish publishPublic"><i class="fas fa-user-friends"></i><br><?php echo $lang["publish_in_public"]; ?></div>
+            <div class="publish publishDelete" onclick="if(confirm('<?php echo $lang["confirm_delete_record"];?>')) publishRecord('trash');"><i class="fas fa-times-circle"></i><br><?php echo $lang["delete_record"]; ?></div>
+            <div class="publish publishPrivate" onclick="publishRecord('private');"><i class="fas fa-user-shield"></i><br><?php echo $lang["publish_in_private"]; ?></div>
+            <div class="publish publishPublic" onclick="publishRecord('public');"><i class="fas fa-user-friends"></i><br><?php echo $lang["publish_in_public"]; ?></div>
         </div>
         <div id="recordingNow" style="<?php echo $hideRecordingScreen;?>">
             <?php
@@ -84,9 +84,9 @@
 
                     }
                     ?>
-                <div <?php echo $start;?> class="recordingbutton" id="play" onclick="recordStatus('play','<?php echo $asset;?>');"><i class="fas fa-play-circle"></i><?php echo $lang["start_recording"];?></div>
-                <div <?php echo $pause;?> class="recordingbutton" id="pause" onclick="recordStatus('pause','<?php echo $asset;?>');"><i class="fas fa-pause-circle"></i><?php echo $lang["pause_recording"];?></div>
-                <div class="recordingbutton" id="stop" onclick="stop_recording('stop','<?php echo $asset;?>');"><i class="fas fa-stop-circle"></i><?php echo $lang["stop_recording"];?></div>
+                <div <?php echo $start;?> class="recordingbutton" id="play" onclick="recordStatus('play');"><i class="fas fa-play-circle"></i><?php echo $lang["start_recording"];?></div>
+                <div <?php echo $pause;?> class="recordingbutton" id="pause" onclick="recordStatus('pause');"><i class="fas fa-pause-circle"></i><?php echo $lang["pause_recording"];?></div>
+                <div class="recordingbutton" id="stop" onclick="stop_recording('stop');"><i class="fas fa-stop-circle"></i><?php echo $lang["stop_recording"];?></div>
                 <div class="recordingbutton" id="camposition" rel="<?php echo $asset;?>"><i class="fas fa-arrows-alt"></i><?php echo $lang["cam_position"];?></div>
             </div>
         </div>

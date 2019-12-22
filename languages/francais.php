@@ -35,5 +35,7 @@
     $lang["delete_record"] = "Supprimer l'enregistrement";
     $lang["publish_in_public"] = "Publier dans l'album publique";
     $lang["publish_in_private"] = "Publier dans l'album privé";
-
+    $lang["execution_failed"] = "Attention: Cette action n'a pas pu être éxécutée.Vérifiez que vous êtes toujours connecté au réseau wifi 'PODC' et rafraichissez la page de votre navigateur (ctrl+R / cmd+R) avant de réessayer.";
+    $lang["confirm_delete_record"] = "Annuler l\'enregistrement? Attention : opération destructive non-réversible!";
+    $lang["loading_recording"] = "Préparation de l'enregistrement <br>Veuillez patienter quelques secondes ...";
 ?>

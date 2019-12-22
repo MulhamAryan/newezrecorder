@@ -4,7 +4,7 @@
 
     $config = array(
         "classroom"       => "firstnewgeneration",
-        "username"        => "_www",
+        "apacheusername"  => "_www",
         "recorderip"      => "127.0.0.1",
         "recorderurl"     => "http://localhost/newezrecorder",
         "recordermaindir" => "/Users/mulham/Movies/",

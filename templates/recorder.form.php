@@ -1,11 +1,13 @@
-<script>
-    function offline_alert() {
-        window.alert("Warning: This action could not be executed.\n\n Verify that you are still connected to PODC and refresh the page in your web browser (ctrl+R / cmd+R) before retrying.");
-    }
-</script>
 <div class="recorder">
     <div class="indiv">
-        <form method="post" action="?action=init_recording">
+        <div class="loadingRecording" id="loadingRecording">
+            <div class="progress">
+                <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: 100%"></div>
+            </div>
+            <br>
+            <?php echo $lang["loading_recording"]; ?>
+        </div>
+        <form method="post" action="?action=init_recording" id="initRecorder">
             <div class="form-group">
                 <label for="course"><i class="fab fa-discourse"></i> Cours</label>
                 <?php
