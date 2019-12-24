@@ -18,15 +18,33 @@
     }
 </script>
 <?php
-    if($recordingstatus == "stop") {
+    if($recordingstatus == "stop")
         $hideRecordingScreen = "display:none;";
-    }
-    else{
+    else
         $displayPublishOptions = "display:none;";
-    }
 ?>
 <div class="recorder">
     <div class="indiv" style="text-align: center">
+        <div id="finalized" style="display: none">
+            <hr>
+            <div id="deleted_record" style="display: none">
+                <?php
+                    echo $lang["record_deleted"];
+                ?>
+            </div>
+            <div id="published_in_private" style="display: none">
+                <?php
+                echo $lang["published_in_private"];
+                ?>
+            </div>
+            <div id="published_in_public" style="display: none">
+                <?php
+                echo $lang["published_in_public"];
+                ?>
+            </div>
+            <a href="index.php"><? echo $lang["start_new"];?></a>
+            <hr>
+        </div>
         <div id="recordingPublish" style="<?php echo $displayPublishOptions;?>">
             <b><i class="fas fa-share-square"></i> <?php echo $lang["where_publish"];?></b>
             <hr>
@@ -36,20 +54,20 @@
         </div>
         <div id="recordingNow" style="<?php echo $hideRecordingScreen;?>">
             <?php
-            $recorderNum = count($recorderInfo);
-            if($recorderNum != 1){
-                $class = "float-left";
-            }
-            foreach ($recorderInfo as $recorderInfoKey => $recorderInfoValue){
-                ?>
-                <div class="<?php echo $class;?>" style="width: 50%; margin: auto; text-align: center">
-                    <b><i class="fas fa-<?php echo $recorderInfoValue["icon"];?>"></i> <?php echo $recorderInfoValue["tempname"];?></b>
-                    <hr>
-                    <video id="video<?php echo $recorderNum;?>" width="100%" height="100%" muted autoplay="" style="border:1px solid #fff"></video>
-                </div>
-            <?php
-                $recorderNum--;
-            }
+                $recorderNum = count($recorderInfo);
+                if($recorderNum != 1){
+                    $class = "float-left";
+                }
+                foreach ($recorderInfo as $recorderInfoKey => $recorderInfoValue){
+                    ?>
+                    <div class="<?php echo $class;?>" style="width: 50%; margin: auto; text-align: center">
+                        <b><i class="fas fa-<?php echo $recorderInfoValue["icon"];?>"></i> <?php echo $recorderInfoValue["tempname"];?></b>
+                        <hr>
+                        <video id="video<?php echo $recorderNum;?>" width="100%" height="100%" muted autoplay="" style="border:1px solid #fff"></video>
+                    </div>
+                <?php
+                    $recorderNum--;
+                }
             ?>
             <div class="clearfix"></div>
             <script src="<?php echo $config["curenttheme"];?>/js/player/player.js"></script>

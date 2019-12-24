@@ -38,4 +38,8 @@
     $lang["execution_failed"] = "Attention: Cette action n'a pas pu être éxécutée.Vérifiez que vous êtes toujours connecté au réseau wifi 'PODC' et rafraichissez la page de votre navigateur (ctrl+R / cmd+R) avant de réessayer.";
     $lang["confirm_delete_record"] = "Annuler l\'enregistrement? Attention : opération destructive non-réversible!";
     $lang["loading_recording"] = "Préparation de l'enregistrement <br>Veuillez patienter quelques secondes ...";
+    $lang["record_deleted"] = "Enregistrement supprimé.";
+    $lang["published_in_private"] = "Enregistrement sauvegardé et en cours de traitement.<br/>Il sera ajouté à votre album privé une fois l'opération terminée.";
+    $lang["published_in_public"] = "Enregistrement sauvegardé et en cours de traitement.<br/>Il sera ajouté à votre album public une fois l'opération terminée.";
+    $lang["start_new"] = "Commencer un nouvel enregistrement";
 ?>

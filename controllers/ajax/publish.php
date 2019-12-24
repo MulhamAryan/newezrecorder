@@ -1,5 +1,5 @@
 <?php
-    /*$pubishin = $system->removeCharacters($input["pubishin"]);
+    $pubishin = $system->removeCharacters($input["pubishin"]);
     $nowrecording = json_decode($system->getRecordingStatus(),true);
     $posibilites = array("trash","private","public");
 
@@ -41,6 +41,6 @@
     }
     else{
         return "can_t_publish_recording_" . $nowrecording;
-    }*/
+    }
 ?>
 
