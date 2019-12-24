@@ -83,7 +83,7 @@
         }
 
         function createDownloadRequestFile($array){
-            
+
         }
 
         function requestUpload($server_url, $recorder_array){
@@ -110,5 +110,25 @@
             //fputs(STDERR, "curl result: $res", 2000);
 
             return $res;
+        }
+
+        function is_process_running($pid) {
+            if (!isset($pid) || $pid == '' || $pid == 0)
+                return false;
+            exec("ps $pid", $output, $result);
+            return count($output) >= 2;
+        }
+
+        function get_pid_from_file($filePath) {
+            if(!file_exists($filePath))
+                return false;
+
+            $handle = fopen($filePath, "r");
+            if($handle == false)
+                return false;
+
+            $pid = fgets($handle);
+            fclose($handle);
+            return $pid;
         }
     }

@@ -1,5 +1,4 @@
 <?php
-require_once(__DIR__."/../global_config.inc");
 
 /**
 To Improve:
@@ -75,7 +74,7 @@ class SQLiteDatabase
      */
     public function __construct($database_file)
     {
-        global $debug_mode;
+        global $debug;
 
         $this->database_file = $database_file;
 
@@ -87,7 +86,7 @@ class SQLiteDatabase
             $this->create_database();
         }
 
-        if($debug_mode)
+        if($debug["debug_mode"])
             $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
         self::$statements = [
@@ -143,6 +142,7 @@ class SQLiteDatabase
             'user_info_write'                     => 'REPLACE INTO '.self::USER_INFO_TABLE_NAME.'(user_id, full_name, email) VALUES (:user_id, :full_name, :email)',
         ];
     }
+
     /**
      * Class destructor
      */
@@ -150,6 +150,7 @@ class SQLiteDatabase
     {
         $this->db = null;
     }
+
     /**
      * Rename database file to *.backup.<date>
      * Return true if success (or file does not exists)
@@ -158,8 +159,10 @@ class SQLiteDatabase
     {
         if(file_exists($this->database_file))
             return rename($this->database_file, $this->database_file . '.backup.' . date("Y-m-d.H-i-s"));
+
         return true;
     }
+
     /**
      * Return true if database seems to be usable
      */
@@ -169,12 +172,15 @@ class SQLiteDatabase
             $result = $this->db->query('SELECT version FROM db_version');
             if(!$result)
                 return false;
+
             //check if our current version matches
             $versionArray = $result->fetch();
             if(sizeof($versionArray) < 1)
                 return false;
+
             if($versionArray[0] != self::DB_VERSION)
                 return false;
+
             // dummy query to test each table
             foreach($this->db_structure as $table_name => &$tables_def) {
                 $testQuery = "SELECT ";
@@ -185,6 +191,7 @@ class SQLiteDatabase
                         $testQuery .= ',';
                     else
                         $first = false;
+
                     $testQuery .= '`'.$column.'`';
                 }
                 $testQuery .= " FROM ".$table_name." LIMIT 1";
@@ -196,9 +203,11 @@ class SQLiteDatabase
             //something went wrong
             return false;
         }
+
         //all ok
         return true;
     }
+
     /**
      *  Create database if need be
      *  Return true if database was created
@@ -215,6 +224,7 @@ class SQLiteDatabase
                     $createTableStr .= ',';
                 else
                     $first = false;
+
                 $createTableStr .= '`'.$column.'` ' . $type;
             }
             $createTableStr .= ')';
@@ -223,18 +233,22 @@ class SQLiteDatabase
                 trigger_error("CRITICAL: Failed to create sqlite database. PDO error: " . json_encode($this->db->errorInfo()) , E_USER_ERROR);
             }
         }
+
         $this->db->query('DROP TABLE IF EXISTS db_version');
         $this->db->query('CREATE TABLE db_version(`version` VARCHAR(30))');
         $this->db->query('INSERT INTO db_version VALUES ("'.self::DB_VERSION.'")');
+
         //set AUTO INCREMENT value at first given by the server
         $starting_id = 0;
         $ok = self::get_last_log_sent($starting_id);
         if(!$ok) {
             trigger_error("Couldn't get last log sent to ezcast for db init. Using 0 as starting id");
         }
+
         if($starting_id != 0 && $starting_id != -1) {
             $this->db->query("REPLACE INTO SQLITE_SEQUENCE (name, seq) VALUES ('".self::LOG_TABLE_NAME."',$starting_id)");
         }
+
         trigger_error("Created database with starting id $starting_id - " . $this->database_file);
     }
 
@@ -292,6 +306,7 @@ class SQLiteDatabase
         foreach($sql_args as $args) {
             $statement->bindParam($args[0], $args[1]);
         }
+
         try {
             $success = $statement->execute();
             if(!$success) {
@@ -314,15 +329,17 @@ class SQLiteDatabase
     //Return last log the server knows from us. Return success of query
     public static function get_last_log_sent(&$last_id_sent)
     {
-        global $last_log_sent_get_url;
+        global $config;
 
-        $last_id_sent = file_get_contents($last_log_sent_get_url);
+        $last_id_sent = file_get_contents($config["last_log_sent_get_url"]);
+
         if($last_id_sent == false) {
             //logger may not yet be init // $this->log(EventType::LOGGER, LogLevel::ERROR, "Failed to get last log sent from $this->last_log_sent_get_url", array("RecorderLogger"));
             return false;
         }
 
         $last_id_sent = trim($last_id_sent); //server service does send line returns for some reason
+
         if(!is_numeric($last_id_sent)) {
             //logger may not yet be init // $this->log(EventType::LOGGER, LogLevel::ERROR, "Failed to get last log sent from $this->last_log_sent_get_url, invalid response: $last_id_sent", array("RecorderLogger"));
             return false;
@@ -335,13 +352,13 @@ class SQLiteDatabase
     // return ServersideLogEntry object
     public function convert_event_to_server_event($recorder_event)
     {
-        global $classroom;
+        global $config;
 
         $server_event = new ServersideLogEntry();
         $server_event->id = $recorder_event["id"];
         $server_event->asset = $recorder_event["asset"];
         $server_event->origin = "ezrecorder";
-        $server_event->asset_classroom_id = $classroom;
+        $server_event->asset_classroom_id = $config["classroom"];
         $server_event->asset_course = $recorder_event["course"];
         $server_event->asset_author = $recorder_event["author"];
         $server_event->asset_cam_slide = $recorder_event["cam_slide"];
@@ -360,7 +377,9 @@ class SQLiteDatabase
     {
         global $send_debug_logs_to_server;
         global $logger;
+
         $to_send = array();
+
 
         $where = "WHERE id > $id";
         if($send_debug_logs_to_server == false)
@@ -376,6 +395,7 @@ class SQLiteDatabase
         }
 
         $results = $statement->fetchAll(PDO::FETCH_ASSOC);
+
         foreach($results as $key => $value) {
             $server_log = $this->convert_event_to_server_event($value);
             array_push($to_send, $server_log);
@@ -400,7 +420,7 @@ class SQLiteDatabase
 
     public function logs_set_autoincrement($id)
     {
-        $PDOstatement = $this->db->query("UPDATE SQLITE_SEQUENCE SET seq = $id WHERE name = '" . RecorderLogger::LOG_TABLE_NAME . "'");
+        $PDOstatement = $this->db->query("UPDATE SQLITE_SEQUENCE SET seq = $id WHERE name = '" . self::LOG_TABLE_NAME . "'");
         return $PDOstatement != false;
     }
 
@@ -409,6 +429,7 @@ class SQLiteDatabase
         $statement = $this->db->prepare(
             'INSERT INTO '.self::LOG_TABLE_NAME.' (`event_time`, `asset`, `course`, `author`, `cam_slide`, `context`, `type_id`, `loglevel`, `message`) VALUES ('.
             "(SELECT datetime('now','localtime')), :asset, :course, :author, :camslide, :context, :type_id, :loglevel, :message)");
+
         if($statement == false) {
             print_r($this->db->errorInfo());
             return false;
@@ -422,6 +443,7 @@ class SQLiteDatabase
         $statement->bindParam(':loglevel', $log_level_integer);
         $statement->bindParam(':type_id', $type_id);
         $statement->bindParam(':message', $message);
+
         try {
             $statement->execute();
         } catch (Exception $ex) {
@@ -614,6 +636,7 @@ class SQLiteDatabase
         return true;
     }
 }
+
 class FormData
 {
     function __construct($course, $title, $description, $record_type)

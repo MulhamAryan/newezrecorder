@@ -5,7 +5,7 @@
 // example :
 // $logger->log(EventType::RECORDER_UPLOAD_TO_EZCAST, LogLevel::ERROR, "Couldn't get info from slide module. Slides will be ignored", array("cli_process_upload"), $asset);
 require_once("logger_event_type.php");
-
+require_once "logger_sync_daemon.php";
 /**
  *
  * Describes log levels. Frm PSR-3 Logger Interface. (http://www.php-fig.org/psr/psr-3/)
@@ -102,7 +102,7 @@ class ServersideLogEntry  {
     public $message = "";
 }
 
-abstract class Logger {
+ class Logger extends LoggerSyncDaemon{
 
     /* Reverted EventType array -> key: id, value: EventType
      * Filled at Logger construct.
@@ -118,7 +118,7 @@ abstract class Logger {
      */
     public static $log_level_name_by_id = false;
 
-    protected function __construct() {
+    public function __construct() {
         $this->fill_event_type_by_id();
         $this->fill_level_name_by_id();
     }
