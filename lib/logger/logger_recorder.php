@@ -62,10 +62,12 @@ class RecorderLogger extends Logger
 
     public static function get_default_asset_for_log()
     {
-        if(RecordingSession::instance() === null)
+        global $auth;
+        global $system;
+        if($auth->getLoggedUser() === null)
             return "";
         
-        $current_asset = RecordingSession::instance()->get_current_asset();
+        $current_asset = $system->getRecorderArray("asset");
         return $current_asset ? $current_asset : "";
     }
     

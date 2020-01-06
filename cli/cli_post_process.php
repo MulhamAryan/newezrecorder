@@ -1,7 +1,6 @@
 <?php
-    include "/Library/newezrecorder/global_config.inc";
+    include __DIR__ . "/../global_config.inc";
     include $config["basedir"] . $config["lib"] . "/cli.class.php";
-
 
     $asset_name = $argv[1];
     $recorder = $argv[2];

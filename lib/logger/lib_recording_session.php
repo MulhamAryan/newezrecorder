@@ -9,8 +9,8 @@
  * 
  * A user login is assimilated into a recording session. The session is created when the user login, and is destroyed when he logs out.
  * This class is used as a singleton trough the instance() function. First initialization must be done with the "lock" function
- */
-class RecordingSession
+*/
+class RecordingSessions
 {
     private static $instance = null;
     private static $session_id = null;
@@ -260,3 +260,5 @@ class RecordingSession
         return $database->session_last_request_get(self::$session_id);
     }
 }
+
+?>

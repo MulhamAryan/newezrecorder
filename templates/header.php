@@ -21,9 +21,17 @@
 <body>
     <div class="container">
         <div class="header">
-            <div class="logo">
-                <a href="http://www.ulb.ac.be"><img src="<?php echo $config["curenttheme"];?>/img/logo-ulb.png"/></a>
-                <a href="refracted"><img src="<?php echo $config["curenttheme"];?>/img/logoezrecorder.png"></a>
+            <div class="float-left">
+                <div class="logo">
+                    <img src="<?php echo $config["curenttheme"];?>/img/logo-ulb.png"/>
+                </div>
+                <div class="logo">
+                    <span class="ez">EZ</span><span class="recorderword">recorder</span>
+                </div>
             </div>
+            <div class="float-right">
+                <a href="?action=help" target="_blank"><span class="btn btn-secondary big_help_btn"><i class="fas fa-info-circle"></i> <?php echo $lang["need_help"]; ?></span></a>
+                <a href="?action=help" target="_blank"><span class="btn btn-secondary small_help_btn"><i class="fas fa-info-circle"></i></span></a>
+            </div>
+            <div class="clearfix"></div>
         </div>
-        <div id="global">

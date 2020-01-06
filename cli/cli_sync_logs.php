@@ -1,6 +1,6 @@
 <?php
 
-include "/Library/newezrecorder/global_config.inc";
+include __DIR__ . "/../global_config.inc";
 
 
 Logger::$print_logs = true;

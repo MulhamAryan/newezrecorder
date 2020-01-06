@@ -21,6 +21,7 @@
         {
             global $config;
             global $lang;
+            global $session;
 
             $admin = array();
             $users = array();
@@ -71,7 +72,9 @@
                             $ret['full_name'] = $users[$user_login]['full_name'];
                             $ret['email'] = $users[$user_login]['email'];
                             $ret["success"] = 1;
-                            $ret["session_key"] = md5(microtime().rand());
+                            //$ret["session_key"] = md5(microtime().rand());
+                            $session->setSession($user_login,$real_login);
+                            echo $session->getSessionId();
                             return $ret;
                         }
                     }

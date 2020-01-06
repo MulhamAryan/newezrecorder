@@ -1,0 +1,8 @@
+{
+    "title":"ptzoptics_cam_management",
+    "description":"This module is designed to control an IP camera supporting PTZ CAM.",
+    "plugin_type":"camcontrollers",
+    "plugin_name":"ptz",
+    "config_file":"config.inc",
+    "library_file":"library.php"
+}

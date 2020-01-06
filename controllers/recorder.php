@@ -2,11 +2,22 @@
     if($auth->userIsLoged()){
         if($system->getRecordingStatus() == false) {
             $coursesList = $auth->getUserCourses();
+            $netID = $auth->getLoggedUser();
 
-            // Add check options for title and description and last selected options
-            //Check if there is a disabled recorder to insert the full menu
+            $lastTitle           = $session->getLastRecordingInfo($netID)->title;
+            $lastCourse          = $session->getLastRecordingInfo($netID)->course;
+            $lastRecorder        = $session->getLastRecordingInfo($netID)->record_type;
+            $lastDescription     = $session->getLastRecordingInfo($netID)->description;
+            $lastAdvancedOptions = $session->getLastRecordingInfo($netID)->advanced_options;
+            $lastAutoStopTime    = $session->getLastRecordingInfo($netID)->auto_stop_time;
+            $lastAutoPublishIn   = $session->getLastRecordingInfo($netID)->publishin;
+
+            if(empty($lastAutoStopTime))
+                $lastAutoStopTime = "02:00";
 
             $disableFullList = 0;
+            if(empty($lastRecorder))
+                $lastRecorder = "all";
 
             foreach ($recorder_modules as $recorderCheckKey => $recorderCheckValue) {
                 if ($recorderCheckValue["enabled"] == false) {
@@ -14,7 +25,7 @@
                 }
             }
 
-            include $config["basedir"] . "/" . $config["templates"] . "/recorder.form.php";
+            include $tmp->loadFile("recorder.form.php");
         }
         else{
             $recordingInfo = $system->getRecordingStatus();
@@ -35,18 +46,14 @@
                 list($hour,$minute) = explode(":",$stoptime);
                 $totimestamp = (($hour*60*60)+($minute*60));
 
-                if($publishin == 1)
-                    $publishalbum = $lang["private_album"];
-                else
-                    $publishalbum = $lang["public_album"];
-
+                $publishalbum = ($publishin == 1 ? $lang["private_album"] : $lang["public_album"]);
             }
 
             $recorderInfo = $system->getRecorderArray($recorder);
 
             $ffmpeg = new ffmpeg($recorderInfo, $asset);
 
-            include $config["basedir"] . "/" . $config["templates"] . "/init_recorder.form.php";
+            include $tmp->loadFile("init_recorder.form.php");
         }
     }
     else{

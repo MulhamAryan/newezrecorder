@@ -6,6 +6,7 @@
     $streaming = htmlspecialchars($input["streaming"]); // Future release
     $advancedoptions = htmlspecialchars($input["advancedoptions"]);
     $netid = $auth->getLoggedUser();
+
     if(empty($title) && empty($course) && empty($recorder)) {
         header("LOCATION:?");
     }
@@ -65,10 +66,11 @@
             );
             $system->recStatus($recStatusArray);
             $system->generateMetadataFile($metaInfo,$asset);
+            $session->setRecordingInfo($netid, $course, $title, $description, $recorder,$advancedoptions,$autostop,$publishin);
         }
 
         header("LOCATION:?");
 
-        include $config["basedir"] . "/" . $config["templates"] . "/init_recorder.form.php";
+        include $tmp->loadFile("init_recorder.form.php");
     }
 ?>

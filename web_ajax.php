@@ -3,6 +3,7 @@
     session_start();
 
     include "global_config.inc";
+
     if(empty($_SESSION["language"])){
         $_SESSION["language"] = "fr";
         include $config["languages"] . "/francais.php";

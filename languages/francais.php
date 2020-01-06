@@ -10,6 +10,7 @@
     $lang["wrong_password"] = "Erreur mot de passe est incorrect!";
     $lang["no_login_found"] = "Votre NetID est incorrect !";
     $lang["help"] = "Aide";
+    $lang["need_help"] = "Besoin d'aide ?";
     $lang["forgot_password_text"] = "forgot password text";
     $lang["no_courses_found"] = "Aucun cours disponible, <a href=\"?acttion=help&select=no_courses\" target=\"_blank\">Cliquez ici pour plus d'information</a>";
     $lang["title"] = "Titre";
@@ -42,4 +43,5 @@
     $lang["published_in_private"] = "Enregistrement sauvegardé et en cours de traitement.<br/>Il sera ajouté à votre album privé une fois l'opération terminée.";
     $lang["published_in_public"] = "Enregistrement sauvegardé et en cours de traitement.<br/>Il sera ajouté à votre album public une fois l'opération terminée.";
     $lang["start_new"] = "Commencer un nouvel enregistrement";
+    $lang["options"] = "Options";
 ?>

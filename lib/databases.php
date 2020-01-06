@@ -39,7 +39,7 @@ class SQLiteDatabase
             'id'               => 'INTEGER PRIMARY KEY AUTOINCREMENT',
             'asset'            => 'VARCHAR(50)',
             'course_id'        => 'VARCHAR(50)',
-            'lang'             => 'VARCHAR(10) DEFAULT "en"',
+            'lang'             => 'VARCHAR(10) DEFAULT "fr"',
             'record_type'      => 'VARCHAR(25)',
             'rec_start_time_ts'=> 'DATETIME',
             'rec_init_time_ts' => 'DATETIME',
@@ -55,6 +55,9 @@ class SQLiteDatabase
             'title'            => 'VARCHAR(100) NOT NULL',
             'description'      => 'TEXT NOT NULL',
             'record_type'      => 'VARCHAR(25) NOT NULL',
+            'advanced_options' => 'VARCHAR(2) DEFAULT NULL',
+            'auto_stop_time'   => 'VARCHAR(25) DEFAULT NULL',
+            'publishin'        => 'VARCHAR(10) DEFAULT NULL',
             'submit_time'      => 'DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP',
         ],
         self::USER_INFO_TABLE_NAME => [
@@ -129,15 +132,10 @@ class SQLiteDatabase
              */
 
             // RECORDS START INFOS
-            'form_data_get_all'                   => 'SELECT course_id, title, description, record_type, submit_time FROM '.self::RECORDS_START_INFOS_TABLE_NAME.' WHERE author = :author',
-            'form_data_get_data_for_last_month'   => 'SELECT course_id, title, description, record_type, submit_time FROM '.self::RECORDS_START_INFOS_TABLE_NAME
-                . ' WHERE author = :author AND submit_time > datetime(\'now\', \'-1 month\')'
-                . ' ORDER BY submit_time',
-            'form_data_insert'                    => 'INSERT INTO '.self::RECORDS_START_INFOS_TABLE_NAME.'(author, course_id, title, description, record_type)'
-                . ' VALUES (:author, :course, :title, :description, :record_type)',
-
+            'form_data_get_all'                   => 'SELECT course_id, title, description, record_type, submit_time, advanced_options, auto_stop_time, publishin FROM '.self::RECORDS_START_INFOS_TABLE_NAME.' WHERE author = :author',
+            'form_data_get_data_for_last_month'   => 'SELECT course_id, title, description, record_type, submit_time, advanced_options, auto_stop_time, publishin FROM '.self::RECORDS_START_INFOS_TABLE_NAME . ' WHERE author = :author AND submit_time > datetime(\'now\', \'-1 month\')' . ' ORDER BY submit_time',
+            'form_data_insert'                    => 'INSERT INTO '.self::RECORDS_START_INFOS_TABLE_NAME.'(author, course_id, title, description, record_type, advanced_options, auto_stop_time, publishin)' . ' VALUES (:author, :course, :title, :description, :record_type, :advanced_options, :auto_stop_time, :publishin)',
             // USER INFO
-
             'user_info_get'                       => 'SELECT full_name, email FROM '.self::USER_INFO_TABLE_NAME.' WHERE user_id = :user_id',
             'user_info_write'                     => 'REPLACE INTO '.self::USER_INFO_TABLE_NAME.'(user_id, full_name, email) VALUES (:user_id, :full_name, :email)',
         ];
@@ -595,7 +593,7 @@ class SQLiteDatabase
             if($best_date_has_same_day_as_today && !$same_day_as_today)
                 continue;
 
-            $data = new FormData($result['course_id'], $result['title'], $result['description'], $result['record_type']);
+            $data = new FormData($result['course_id'], $result['title'], $result['description'], $result['record_type'],$result['advanced_options'], $result['auto_stop_time'], $result['publishin']);
             $best_date = $formDate;
         }
 
@@ -603,10 +601,10 @@ class SQLiteDatabase
         return $data;
     }
 
-    public function form_data_insert($author, $course, $title, $decription, $record_type)
+    public function form_data_insert($author, $course, $title, $decription, $record_type,$advanced_options,$auto_stop_time,$publishin)
     {
         // (:course, :title, :description, :record_type)',
-        $ok = self::exec_query('form_data_insert', array(':author', $author), array(':course', $course), array(':title', $title), array(':description', $decription), array(':record_type', $record_type));
+        $ok = self::exec_query('form_data_insert', array(':author', $author), array(':course', $course), array(':title', $title), array(':description', $decription), array(':record_type', $record_type), array(':advanced_options', $advanced_options), array(':auto_stop_time', $auto_stop_time), array(':publishin', $publishin));
         if($ok === false)
             return false;
 
@@ -639,12 +637,16 @@ class SQLiteDatabase
 
 class FormData
 {
-    function __construct($course, $title, $description, $record_type)
+    function __construct($course, $title, $description, $record_type, $advanced_options, $auto_stop_time, $publishin)
     {
         $this->course = $course;
         $this->title = $title;
         $this->description = $description;
         $this->record_type = $record_type;
+        $this->advanced_options = $advanced_options;
+        $this->auto_stop_time = $auto_stop_time;
+        $this->publishin = $publishin;
+
     }
 
     public $course;

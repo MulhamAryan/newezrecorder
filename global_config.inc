@@ -1,5 +1,5 @@
 <?php
-
+    date_default_timezone_set("Europe/Brussels");
     $config_version = "2019121201";
 
     $config = array(
@@ -21,6 +21,8 @@
         "adminmail"       => "podcast.tech@ulb.ac.be",
         "phpcli"          => "/usr/bin/php",
         "ffmpegcli"       => "/usr/local/bin/ffmpeg",
+        "crontab"         => "/usr/bin/crontab",
+        "crontabcli"      => "cli_auto_publish.php",
         "downloadprotocol"=> "rsync",
         "controllers"     => "controllers",
         "ajaxdir"         => "ajax",
@@ -33,7 +35,8 @@
         "var"             => "var",
         "theme"           => "refracted",
         "statusfile"      => "recording.json",
-        "metadata"        => "metadata.xml"
+        "metadata"        => "metadata.xml",
+        "crontabuserfile" => "crontabfile"
     );
 
     $config["curenttheme"] = $config["templates"] . "/" . $config["theme"];
@@ -54,11 +57,11 @@
         array(
             "enabled"   => true,
             "module"    => "camrecord", //This is the first version don't change `camrecord`
-            "ip"        => "192.168.100.103",
+            "ip"        => "192.168.1.46",
             "type"      => "rtsp",
             "quality"   => array(
-                "hd"        => "10.0.2.102:554/1"
-                //"sd"        => "10.0.2.102:554/2" // First version please don't enable this option and don't add more than on quality (Will be available in next versions)
+                "hd"        => "192.168.1.46:554/1"
+                //"sd"      => "10.0.2.102:554/2" // First version please don't enable this option and don't add more than on quality (Will be available in next versions)
             ),
             "icon"      => "film",
             "tempname"  => "Camera"
@@ -67,10 +70,10 @@
         array(
             "enabled"   => true,
             "module"    => "sliderecord",  //This is the first version don't change `sliderecord`
-            "ip"        => "192.168.100.103",
+            "ip"        => "192.168.1.46",
             "type"      => "rtsp",
             "quality"   => array(
-                "hd"        => "10.0.2.102:554/1"
+                "hd"        => "192.168.1.46:554/1"
                 //"sd"        => "10.0.2.102:554/2"// First version please don't enable this option and don't add more than on quality (Will be available in next versions)
             ),
             "icon"      => "image",
@@ -79,10 +82,21 @@
 
     );
 
-    $plugins = array(
-        "vu_metter" => true,
-        "sound_backup" => true
-    );
+    $plugins_list = [
+        "camcontrollers" => [
+            "ptz" => true,
+            "crestron" => false,
+            "onvif" => false,
+            "visca" => false
+        ],
+        "vu_metter" => [
+            "ffmpeg_viewer" => false,
+            "crestron" => false,
+            "onvif" => false,
+            "visca" => false
+        ],
+        "sound_backup" => false
+    ];
 
     $debug = array(
         "debug_mode" => false,
@@ -107,16 +121,32 @@
             "name" => "Dutch"
         ),
     );
+
+    if(empty($_SESSION["language"])){
+        $_SESSION["language"] = "fr";
+        include $config["languages"] . "/francais.php";
+    }
+    else{
+        $selectedLang = $_SESSION["language"];
+        include $config["languages"] . "/" . $languagesList[$selectedLang]["file"];
+    }
+
     include $config["lib"] . "/system.php";
     $system = new System();
 
     include $config["lib"] . "/databases.php";
     $database = new SQLiteDatabase($config["database_file"]);
 
+    include $config["lib"] . "/recording_session.php";
+    $session = new RecordingSession();
+
     include $config["lib"] . "/logger/logger_recorder.php";
+    $logger = new RecorderLogger($config["classroom"]);
 
     include $config["lib"] . "/ffmpeg.php";
     include $config["templates"] . "/template.class.php";
     include $config["lib"] . "/authentification.class.php";
+    include $config["plugins"] . "/plugin_loader.php";
+
     $auth = new authentification();
 ?>

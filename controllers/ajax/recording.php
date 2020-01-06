@@ -18,6 +18,12 @@
             else{
                 $status = "play";
                 $nowrecording["start_time"] = time();
+                if($nowrecording["auto_stop"] == 1){
+                    $jobInfo = array(
+                        "time"=> $nowrecording["stop_time"]
+                    );
+                    $system->createJob($jobInfo);
+                }
             }
         }
         elseif($status == "pause"){
