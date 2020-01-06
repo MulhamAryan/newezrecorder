@@ -1,15 +1,11 @@
 <?php
 
-//require_once __DIR__.'/lib_various.php'; //Need restoration
-//require_once __DIR__.'/lib_recording_session.php'; //Need restoration
-
 class LoggerSyncDaemon {
 
     public function ensure_is_running() {
         global $config;
-
-        if($this->is_running()) {
-            system("php -f ". $this->cli_sync_daemon . " > " . $config["basedir"] . "/" . $config["var"] . "/log_sync_daemon 2>&1 &");
+        if($this->is_running() == false) {
+            system($config["phpcli"] . " ". $this->cli_sync_daemon . " > " . $config["basedir"] . "/" . $config["var"] . "/log_sync_daemon 2>&1 &");
         }
     }
     

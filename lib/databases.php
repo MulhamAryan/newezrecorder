@@ -75,11 +75,12 @@ class SQLiteDatabase
      * @param string $database_file      File path to the sqlite database
      * @param string $last_log_sent_get_url Web address to the last log sent service on ezcast
      */
-    public function __construct($database_file)
+    public function __construct()
     {
         global $debug;
+        global $config;
 
-        $this->database_file = $database_file;
+        $this->database_file = $config["database_file"];
 
         $this->db = new PDO('sqlite:'.$this->database_file);
         if(!$this->database_is_valid()) {

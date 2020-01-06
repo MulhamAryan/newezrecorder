@@ -2,7 +2,6 @@
 
 require_once("logger.php");
 require_once("logger_sync_daemon.php");
-//require_once("lib_various.php"); // need restoration
 require_once("lib_recording_session.php"); // need restoration
 
 /**
@@ -23,7 +22,7 @@ class RecorderLogger extends Logger
      *
      * @param string $classroom      
      */
-    public function __construct($classroom) 
+    public function __construct()
     {
         global $config;
 
@@ -31,12 +30,14 @@ class RecorderLogger extends Logger
         ini_set("allow_url_fopen", 1); //needed to use file_get_contents on web, used by get_last_log_sent
         $this->update_interval = 60;
         $this->pid_file = $config["basedir"] . '/var/sync_logs_daemon.pid';
-        $this->cli_sync = $config["basedir"] .'/cli/cli_sync_logs.php';
         $this->cli_sync_daemon = $config["basedir"] .'/cli/cli_sync_logs.php';
         $this->sync_batch_size = 1000;
         $this->max_run_time = 86400; //run max 24 hours. This is to help when global_config has been changed, or if this file has been updated
         $this->max_failures_before_warning = 15;
-        $this->classroom = $classroom;
+        $this->classroom = $config["classroom"];
+        if($this->is_running() == false){
+            $this->ensure_is_running();
+        }
     }
                 
     // returns events array (with column names as keys)
@@ -65,10 +66,10 @@ class RecorderLogger extends Logger
         global $auth;
         global $system;
         if($auth->getLoggedUser() === null)
-            return "";
+            return false;
         
-        $current_asset = $system->getRecorderArray("asset");
-        return $current_asset ? $current_asset : "";
+        $current_asset = $system->getRecordingStatus("asset");
+        return $current_asset;
     }
     
     /**
@@ -83,8 +84,7 @@ class RecorderLogger extends Logger
      * @param AssetLogInfo $asset_info Additional information about asset if any, in the form of a AssetLogInfo structure
      * @return LogData temporary data, used by children functions
      */
-    public static function log($type, $level, $message, array $context = array(), $asset = "",
-            $author = null, $cam_slide = null, $course = null, $classroom = null) 
+    public static function log($type, $level, $message, array $context = array(), $asset = "", $author = null, $cam_slide = null, $course = null, $classroom = null)
     {
         global $database;
         global $config;

@@ -57,10 +57,10 @@
         array(
             "enabled"   => true,
             "module"    => "camrecord", //This is the first version don't change `camrecord`
-            "ip"        => "192.168.1.46",
+            "ip"        => "10.0.2.101",
             "type"      => "rtsp",
             "quality"   => array(
-                "hd"        => "192.168.1.46:554/1"
+                "hd"        => "10.0.2.101:554/1"
                 //"sd"      => "10.0.2.102:554/2" // First version please don't enable this option and don't add more than on quality (Will be available in next versions)
             ),
             "icon"      => "film",
@@ -70,10 +70,10 @@
         array(
             "enabled"   => true,
             "module"    => "sliderecord",  //This is the first version don't change `sliderecord`
-            "ip"        => "192.168.1.46",
+            "ip"        => "10.0.2.101",
             "type"      => "rtsp",
             "quality"   => array(
-                "hd"        => "192.168.1.46:554/1"
+                "hd"        => "10.0.2.101:554/1"
                 //"sd"        => "10.0.2.102:554/2"// First version please don't enable this option and don't add more than on quality (Will be available in next versions)
             ),
             "icon"      => "image",
@@ -131,22 +131,5 @@
         include $config["languages"] . "/" . $languagesList[$selectedLang]["file"];
     }
 
-    include $config["lib"] . "/system.php";
-    $system = new System();
-
-    include $config["lib"] . "/databases.php";
-    $database = new SQLiteDatabase($config["database_file"]);
-
-    include $config["lib"] . "/recording_session.php";
-    $session = new RecordingSession();
-
-    include $config["lib"] . "/logger/logger_recorder.php";
-    $logger = new RecorderLogger($config["classroom"]);
-
-    include $config["lib"] . "/ffmpeg.php";
-    include $config["templates"] . "/template.class.php";
-    include $config["lib"] . "/authentification.class.php";
-    include $config["plugins"] . "/plugin_loader.php";
-
-    $auth = new authentification();
+    include $config["lib"] . "/loader.php";
 ?>

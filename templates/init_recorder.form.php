@@ -30,7 +30,7 @@
     }
     $(document).ready(function (){
         $("#camposition").click(function (){
-            alert("ok");
+            $("#campresets").fadeIn();
         });
     });
 </script>
@@ -40,6 +40,7 @@
         $hideRecordingScreen = "display:none;";
     else
         $displayPublishOptions = "display:none;";
+
 ?>
 <div class="recorder">
     <div class="indiv" style="text-align: center">
@@ -63,7 +64,7 @@
             <a href="index.php"><? echo $lang["start_new"];?></a>
             <hr>
         </div>
-        <div id="recordingPublish" style="<?php echo $displayPublishOptions;?>">
+        <div id="recordingPublish" style="<?php echo $displayPublishOptions;?> padding: 20px;">
             <b><i class="fas fa-share-square"></i> <?php echo $lang["where_publish"];?></b>
             <hr>
             <div class="publish publishDelete" onclick="if(confirm('<?php echo $lang["confirm_delete_record"];?>')) publishRecord('trash');"><i class="fas fa-times-circle"></i><br><?php echo $lang["delete_record"]; ?></div>
@@ -103,26 +104,10 @@
             <hr>
             <div class="controller">
                 <?php
-                    /*$recordingInfo["stop_time"] = explode(":",$recordingInfo["stop_time"]);
-                    $converted = ((int)$recordingInfo["stop_time"][0]*60*60)+((int)$recordingInfo["stop_time"][1]*60);
-                    $startTime = date('H:i:s',$recordingInfo["start_time"]);
-                    $startTime = explode(":",$startTime);
-                    $startTime = ((int)$startTime[0]*60*60)+((int)$startTime[1]*60)+((int)$startTime[2]);
-
-                    $nowTime = date('H:i:s',time());
-                    $nowTime = explode(":",$nowTime);
-                    $nowTime = ((int)$nowTime[0]*60*60)+((int)$nowTime[1]*60)+((int)$nowTime[2]);
-
-                    //var_dump($recordingInfo);
-                    //echo $startTime.'<br>';
-                    //echo $nowTime;
-                    */
-                ?>
-                <?php
                     if($recordingstatus == "init" || $recordingstatus == "pause"){
                         $pause = 'style="display:none;"';
                     }
-                    elseif($recordingstatus == "play"){
+                    elseif($recordingstatus == "play" || $recordingstatus == "resume"){
                         $start = 'style="display:none;"';
                     }
                     if($autostop == 1){
@@ -141,6 +126,7 @@
                 <div class="recordingbutton" id="stop" onclick="stop_recording('stop');"><i class="fas fa-stop-circle"></i><br><?php echo $lang["stop_recording"];?></div>
                 <div class="recordingbutton" id="camposition" rel="<?php echo $asset;?>"><i class="fas fa-arrows-alt"></i><br><?php echo $lang["cam_position"];?></div>
             </div>
+            <div id="campresets" style="display: none">test</div>
         </div>
     </div>
 </div>

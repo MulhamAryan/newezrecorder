@@ -52,7 +52,7 @@
             $recorderInfo = $system->getRecorderArray($recorder);
 
             $ffmpeg = new ffmpeg($recorderInfo, $asset);
-
+            var_dump($ffmpeg->isRunning());
             include $tmp->loadFile("init_recorder.form.php");
         }
     }

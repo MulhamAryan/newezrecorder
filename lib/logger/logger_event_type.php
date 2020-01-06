@@ -14,6 +14,8 @@ class EventType
     const PHP                                = "php";
     const ASSET_CANCELED                     = "asset_canceled";
 
+    // CronJob
+
     // Recorder
     const RECORDER_DB                        = "recorder_recorder_db";
     const RECORDER_UPLOAD_WRONG_METADATA     = "recorder_upload_wrong_metadata";
@@ -47,6 +49,7 @@ class EventType
     const RECORDER_FFMPEG_PROCESS            = "recorder_ffmpeg_process";
     const RECORDER_MODULE_MONIT              = "recorder_module_monit";
     const RECORDER_SOUND_BACKUP              = "recorder_sound_backup";
+    const RECORDER_CREATE_CRONTAB            = "create_crontab";
 
     // EZAdmin
 
@@ -118,7 +121,7 @@ class EventType
         EventType::RECORDER_FFMPEG_PROCESS                    => 1029,
         EventType::RECORDER_MODULE_MONIT                      => 1030,
         EventType::RECORDER_SOUND_BACKUP                      => 1031,
-
+        EventType::RECORDER_CREATE_CRONTAB                    => 1032,
         // EZAdmin: 2000->2999
 
         // EZManager: 3000->3999

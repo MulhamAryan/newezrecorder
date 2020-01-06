@@ -42,7 +42,7 @@
                     <?php echo $lang["select_type"];?> :
                     <br><br>
                     <div class="customRadio">
-                        <?php $i = 1; if($disableFullList == 0){?><input type="radio" name="recorder" value="all" id="r<?php echo $i;?>" <?php echo $tmp->isChecked($lastRecorder,"all");?>/><label class="radio" for="r<?php echo $i;?>"><i class="fas fa-photo-video"></i><br>Camera + Slide</label>
+                        <?php $i = 1; if($disableFullList == 0){?><input type="radio" name="recorder" value="all" id="r<?php echo $i;?>" <?php echo $tmp->isChecked($lastRecorder,"all");?> /><label class="radio" for="r<?php echo $i;?>"><i class="fas fa-photo-video"></i><br>Camera + Slide</label>
                             <?php $i++; }
                         foreach ($recorder_modules as $recorderKey => $recorderValue){
                             if($recorderValue["enabled"] == true) {
@@ -65,11 +65,10 @@
                         <div class="float-left"> <?php echo $lang["auto_stop_after"]; ?> <input type="time" name="autostop" value="<?php echo $lastAutoStopTime;?>" max="12:00" min="00:30" id="stoptime" style="padding: 0 !important;" required> hh:mm</div>
                         <div class="float-right">
                             <?php echo $lang["publish_in"];?> :
-                            <label for="privatealbum" class="privatealbum"><input type="radio" name="publishin" value="1" id="privatealbum" <?php echo $tmp->isChecked($lastAutoPublishIn,1) ?> /> <?php echo $lang["private_album"];?> </label>
-                            <label for="publicalbum" class="publicalbum"><input type="radio" name="publishin" value="2" id="publicalbum" <?php echo $tmp->isChecked($lastAutoPublishIn,2) ?> /> <?php echo $lang["public_album"];?> </label>
+                            <label for="privatealbum" class="privatealbum"><input type="radio" name="publishin" value="1" id="privatealbum" <?php echo $tmp->isChecked($lastAutoPublishIn,1) ?> required/> <?php echo $lang["private_album"];?> </label>
+                            <label for="publicalbum" class="publicalbum"><input type="radio" name="publishin" value="2" id="publicalbum" <?php echo $tmp->isChecked($lastAutoPublishIn,2) ?> required/> <?php echo $lang["public_album"];?> </label>
                         </div>
                     </div>
-
                 </div>
                 <hr>
                 <div class="float-right">

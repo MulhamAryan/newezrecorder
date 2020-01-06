@@ -206,6 +206,7 @@
                 }
             }
         }
+
         function mergeRecordPerFile($recorder,$quality){
             file_put_contents($this->assetDir . $recorder . "/init.log", "-- [" . date("d/m/Y - H:i:s",time()) ."] : Starting concat merge video for $recorder and $quality" . PHP_EOL, FILE_APPEND | LOCK_EX);
             $recorderDir = $this->assetDir . $recorder;
@@ -240,6 +241,7 @@
                 }
             }
         }
+
         // This function is used to get the number of recorded qualities in all recorder
         function getIsRecFileContent(){
             $recordingFileInfo = file_get_contents($this->assetDir . "/" . $this->isRecordingFile);
@@ -251,6 +253,7 @@
         {
             return $this->recordExtenstion;
         }
+
         // This function is used to modify the _cut_list.txt file
         function cutListFile($dir,$txt){
             $getType = explode(":",$txt);
@@ -268,6 +271,25 @@
             $txt .= ":" . $counter;
             file_put_contents($dir . '/_cut_list.txt', $txt . PHP_EOL , FILE_APPEND | LOCK_EX);
         }
+
+        function getRunningRecorder(){
+            $isRecording = $this->getIsRecFileContent();
+            foreach ($isRecording as $isRecordingKey => $isRecordingQuality){
+                $result .= $isRecordingKey .  " => ";
+                foreach ($isRecordingQuality as $quality){
+                    $result .= $quality . ", ";
+                }
+            }
+            return $result;
+        }
+
+        function isRunning($options = null){
+            if(empty($options)){
+
+            }
+            return true;
+        }
+
     }
 
 ?>

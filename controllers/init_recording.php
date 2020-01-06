@@ -14,7 +14,6 @@
         if ($advancedoptions == 1) {
             $autostop = htmlspecialchars($input["autostop"]);
             $publishin = htmlspecialchars($input["publishin"]);
-            echo $autostop;
         }
         $date = date("Y_m_d_H\hi");
         $asset = $date . "_" . $course;
@@ -24,6 +23,13 @@
         if ($system->getRecordingStatus() == false) {
             $ffmpeg = new ffmpeg($recorderInfo, $asset);
             $ffmpeg->launch();
+            $getRunningRecorder = $ffmpeg->getRunningRecorder();
+            if($ffmpeg->isRunning()) {
+                $logger->log(EventType::RECORDER_FFMPEG_INIT, LogLevel::INFO, "Successfully initialized recording ($getRunningRecorder).", array(__FUNCTION__), $asset);
+            }
+            else{
+                $logger->log(EventType::RECORDER_FFMPEG_INIT, LogLevel::ERROR, "Couldn't start recording (not ignored recorder $getRunningRecorder)", array(__FUNCTION__), $asset);
+            }
             //Generate recording status file
             $recStatusArray = array(
                 "userLogin" => $auth->getLoggedUser(),

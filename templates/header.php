@@ -26,7 +26,7 @@
                     <img src="<?php echo $config["curenttheme"];?>/img/logo-ulb.png"/>
                 </div>
                 <div class="logo">
-                    <span class="ez">EZ</span><span class="recorderword">recorder</span>
+                    <a href="index.php"><span class="ez">EZ</span><span class="recorderword">recorder</span></a>
                 </div>
             </div>
             <div class="float-right">
