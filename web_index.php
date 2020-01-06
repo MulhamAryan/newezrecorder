@@ -10,25 +10,29 @@
         $action = $input['action'];
     }
 
-   include $tmp->loadFile("header.php");
+    include $tmp->loadFile("header.php");
+    if($maintenance == false) {
+        if ($auth->userIsLoged() == true) {
+            switch ($action) {
+                case $action:
+                    if (file_exists($config["basedir"] . $config["controllers"] . "/" . $action . ".php"))
+                        include $config["basedir"] . $config["controllers"] . "/" . $action . ".php";
+                    else
+                        include $config["basedir"] . $config["controllers"] . "/index.php";
+                    break;
 
-    if($auth->userIsLoged() == true) {
-        switch ($action) {
-            case $action:
-                if (file_exists($config["basedir"] . $config["controllers"] . "/" . $action . ".php"))
-                    include $config["basedir"] . $config["controllers"] . "/" . $action . ".php";
-                else
+                default:
                     include $config["basedir"] . $config["controllers"] . "/index.php";
-                break;
+                    break;
 
-            default:
-                include $config["basedir"] . $config["controllers"] . "/index.php";
-                break;
-
+            }
+        } else {
+            include $config["basedir"] . $config["controllers"] . "/login.php";
         }
     }
     else{
-        include $config["basedir"] . $config["controllers"] . "/login.php";
+        include $tmp->loadFile("maintenance.php");
     }
+
     include $tmp->loadFile("footer.php");
 ?>

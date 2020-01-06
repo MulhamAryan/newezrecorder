@@ -1,4 +1,6 @@
 <?php
+    @error_reporting(E_ALL | E_STRICT); // Only on debug mode !
+    @ini_set('display_errors', '1');    // Only on debug mode !
     date_default_timezone_set("Europe/Brussels");
     $config_version = "2019121201";
 
@@ -130,6 +132,8 @@
         $selectedLang = $_SESSION["language"];
         include $config["languages"] . "/" . $languagesList[$selectedLang]["file"];
     }
+
+    $maintenance = true; // if true go to the template directory and modify the text in maintenance.php file.
 
     include $config["lib"] . "/loader.php";
 ?>
