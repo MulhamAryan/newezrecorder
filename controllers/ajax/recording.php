@@ -14,7 +14,7 @@
         if($status == "play"){
             if($nowrecording["recording_status"] == "pause"){
                 $status = "resume";
-                $logger->log(EventType::RECORDER_PAUSE_RESUME, LogLevel::INFO, "Recording resumed by $user", array(__FUNCTION__), $nowrecording["asset"]);
+                $logger->log(EventType::RECORDER_PAUSE_RESUME, LogLevel::INFO, "Recording resumed by $user", array(basename(__FILE__)), $nowrecording["asset"]);
             }
             else{
                 $status = "play";
@@ -25,24 +25,24 @@
                     );
                     $system->createJob($jobInfo);
                     $publishin = ($nowrecording["publishin"] == "true" ? "public album":"private album");
-                    $logger->log(EventType::RECORDER_CREATE_CRONTAB, LogLevel::NOTICE, "Cronjob is enabled : stop after " . $nowrecording["stop_time"] . " and publish in " . $publishin, array(__FUNCTION__), $nowrecording["asset"]);
+                    $logger->log(EventType::RECORDER_CREATE_CRONTAB, LogLevel::NOTICE, "Cronjob is enabled : stop after " . $nowrecording["stop_time"] . " and publish in " . $publishin, array(basename(__FILE__)), $nowrecording["asset"]);
                 }
                 $getRunningRecorder = $ffmpeg->getRunningRecorder();
-                $logger->log(EventType::ASSET_CREATED, LogLevel::NOTICE,"Starting recorders by $user request. Requested type: $getRunningRecorder", array(__FUNCTION__), $nowrecording["asset"], $user, $nowrecording["recorders"] , $nowrecording["course"], $config["classroom"]);
+                $logger->log(EventType::ASSET_CREATED, LogLevel::NOTICE,"Starting recorders by $user request. Requested type: $getRunningRecorder", array(basename(__FILE__)), $nowrecording["asset"], $user, $nowrecording["recorders"] , $nowrecording["course"], $config["classroom"]);
             }
         }
         elseif($status == "pause"){
             $status = "pause";
-            $logger->log(EventType::RECORDER_PAUSE_RESUME, LogLevel::INFO, "Recording was paused by $user", array(__FUNCTION__), $nowrecording["asset"]);
+            $logger->log(EventType::RECORDER_PAUSE_RESUME, LogLevel::INFO, "Recording was paused by $user", array(basename(__FILE__)), $nowrecording["asset"]);
         }
         elseif($status == "stop"){
             $status = "stop";
             $nowrecording["stop_time"] = time();
-            $logger->log(EventType::RECORDER_PUSH_STOP, LogLevel::NOTICE, "Recording was stopped by user $user", array(__FUNCTION__), $nowrecording["asset"]);
+            $logger->log(EventType::RECORDER_PUSH_STOP, LogLevel::NOTICE, "Recording was stopped by user $user", array(basename(__FILE__)), $nowrecording["asset"]);
         }
         else{
             $status = "init";
-            $logger->log(EventType::RECORDER_PUSH_STOP, LogLevel::ALERT, "User $user try to launch unknow status " . $system->removeCharacters($input["status"]), array(__FUNCTION__), $nowrecording["asset"]);
+            $logger->log(EventType::RECORDER_PUSH_STOP, LogLevel::ALERT, "User $user try to launch unknow status " . $system->removeCharacters($input["status"]), array(basename(__FILE__)), $nowrecording["asset"]);
         }
 
         $newArrayValue = array(
@@ -63,11 +63,23 @@
 
         if($status){
             $ffmpeg->setMediaStatus($status);
-            if($status == "stop")
+            if($status == "stop") {
                 $ffmpeg->stopRecording();
-            /*
-             * add checking method for every running ffmpeg module + qualities using isRunning from ffmpeg.class
-            */
+                sleep(1);
+                //Check if there is some recording running
+                if($ffmpeg->isRunning() != false){
+                    foreach ($ffmpeg->isRunning() as $runningRecord) {
+                        if($ffmpeg->killPid($runningRecord) == true){
+                            $logger->log(EventType::RECORDER_PUSH_STOP, LogLevel::NOTICE, "Stopping ffmpeg after double check : $runningRecord ", array(basename(__FILE__)), $nowrecording["asset"]);
+                        }
+                        else
+                            $logger->log(EventType::RECORDER_PUSH_STOP, LogLevel::ALERT, "System couldn't stop the recording : $runningRecord", array(basename(__FILE__)), $nowrecording["asset"]);
+                    }
+                }
+                else{
+                    $logger->log(EventType::RECORDER_PUSH_STOP, LogLevel::NOTICE, "Recording stoped without problems.", array(basename(__FILE__)), $nowrecording["asset"]);
+                }
+            }
         }
         return true;
     }

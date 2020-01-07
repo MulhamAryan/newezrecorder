@@ -24,11 +24,11 @@
             $ffmpeg = new ffmpeg($recorderInfo, $asset);
             $ffmpeg->launch();
             $getRunningRecorder = $ffmpeg->getRunningRecorder();
-            if($ffmpeg->isRunning()) {
-                $logger->log(EventType::RECORDER_FFMPEG_INIT, LogLevel::INFO, "Successfully initialized recording ($getRunningRecorder).", array(__FUNCTION__), $asset);
+            if($ffmpeg->isRunning("init_check") == "all") {
+                $logger->log(EventType::RECORDER_FFMPEG_INIT, LogLevel::INFO, "Successfully initialized recording ($getRunningRecorder).", array("controllers/ini_recording.php"), $asset);
             }
             else{
-                $logger->log(EventType::RECORDER_FFMPEG_INIT, LogLevel::ERROR, "Couldn't start recording (not ignored recorder $getRunningRecorder)", array(__FUNCTION__), $asset);
+                $logger->log(EventType::RECORDER_FFMPEG_INIT, LogLevel::ERROR, "Couldn't start recording (not ignored recorder $getRunningRecorder)", array("controllers/ini_recording.php"), $asset);
             }
             //Generate recording status file
             $recStatusArray = array(
@@ -73,6 +73,7 @@
             $system->recStatus($recStatusArray);
             $system->generateMetadataFile($metaInfo,$asset);
             $session->setRecordingInfo($netid, $course, $title, $description, $recorder,$advancedoptions,$autostop,$publishin);
+
         }
 
         header("LOCATION:?");

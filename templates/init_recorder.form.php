@@ -1,13 +1,5 @@
 <?php
-    if(!empty($recordingInfo["start_time"])) {
-        $recordingInfo["stop_time"] = explode(":", $recordingInfo["stop_time"]);
-        $converted = ((int)$recordingInfo["stop_time"][0] * 60 * 60) + ((int)$recordingInfo["stop_time"][1] * 60);
-        $startedConverted = date('H:i:s', $recordingInfo["start_time"] + $converted);
-        $converted = $startedConverted;
-    }
-    else{
-        $startedConverted = $converted;
-    }
+
     ?>
 
 <script>
@@ -35,7 +27,6 @@
     });
 </script>
 <?php
-
     if($recordingstatus == "stop")
         $hideRecordingScreen = "display:none;";
     else
@@ -72,6 +63,7 @@
             <div class="publish publishPublic" onclick="publishRecord('public');"><i class="fas fa-user-friends"></i><br><?php echo $lang["publish_in_public"]; ?></div>
         </div>
         <div id="recordingNow" style="<?php echo $hideRecordingScreen;?>">
+            <div class="clearfix"></div>
             <?php
                 $recorderNum = count($recorderInfo);
                 if($recorderNum != 1){
@@ -110,6 +102,8 @@
                     elseif($recordingstatus == "play" || $recordingstatus == "resume"){
                         $start = 'style="display:none;"';
                     }
+                $start = (!empty($start) ? $start:"");
+                $pause = (!empty($pause) ? $pause:"");
                     if($autostop == 1){
                         echo '<span id="autostop_before" '.$start.'>';
                         echo $lang["auto_stop_actived"] . ' ' . $lang["auto_stop_to"] . '<span style="color:#FF0000; font-weight: bold;" id="counter">' . $hour . 'h ' . $lang["and"] . ' ' . $minute .'m</span> ' .$lang["and"]. ' ' . $lang["publish_in"] . ' <b>' . $publishalbum . '</b>';

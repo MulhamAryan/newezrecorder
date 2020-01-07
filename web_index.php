@@ -6,12 +6,16 @@
 
     $input = array_merge($_GET, $_POST);
 
-    if(isset($input['action'])) {
+    if(isset($input['action']) && !empty($input['action'])) {
         $action = $input['action'];
+    }
+    else{
+        $action = "";
     }
 
     include $tmp->loadFile("header.php");
-    if($maintenance == false) {
+
+    if($enablemaintenance == false) {
         if ($auth->userIsLoged() == true) {
             switch ($action) {
                 case $action:

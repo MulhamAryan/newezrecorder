@@ -15,26 +15,13 @@ require_once("lib_recording_session.php"); // need restoration
  */
 class RecorderLogger extends Logger 
 {  
-    protected $classroom;
-    
-    /**
-     * Class constructor
-     *
-     * @param string $classroom      
-     */
+
     public function __construct()
     {
         global $config;
 
         parent::__construct();
         ini_set("allow_url_fopen", 1); //needed to use file_get_contents on web, used by get_last_log_sent
-        $this->update_interval = 60;
-        $this->pid_file = $config["basedir"] . '/var/sync_logs_daemon.pid';
-        $this->cli_sync_daemon = $config["basedir"] .'/cli/cli_sync_logs.php';
-        $this->sync_batch_size = 1000;
-        $this->max_run_time = 86400; //run max 24 hours. This is to help when global_config has been changed, or if this file has been updated
-        $this->max_failures_before_warning = 15;
-        $this->classroom = $config["classroom"];
         if($this->is_running() == false){
             $this->ensure_is_running();
         }
@@ -93,7 +80,7 @@ class RecorderLogger extends Logger
             $asset = self::get_default_asset_for_log();
         }
         
-        $tempLogData = parent::_log($type, $level, $message, $context, $asset, $author, $cam_slide, $course, $classroom);
+        $tempLogData = (new Logger)->_log($type, $level, $message, $context, $asset, $author, $cam_slide, $course, $classroom);
         
         //default classroom if none specified
         if($classroom == null)

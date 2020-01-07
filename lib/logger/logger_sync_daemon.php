@@ -2,6 +2,29 @@
 
 class LoggerSyncDaemon {
 
+    /**
+     * @var int
+     */
+    public $update_interval;
+    public $pid_file;
+    public $cli_sync_daemon;
+    public $sync_batch_size;
+    public $max_run_time;
+    public $max_failures_before_warning;
+    public $classroom;
+
+    function __construct()
+    {
+        global $config;
+        $this->update_interval = 60;
+        $this->pid_file = $config["basedir"] . '/var/sync_logs_daemon.pid';
+        $this->cli_sync_daemon = $config["basedir"] .'/cli/cli_sync_logs.php';
+        $this->sync_batch_size = 1000;
+        $this->max_run_time = 86400; //run max 24 hours. This is to help when global_config has been changed, or if this file has been updated
+        $this->max_failures_before_warning = 15;
+        $this->classroom = $config["classroom"];
+    }
+
     public function ensure_is_running() {
         global $config;
         if($this->is_running() == false) {

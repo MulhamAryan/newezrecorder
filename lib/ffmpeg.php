@@ -185,14 +185,28 @@
 
         // Get the pid of one record by file name
         function getFfmpegPid($pidFile){
-            $pid = file_get_contents($pidFile);
+            if(file_exists($pidFile))
+                $pid = trim(file_get_contents($pidFile));
+            else
+                $pid = false;
+
             return $pid;
         }
 
         // Kill the pid of one record by file name
         function killPid($pidFile){
             $pid = $this->getFfmpegPid($pidFile);
-            posix_kill($pid,9);
+            if($pid != false){
+                if(posix_kill($pid,9) == true) {
+                    return true;
+                }
+                else
+                    return false;
+            }
+            else{
+                return false;
+            }
+
         }
 
         function stopRecording(){
@@ -274,6 +288,7 @@
 
         function getRunningRecorder(){
             $isRecording = $this->getIsRecFileContent();
+            $result = (!empty($result) ? $result : "");
             foreach ($isRecording as $isRecordingKey => $isRecordingQuality){
                 $result .= $isRecordingKey .  " => ";
                 foreach ($isRecordingQuality as $quality){
@@ -283,11 +298,27 @@
             return $result;
         }
 
-        function isRunning($options = null){
-            if(empty($options)){
+        function isRunning($option = null){
+            if(empty($option)){
+                $isRecording = $this->getIsRecFileContent();
+                foreach ($isRecording as $isRecordingKey => $isRecordingQuality){
+                    foreach ($isRecordingQuality as $quality){
+                        if(posix_getpgid($this->getFfmpegPid($this->assetDir . $isRecordingKey ."/" . $quality . "/init.pid")) != false)
+                            $running[] = $this->assetDir . $isRecordingKey ."/" . $quality . "/init.pid";
+                    }
+                }
+                if(empty($running))
+                    $running = false;
 
+                return $running;
             }
-            return true;
+            elseif($option == "init_check"){
+                return "all";
+            }
+            else{
+                return true;
+            }
+
         }
 
     }

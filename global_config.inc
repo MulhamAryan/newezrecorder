@@ -133,7 +133,7 @@
         include $config["languages"] . "/" . $languagesList[$selectedLang]["file"];
     }
 
-    $maintenance = true; // if true go to the template directory and modify the text in maintenance.php file.
+    $enablemaintenance = false; // if true go to the template directory and modify the text in maintenance.php file.
 
     include $config["lib"] . "/loader.php";
 ?>

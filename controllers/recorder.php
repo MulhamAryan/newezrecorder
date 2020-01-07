@@ -52,7 +52,17 @@
             $recorderInfo = $system->getRecorderArray($recorder);
 
             $ffmpeg = new ffmpeg($recorderInfo, $asset);
-            var_dump($ffmpeg->isRunning());
+
+            if(!empty($recordingInfo["start_time"]) && !empty($recordingInfo["auto_stop"])) {
+                $recordingInfo["stop_time"] = explode(":", $recordingInfo["stop_time"]);
+                $converted = ((int)$recordingInfo["stop_time"][0] * 60 * 60) + ((int)$recordingInfo["stop_time"][1] * 60);
+                $startedConverted = date('H:i:s', $recordingInfo["start_time"] + $converted);
+                $converted = $startedConverted;
+            }
+            else{
+                $startedConverted = (!empty($startedConverted) ? $converted:"");
+            }
+
             include $tmp->loadFile("init_recorder.form.php");
         }
     }
