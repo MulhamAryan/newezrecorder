@@ -19,7 +19,7 @@
         $action = $input['action'];
     }
 
-    if($auth->userIsLoged() == true) {
+    if($auth->userSession("is_logged") == true) {
         switch ($action) {
             case $action:
                 if (file_exists($config["ajax"] . "/" . $action . ".php"))

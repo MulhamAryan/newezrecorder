@@ -1,8 +1,8 @@
 <?php
-    if($auth->userIsLoged()){
+    if($auth->userSession("is_logged")){
         if($system->getRecordingStatus() == false) {
-            $coursesList = $auth->getUserCourses();
-            $netID = $auth->getLoggedUser();
+            $netID = $auth->userSession("logged_user");
+            $coursesList = $auth->getUserInfo("courses",$netID);
 
             if(!empty($session->getLastRecordingInfo($netID))) {
                 $lastTitle = $session->getLastRecordingInfo($netID)->title;

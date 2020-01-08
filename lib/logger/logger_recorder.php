@@ -52,7 +52,7 @@ class RecorderLogger extends Logger
     {
         global $auth;
         global $system;
-        if($auth->getLoggedUser() === null)
+        if($auth->userSession("logged_user") === null)
             return false;
         
         $current_asset = $system->getRecordingStatus("asset");

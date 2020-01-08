@@ -1,6 +1,6 @@
 <?php
 
-    if(!$auth->userIsLoged())
+    if(!$auth->userSession("is_logged"))
     {
         $_SESSION["forced_login"] = false;
         if(isset($input["userlogin"])){

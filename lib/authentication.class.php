@@ -1,6 +1,11 @@
 <?php
-    class authentification{
+    /*
+     * Authentication, authorization and access control
+     * This is the main authentication library for the recorder
+    */
+    class Authentication{
 
+        //Check if authentication file exists with correct permissions and mod
         function checkFileSystem(){
             global $config;
             if (!file_exists($config["passwordfile"]) || !is_readable($config["passwordfile"])) {
@@ -17,11 +22,11 @@
             }
         }
 
+        //Check user information while login
         function checkUserInfo($username, $password)
         {
             global $config;
             global $lang;
-            global $session;
 
             $admin = array();
             $users = array();
@@ -84,50 +89,60 @@
             }
         }
 
-        function userIsLoged(){
-            if(!empty($_SESSION["user_login"]) && $_SESSION["recorder_logged"] = true){
-                return true;
+        //Get user session information
+        function userSession($parameter){
+            if($parameter == "is_logged"){
+                if(!empty($_SESSION["user_login"]) && $_SESSION["recorder_logged"] = true){
+                    return true;
+                }
+                else{
+                    unset($_SESSION["user_login"]);
+                    unset($_SESSION["recorder_logged"]);
+                    return false;
+                }
+            }
+            elseif($parameter == "logged_user"){
+                if(!empty($_SESSION["user_login"]))
+                    return $_SESSION["user_login"];
+                else
+                    return false;
             }
             else{
-                unset($_SESSION["user_login"]);
-                unset($_SESSION["recorder_logged"]);
                 return false;
             }
         }
 
-        function getLoggedUser(){
-            if(!empty($_SESSION["user_login"]))
-                return $_SESSION["user_login"];
-            else
-                return false;
-        }
-
-        function getUserCourses($user = ""){
+        //Get user information and user courses
+        function getUserInfo($parameter,$user,$info = null){
             global $logger;
             global $config;
 
-            include $config["courselist"];
-            if(empty($user))
-                $user = $this->getLoggedUser();
+            if($parameter == "info"){
+                $users = array();
 
-            if(!isset($course)) {
-                //$logger->log(EventType::RECORDER_LOGIN, LogLevel::WARNING, "Could not get any course from file $config["courselist"]. Did the server pushed the course list?", array('auth_file_user_courselist_get'));
+                require_once $config["courselist"];
+
+                return $users[$user][$info];
+            }
+            elseif($parameter == "courses"){
+
+                include $config["courselist"];
+                if(empty($user))
+                    $user = $this->userSession("logged_user");
+
+                if(!isset($course)) {
+                    $logger->log(EventType::RECORDER_LOGIN, LogLevel::WARNING, "Could not get any course from file " . $config["courselist"] . ". Did the server pushed the course list?", array(__FUNCTION__));
+                    return array();
+                }
+
+                if(isset($course[$user]))
+                    return $course[$user];
+
                 return array();
             }
-
-            if(isset($course[$user]))
-                return $course[$user];
-
-            return array();
-        }
-
-        function getUserInfo($netid,$info){
-            global $config;
-            $users = array();
-
-            require_once $config["courselist"];
-
-            return $users[$netid][$info];
+            else{
+                return false;
+            }
         }
 
     }

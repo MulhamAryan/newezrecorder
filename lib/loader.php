@@ -15,9 +15,9 @@
 
     include $config["basedir"] . $config["templates"] . "/template.class.php";
 
-    include "authentification.class.php";
+    include "authentication.class.php";
 
     include $config["basedir"] . $config["plugins"] . "/plugin_loader.php";
 
-    $auth = new authentification();
+    $auth = new Authentication();
 ?>

@@ -1,7 +1,7 @@
 <?php
-    $auth = new authentification();
+    $auth = new Authentication();
 
-    if($auth->userIsLoged()){
+    if($auth->userSession("is_logged")){
         include $config["basedir"] . $config["controllers"] . "/recorder.php";
     }
     else{

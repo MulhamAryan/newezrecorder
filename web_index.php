@@ -16,7 +16,7 @@
     include $tmp->loadFile("header.php");
 
     if($enablemaintenance == false) {
-        if ($auth->userIsLoged() == true) {
+        if ($auth->userSession("is_logged") == true) {
             switch ($action) {
                 case $action:
                     if (file_exists($config["basedir"] . $config["controllers"] . "/" . $action . ".php"))

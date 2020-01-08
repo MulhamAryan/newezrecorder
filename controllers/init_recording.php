@@ -5,7 +5,7 @@
     $recorder = htmlspecialchars($input["recorder"]);
     $streaming = htmlspecialchars($input["streaming"]); // Future release
     $advancedoptions = htmlspecialchars($input["advancedoptions"]);
-    $netid = $auth->getLoggedUser();
+    $netid = $auth->userSession("logged_user");
 
     if(empty($title) && empty($course) && empty($recorder)) {
         header("LOCATION:?");
@@ -32,7 +32,7 @@
             }
             //Generate recording status file
             $recStatusArray = array(
-                "userLogin" => $auth->getLoggedUser(),
+                "userLogin" => $auth->userSession("logged_user"),
                 "assetName" => $asset,
                 "courseName" => $course,
                 "initTime" => time(),
@@ -64,7 +64,7 @@
                 "description" => " " . $description . "",
                 "record_type" => "" . $record_type . "",
                 "moderation" => "false",
-                "author" => '' . $auth->getUserInfo($netid,"full_name") . '',
+                "author" => '' . $auth->getUserInfo("info",$netid,"full_name") . '',
                 "netid" => "" . $netid . "",
                 "record_date" => "" . $date . "",
                 "streaming" => "false",
