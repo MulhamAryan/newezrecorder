@@ -31,7 +31,12 @@
 
             }
         } else {
-            include $config["basedir"] . $config["controllers"] . "/login.php";
+            if($action == "recording_force_quit"){
+                include $config["basedir"] . $config["controllers"] . "/recording_force_quit.php";
+            }
+            else{
+                include $config["basedir"] . $config["controllers"] . "/login.php";
+            }
         }
     }
     else{

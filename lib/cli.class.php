@@ -31,7 +31,6 @@
             file_put_contents($assetDir . "/post_process.log", "-- [" . date("d/m/Y - H:i:s",time()) ."] : Starting merge -> $this->recorders " . PHP_EOL, FILE_APPEND | LOCK_EX);
             ffmpeg::mergeAllRecord();
             file_put_contents($assetDir . "/post_process.log", "-- [" . date("d/m/Y - H:i:s",time()) ."] : End of merge -> $this->recorders " . PHP_EOL, FILE_APPEND | LOCK_EX);
-
         }
 
         function startUploadToServer(){

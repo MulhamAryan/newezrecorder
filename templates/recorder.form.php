@@ -10,7 +10,7 @@
         </div>
         <form method="post" action="?action=init_recording" id="initRecorder">
             <div class="form-group">
-                <label for="course"><i class="fab fa-discourse"></i> Cours</label>
+                <label for="course"><i class="fab fa-discourse"></i> <?php echo $lang["course"];?></label>
                     <?php
                     if (!isset($coursesList) || empty($coursesList))
                         echo $lang["no_courses_found"];

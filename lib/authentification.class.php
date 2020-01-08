@@ -72,8 +72,6 @@
                             $ret['full_name'] = $users[$user_login]['full_name'];
                             $ret['email'] = $users[$user_login]['email'];
                             $ret["success"] = 1;
-                            //$ret["session_key"] = md5(microtime().rand());
-                            //$session->setSession($user_login,$real_login); // Disabled because not using it at this time
                             return $ret;
                         }
                     }

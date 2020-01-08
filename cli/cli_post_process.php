@@ -18,6 +18,7 @@
     else{
         $cli = new cli($asset_name,$recorder);
         if($function == "startmerge"){
+            $logger->log(EventType::RECORDER_CAPTURE_POST_PROCESSING, LogLevel::INFO, "Started videos post processing", array(basename(__FILE__)), $asset_name);
             $cli->startMerge();
             $assetDir = $config["recordermaindir"] . $config["local_processing"] . "/" . $asset_name;
             copy($assetDir . "/_" . $config["metadata"],$assetDir . "/" . $config["metadata"]);
@@ -27,7 +28,7 @@
         }
         elseif ($function == "upload_to_server"){
             $assetDir = $config["recordermaindir"] . $config["local_processing"] . "/" . $asset_name;
-
+            $logger->log(EventType::RECORDER_CAPTURE_POST_PROCESSING, LogLevel::INFO, "Starting upload to server", array(basename(__FILE__)), $asset_name);
             $cli->startUploadToServer();
 
         }

@@ -74,17 +74,12 @@ class RecorderLogger extends Logger
     public static function log($type, $level, $message, array $context = array(), $asset = "", $author = null, $cam_slide = null, $course = null, $classroom = null)
     {
         global $database;
-        global $config;
 
         if($asset == "") {
             $asset = self::get_default_asset_for_log();
         }
         
         $tempLogData = (new Logger)->_log($type, $level, $message, $context, $asset, $author, $cam_slide, $course, $classroom);
-        
-        //default classroom if none specified
-        if($classroom == null)
-            $classroom = $config["classroom"];
 
         $logger_sync = new LoggerSyncDaemon();
         $logger_sync->ensure_is_running();

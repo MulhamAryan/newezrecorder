@@ -85,6 +85,8 @@
 
         function prepareMerge($publishin,$nowrecording){
             global $config;
+            global $logger;
+
             $assetDir = $this->getRecordingAssetDir();
             $varDir = $config["basedir"] . $config["var"];
 
@@ -92,6 +94,7 @@
                 if(file_exists($assetDir) && file_exists($varDir ."/" . $config["statusfile"])) {
                     rename($varDir . "/" . $config["statusfile"], $assetDir . "/recordinginfo.json");
                     rename($assetDir, $config["recordermaindir"] . $config["trash"] . "/" . $nowrecording["asset"]);
+                    $logger->log(EventType::TEST, LogLevel::INFO, "Asset moved to " .$config["trash"], array(__FUNCTION__), $nowrecording["asset"]);
                     return true;
                 }
                 else{
@@ -153,14 +156,14 @@
             return $res;
         }
 
-        function is_process_running($pid) {
+        function isProcessRunning($pid) {
             if (!isset($pid) || $pid == '' || $pid == 0)
                 return false;
             exec("ps $pid", $output, $result);
             return count($output) >= 2;
         }
 
-        function get_pid_from_file($filePath) {
+        function getPidFromFile($filePath) {
             if(!file_exists($filePath))
                 return false;
 
@@ -172,7 +175,6 @@
             fclose($handle);
             return $pid;
         }
-
 
         function getRecordingAssetDir(){
             global $config;

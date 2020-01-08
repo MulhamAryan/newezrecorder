@@ -134,6 +134,7 @@
     }
 
     $enablemaintenance = false; // if true go to the template directory and modify the text in maintenance.php file.
+    $randomSecurityNumber = 98856;
 
     include $config["lib"] . "/loader.php";
 ?>

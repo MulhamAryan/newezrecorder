@@ -7,10 +7,22 @@
             </div>
             <hr>
             <?php
+                $checkLock = (empty($checkLock) ? "":$checkLock);
                 if(!empty($errorMsg)){
                     echo $tmp->error($errorMsg);
                 }
-                ?>
+                elseif($checkLock != false){?>
+                    <script type="text/javascript">
+                        var res = false;
+                        res = window.confirm("<?php echo $lang["recorder_in_use"];?> \n <?php echo $lang["author"];?> : <?php echo $current_user; ?> \n <?php echo $lang["course"];?> : <?php echo $course; ?> \n <?php echo $lang["date_hour"];?> : <?php echo $start_time; ?>");
+                        if(res) {
+                            window.location = '?action=recording_force_quit';
+                        }
+                        else {
+                            window.location = '?action=login';
+                        }
+                    </script>
+            <?php } ?>
             <div class="passwordForm" id="passwordForm">
                 <button type="button" class="close" aria-label="Close" id="closePassForm">
                     <span aria-hidden="true">&times;</span>

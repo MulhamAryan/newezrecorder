@@ -38,7 +38,7 @@ class LoggerSyncDaemon {
     
     public function is_running() {
         global $system;
-        return $system->is_process_running($system->get_pid_from_file($this->pid_file));
+        return $system->isProcessRunning($system->getPidFromFile($this->pid_file));
     }
     
     public function sync_logs() {

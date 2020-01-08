@@ -13,6 +13,9 @@
     $lang["need_help"] = "Besoin d'aide ?";
     $lang["forgot_password_text"] = "forgot password text";
     $lang["no_courses_found"] = "Aucun cours disponible, <a href=\"?acttion=help&select=no_courses\" target=\"_blank\">Cliquez ici pour plus d'information</a>";
+    $lang["date_hour"] = "Date et heure";
+    $lang["author"] = "Auteur";
+    $lang["course"] = "Cours";
     $lang["title"] = "Titre";
     $lang["description"] = "Description";
     $lang["continue"] = "Continuer";
@@ -36,7 +39,7 @@
     $lang["delete_record"] = "Supprimer l'enregistrement";
     $lang["publish_in_public"] = "Publier dans l'album publique";
     $lang["publish_in_private"] = "Publier dans l'album privé";
-    $lang["execution_failed"] = "Attention: Cette action n'a pas pu être éxécutée.Vérifiez que vous êtes toujours connecté au réseau wifi 'PODC' et rafraichissez la page de votre navigateur (ctrl+R / cmd+R) avant de réessayer.";
+    $lang["execution_failed"] = "Attention: Cette action n'a pas pu être éxécutée.\\nVérifiez que vous êtes toujours connecté au réseau wifi 'PODC' et rafraichissez la page de votre navigateur (ctrl+R / cmd+R) avant de réessayer.";
     $lang["confirm_delete_record"] = "Annuler l\'enregistrement? Attention : opération destructive non-réversible!";
     $lang["loading_recording"] = "Préparation de l'enregistrement <br>Veuillez patienter quelques secondes ...";
     $lang["record_deleted"] = "Enregistrement supprimé.";
@@ -44,4 +47,5 @@
     $lang["published_in_public"] = "Enregistrement sauvegardé et en cours de traitement.<br/>Il sera ajouté à votre album public une fois l'opération terminée.";
     $lang["start_new"] = "Commencer un nouvel enregistrement";
     $lang["options"] = "Options";
+    $lang["recorder_in_use"] = "Attention : enregistrement en cours! \\nVoulez-vous arrêter l'enregistrement en cours et en lancer un nouveau ?\\n";
 ?>

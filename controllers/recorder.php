@@ -4,20 +4,25 @@
             $coursesList = $auth->getUserCourses();
             $netID = $auth->getLoggedUser();
 
-            $lastTitle           = $session->getLastRecordingInfo($netID)->title;
-            $lastCourse          = $session->getLastRecordingInfo($netID)->course;
-            $lastRecorder        = $session->getLastRecordingInfo($netID)->record_type;
-            $lastDescription     = $session->getLastRecordingInfo($netID)->description;
-            $lastAdvancedOptions = $session->getLastRecordingInfo($netID)->advanced_options;
-            $lastAutoStopTime    = $session->getLastRecordingInfo($netID)->auto_stop_time;
-            $lastAutoPublishIn   = $session->getLastRecordingInfo($netID)->publishin;
+            if(!empty($session->getLastRecordingInfo($netID))) {
+                $lastTitle = $session->getLastRecordingInfo($netID)->title;
+                $lastCourse = $session->getLastRecordingInfo($netID)->course;
+                $lastRecorder = $session->getLastRecordingInfo($netID)->record_type;
+                $lastDescription = $session->getLastRecordingInfo($netID)->description;
+                $lastAdvancedOptions = $session->getLastRecordingInfo($netID)->advanced_options;
+                $lastAutoStopTime = $session->getLastRecordingInfo($netID)->auto_stop_time;
+                $lastAutoPublishIn = $session->getLastRecordingInfo($netID)->publishin;
+            }
 
-            if(empty($lastAutoStopTime))
-                $lastAutoStopTime = "02:00";
+            $lastTitle = (!empty($lastTitle) ? $lastTitle : "");
+            $lastCourse = (!empty($lastCourse) ? $lastCourse : "");
+            $lastRecorder = (!empty($lastRecorder) ? $lastRecorder : "all");
+            $lastDescription = (!empty($lastDescription) ? $lastDescription : "");
+            $lastAdvancedOptions = (!empty($lastAdvancedOptions) ? $lastAdvancedOptions : "");
+            $lastAutoStopTime = (!empty($lastAutoStopTime) ? $lastAutoStopTime : "02:00");
+            $lastAutoPublishIn = (!empty($lastAutoPublishIn) ? $lastAutoPublishIn : 2);
 
             $disableFullList = 0;
-            if(empty($lastRecorder))
-                $lastRecorder = "all";
 
             foreach ($recorder_modules as $recorderCheckKey => $recorderCheckValue) {
                 if ($recorderCheckValue["enabled"] == false) {
@@ -40,12 +45,10 @@
             $autostop = $recordingInfo["auto_stop"];
 
             if($autostop == 1){
-
                 $stoptime = $recordingInfo["stop_time"];
                 $publishin = $recordingInfo["publishin"];
                 list($hour,$minute) = explode(":",$stoptime);
                 $totimestamp = (($hour*60*60)+($minute*60));
-
                 $publishalbum = ($publishin == 1 ? $lang["private_album"] : $lang["public_album"]);
             }
 

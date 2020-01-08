@@ -1,7 +1,3 @@
-<?php
-
-    ?>
-
 <script>
     function stop_recording(fnct){
         if(window.confirm("<?php echo $lang["stop_recording_message"];?>")) {
@@ -20,6 +16,7 @@
             });
         }
     }
+    //need review
     $(document).ready(function (){
         $("#camposition").click(function (){
             $("#campresets").fadeIn();

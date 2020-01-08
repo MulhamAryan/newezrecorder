@@ -638,6 +638,14 @@ class SQLiteDatabase
 
 class FormData
 {
+    public $course;
+    public $title;
+    public $description;
+    public $record_type;
+    public $advanced_options;
+    public $auto_stop_time;
+    public $publishin;
+
     function __construct($course, $title, $description, $record_type, $advanced_options, $auto_stop_time, $publishin)
     {
         $this->course = $course;
@@ -649,9 +657,4 @@ class FormData
         $this->publishin = $publishin;
 
     }
-
-    public $course;
-    public $title;
-    public $description;
-    public $record_type;
 }
