@@ -84,7 +84,7 @@
                 <?php
                     $recorderNumUrl = count($recorderInfo);
                     foreach ($recorderInfo as $recorderInfoUrlKey => $recorderInfoUrlValue){
-                        echo 'var url'.$recorderNumUrl.' = "'.$config["recorderurl"].'/m3u8.php?asset='.$asset.'&recorder='.$recorderInfoUrlValue["module"].'&type=hd";' . PHP_EOL;
+                        echo 'var url'.$recorderNumUrl.' = "'.$config["playerlink"].'/m3u8.php?asset='.$asset.'&recorder='.$recorderInfoUrlValue["module"].'&type=hd";' . PHP_EOL;
                         echo 'playM3u8(url'.$recorderNumUrl.',"video'.$recorderNumUrl.'");' . PHP_EOL;
                         $recorderNumUrl--;
                     }

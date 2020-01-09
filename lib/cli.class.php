@@ -41,6 +41,7 @@
             }
             else{
                 rename($assetDir, $config["recordermaindir"] . $config["upload_to_server"] . "/" . $this->assetName);
+                $assetDir = $config["recordermaindir"] . $config["upload_to_server"] . "/" . $this->assetName;
                 file_put_contents($assetDir . "/post_process.log", "-- [" . date("d/m/Y - H:i:s",time()) ."] : $this->assetName asset moved successefully to " . $config["upload_to_server"] . PHP_EOL, FILE_APPEND | LOCK_EX);
             }
 
@@ -79,7 +80,7 @@
                 "record_date" => $record_date,
                 "course_name" => $this->recordingInfo["course"],
                 "php_cli" => $config["phpcli"],
-                "metadata_file" => $assetDir ."/metadata.xml"
+                "metadata_file" => $assetDir ."/" . $config["metadata"]
             );
             if($camEnabled == true){
                 $cam_info = array(
@@ -101,8 +102,40 @@
                 $downloadRequestArray["slide_info"] = serialize($slide_info);
             }
             $downloadRequestArray["recorder_version"] = "2.0";
-            file_put_contents("$assetDir/download_request_dump.txt", var_export($downloadRequestArray, true) . PHP_EOL, FILE_APPEND);
+            file_put_contents("$assetDir/" . $config["request_dump"], var_export($downloadRequestArray, true) . PHP_EOL, FILE_APPEND);
+            $curl_success = strpos($this->requestUpload($config["ezcast_submit_url"], $downloadRequestArray), 'Curl error') === false;
+            if(!$curl_success)
+                return "error";
 
+            return 0;
+        }
+
+        function requestUpload($server_url, $recorder_array){
+            global $logger;
+            global $config;
+            $ch = curl_init($server_url);
+            curl_setopt($ch, CURLOPT_POST, 1); //activate POST parameters
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $recorder_array);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); //don't send answer to stdout but in returned string
+            curl_setopt($ch, CURLOPT_CONNECTTIMEOUT ,30);
+            curl_setopt($ch, CURLOPT_TIMEOUT, 30); //timeout in seconds
+            $res = curl_exec($ch);
+            $curlinfo = curl_getinfo($ch);
+            curl_close($ch);
+            file_put_contents($config["basedir"] ."/" . $config["var"] ."/curl.log", var_export($curlinfo, true) . PHP_EOL . $res, FILE_APPEND);
+            if ($res === false) {//error
+                $http_code = isset($curlinfo['http_code']) ? $curlinfo['http_code'] : false;
+                $logger->log(EventType::RECORDER_REQUEST_TO_MANAGER, LogLevel::ERROR, "Curl failed to POST data to $server_url. Http code: $http_code", array(__FUNCTION__));
+
+                return "Curl error. Http code: $http_code";
+            }
+
+            $logger->log(EventType::RECORDER_REQUEST_TO_MANAGER, LogLevel::DEBUG, "server_request_send $server_url, result= $res", array(__FUNCTION__));
+
+            //All went well send http response in stderr to be logged
+            fputs(STDERR, "curl result: $res", 2000);
+
+            return $res;
         }
 
         function finishUploadToServer(){

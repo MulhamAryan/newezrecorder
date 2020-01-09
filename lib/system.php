@@ -128,34 +128,6 @@
 
         }
 
-        function requestUpload($server_url, $recorder_array){
-            global $logger;
-            global $config;
-            $ch = curl_init($server_url);
-            curl_setopt($ch, CURLOPT_POST, 1); //activate POST parameters
-            curl_setopt($ch, CURLOPT_POSTFIELDS, $recorder_array);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); //don't send answer to stdout but in returned string
-            curl_setopt($ch, CURLOPT_CONNECTTIMEOUT ,30);
-            curl_setopt($ch, CURLOPT_TIMEOUT, 30); //timeout in seconds
-            $res = curl_exec($ch);
-            $curlinfo = curl_getinfo($ch);
-            curl_close($ch);
-            file_put_contents($config["basedir"] ."/var/curl.log", var_export($curlinfo, true) . PHP_EOL . $res, FILE_APPEND);
-            if ($res === false) {//error
-                $http_code = isset($curlinfo['http_code']) ? $curlinfo['http_code'] : false;
-                $logger->log(EventType::RECORDER_REQUEST_TO_MANAGER, LogLevel::ERROR, "Curl failed to POST data to $server_url. Http code: $http_code", array(__FUNCTION__));
-
-                return "Curl error. Http code: $http_code";
-            }
-
-            $logger->log(EventType::RECORDER_REQUEST_TO_MANAGER, LogLevel::DEBUG, "server_request_send $server_url, result= $res", array(__FUNCTION__));
-
-            //All went well send http response in stderr to be logged
-            fputs(STDERR, "curl result: $res", 2000);
-
-            return $res;
-        }
-
         function isProcessRunning($pid) {
             if (!isset($pid) || $pid == '' || $pid == 0)
                 return false;

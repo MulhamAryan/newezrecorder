@@ -6,9 +6,9 @@
 
     $config = array(
         "classroom"       => "mulham",
-        "apacheusername"  => "_www",
-        "recorderip"      => "127.0.0.1",
-        "recorderurl"     => "http://localhost/newezrecorder",
+        "apacheusername"  => "mulham", //Review
+        "recorderip"      => "164.15.43.32",
+        "htdocspath"      => "newezrecorder",
         "recordermaindir" => "/Users/mulham/Movies/",
         "local_processing"=> "local_processing",
         "trash"           => "trash",
@@ -34,13 +34,15 @@
         "services"        => "services",
         "plugins"         => "plugins",
         "htdocs"          => "htdocs",
+        "player"          => "player",
         "var"             => "var",
         "theme"           => "refracted",
         "statusfile"      => "recording.json",
         "metadata"        => "metadata.xml",
+        "request_dump"    => "download_request_dump.txt",
         "crontabuserfile" => "crontabfile"
     );
-
+    $config["recorderurl"] = "http://". $config["recorderip"] . "/" . $config["htdocspath"];
     $config["curenttheme"] = $config["templates"] . "/" . $config["theme"];
     $config["passwordfile"] = $config["basedir"] . "/etc/users/htpasswd";
     $config["adminlist"] = $config["basedir"] . "/etc/users/admin.inc";
@@ -54,6 +56,8 @@
     $config["last_log_sent_get_url"] = $config["ezcast_logs_url"] . "?action=last_log_sent&source=".$config["classroom"];
     $config["log_push_url"] = $config["ezcast_logs_url"] . "?action=push_logs";
     $config["ezcast_submit_url"] = $config["ezmanagerurl"] . "recorder/index.php";
+
+    $config["playerlink"] = $config["recorderurl"] . "/" . $config["player"];
 
     $recorder_modules = array(
         array(
