@@ -1,5 +1,7 @@
 <?php
-    include "/Library/newezrecorder/global_config.inc";
+    include __DIR__ . "/../global_config.inc";
+
+    header("Access-Control-Allow-Origin: *");
     header('Content-Type: application/octet-stream');
 
     $asset = $_GET["asset"];
@@ -18,7 +20,7 @@
                 $link .= "&type=$type";
                 echo "#EXTM3U" . PHP_EOL;
                 echo "#EXT-X-VERSION:3" . PHP_EOL;
-                echo "#EXT-X-STREAM-INF:PROGRAM-ID=1,BANDWIDTH=256000,CODECS=\"avc1.66.30,mp4a.40.2\"" . PHP_EOL;
+                echo "#EXT-X-STREAM-INF:BANDWIDTH=150000,RESOLUTION=416x234,CODECS=\"avc1.42e00a,mp4a.40.2\"" . PHP_EOL;
                 echo $link;
             }
             else{

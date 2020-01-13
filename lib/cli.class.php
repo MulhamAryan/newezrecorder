@@ -138,8 +138,24 @@
             return $res;
         }
 
-        function finishUploadToServer(){
+        function finishUploadToServer($asset) {
+            global $config;
+            global $logger;
 
+            //Check where the recorder is first [DEV]
+
+            $logger->log(EventType::RECORDER_UPLOAD_TO_EZCAST, LogLevel::DEBUG, __FILE__ . " called with args: $asset", array(__FILE__), $asset);
+
+            //move asset folder from upload_to_server to upload_ok dir
+            $ok = rename($config["recordermaindir"] . "/" .$config["upload_to_server"] . "/" . $asset,$config["recordermaindir"] . "/" .$config["upload_ok"] . "/" . $asset);
+            if(!$ok) {
+                $logger->log(EventType::RECORDER_UPLOAD_TO_EZCAST, LogLevel::CRITICAL, "Could not move asset folder from " . $config["upload_to_server"] . " to " . $config["upload_ok"] . " dir (failed on local or on remote)", array(__FILE__), $asset);
+                return false;
+            }
+            else{
+                $logger->log(EventType::TEST, LogLevel::INFO, "Local asset moved from " . $config["upload_to_server"] . " to " . $config["upload_ok"] . " dir", array(__FUNCTION__), $asset);
+                return true;
+            }
         }
 
     }

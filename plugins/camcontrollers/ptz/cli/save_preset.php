@@ -8,6 +8,6 @@ if($argc != 2) {
 
 $presetName = $argv[1];
 
-$ptz = require(__DIR__ . '/../lib_cam.php');
+$ptz = require(__DIR__ . '/../library.php');
 
 $ptz->positionSave($presetName);

@@ -1,5 +1,7 @@
 <?php
     include __DIR__ . "/../global_config.inc";
+
+    header("Access-Control-Allow-Origin: *");
     header('Content-Type: application/octet-stream');
     $file = $_GET["filename"];
     $file = preg_replace('/[^a-zA-Z0-9.]/i', '', $file);

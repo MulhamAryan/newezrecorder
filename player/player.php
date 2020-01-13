@@ -1,6 +1,7 @@
 <?php
-    include "/Library/newezrecorder/global_config.inc";
+    include __DIR__ . "/../global_config.inc";
 
+    header("Access-Control-Allow-Origin: *");
     header('Content-Type: application/octet-stream');
     $asset = $_GET["asset"];
     $asset = preg_replace('/[^a-zA-Z0-9_-]/i', '_', $asset);

@@ -159,6 +159,7 @@
                 $recording_direcory = $this->folders["local_processing"] . $asset . "/" . $module . "/" . $qualityKey;
 
                 // RTSP FFMPEG Command line
+                // -vf \"select='eq(pict_type,PICT_TYPE_I)'\" -vsync vfr /Library/newezrecorder/var/$module/i%d.jpg
                 $cmd = $this->ffmpeg_cli . $this->limit_duration . $this->type . " " . $insertLogo . " -vcodec copy -acodec aac -ac 1 -hls_time 3 -hls_list_size 0 -hls_wrap 0 -flags output_corrupt -start_number 1 $recording_direcory/$this->common_movie_name.m3u8 > $ffmpeg_log 2>&1 < /dev/null & echo $! > $pid_file";
                 $this->bashCommandLine($cmd);
 

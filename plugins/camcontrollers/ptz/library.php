@@ -79,7 +79,6 @@ class PtzController extends PTZOptics_CGI_API
 
     function getLastUsedPresetId()
     {
-
         $presets = $this->getPresets();
         if (!$presets)
             return 0;
@@ -104,6 +103,7 @@ class PtzController extends PTZOptics_CGI_API
         $string_data = serialize($presets);
         file_put_contents($module_parameters["preset_file"], $string_data);
     }
+
 }
 
 $CamController = new PtzController();

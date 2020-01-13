@@ -1,3 +1,6 @@
+<?php
+    $camcontroller = ($plugin["camcontrollers"] != null ? true:false);
+?>
 <script>
     function stop_recording(fnct){
         if(window.confirm("<?php echo $lang["stop_recording_message"];?>")) {
@@ -22,6 +25,18 @@
             $("#campresets").fadeIn();
         });
     });
+
+    function changeCamPosition(position){
+        $.ajax({
+            type: 'GET',
+            url: "ajax.php?action=cam_move&plan=" + position,
+            cache: false,
+            timeout: 10000,
+            error: function(){
+                alert("Error can't change cam position please verify wifi.");
+            }
+        });
+    }
 </script>
 <?php
     if($recordingstatus == "stop")
@@ -117,7 +132,19 @@
                 <div class="recordingbutton" id="stop" onclick="stop_recording('stop');"><i class="fas fa-stop-circle"></i><br><?php echo $lang["stop_recording"];?></div>
                 <div class="recordingbutton" id="camposition" rel="<?php echo $asset;?>"><i class="fas fa-arrows-alt"></i><br><?php echo $lang["cam_position"];?></div>
             </div>
-            <div id="campresets" style="display: none">test</div>
+            <div id="campresets" class="campresets">
+                <hr>
+                <ul>
+                <?php
+                    if($camcontroller == true){
+                        foreach ($plugin["camcontrollers"]->positionNamesGet() as $scene){
+                            echo '<li style="background-image: url(\'templates/refracted/img/cam_position/' . $scene . '.png\');" onclick="changeCamPosition(\'' . $scene .'\');"></li>';
+                        }
+                    }
+                ?>
+
+                </ul>
+            </div>
         </div>
     </div>
 </div>

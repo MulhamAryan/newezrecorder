@@ -3,6 +3,7 @@
     @ini_set('display_errors', '1');    // Only on debug mode !
     date_default_timezone_set("Europe/Brussels");
     $config_version = "2019121201";
+    $input = array_merge($_GET, $_POST);
 
     $config = array(
         "classroom"       => "mulham",
@@ -63,10 +64,10 @@
         array(
             "enabled"   => true,
             "module"    => "camrecord", //This is the first version don't change `camrecord`
-            "ip"        => "10.0.2.101",
+            "ip"        => "10.0.2.102",
             "type"      => "rtsp",
             "quality"   => array(
-                "hd"        => "10.0.2.101:554/1"
+                "hd"        => "10.0.2.102:554/1"
                 //"sd"      => "10.0.2.102:554/2" // First version please don't enable this option and don't add more than on quality (Will be available in next versions)
             ),
             "icon"      => "film",
@@ -76,10 +77,10 @@
         array(
             "enabled"   => true,
             "module"    => "sliderecord",  //This is the first version don't change `sliderecord`
-            "ip"        => "10.0.2.101",
+            "ip"        => "10.0.2.102",
             "type"      => "rtsp",
             "quality"   => array(
-                "hd"        => "10.0.2.101:554/1"
+                "hd"        => "10.0.2.102:554/1"
                 //"sd"        => "10.0.2.102:554/2"// First version please don't enable this option and don't add more than on quality (Will be available in next versions)
             ),
             "icon"      => "image",

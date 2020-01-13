@@ -4,8 +4,6 @@
 
     include "global_config.inc";
 
-    $input = array_merge($_GET, $_POST);
-
     if(isset($input['action']) && !empty($input['action'])) {
         $action = $input['action'];
     }
