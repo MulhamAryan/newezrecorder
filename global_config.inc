@@ -7,10 +7,10 @@
 
     $config = array(
         "classroom"       => "mulham",
-        "apacheusername"  => "mulham", //Review
+        "apacheusername"  => "podclient", //Review
         "recorderip"      => "164.15.43.32",
         "htdocspath"      => "newezrecorder",
-        "recordermaindir" => "/Users/mulham/Movies/",
+        "recordermaindir" => "/home/podclient/Videos/",
         "local_processing"=> "local_processing",
         "trash"           => "trash",
         "upload_to_server"=> "upload_to_server",
@@ -18,12 +18,12 @@
         "basedir"         => __DIR__ . "/",
         "clidir"          => "cli",
         "clipostprocess"  => "cli_post_process.php",
-        "webbasedir"      => "/Library/WebServer/Documents/ezrecorder/",
+        "webbasedir"      => "/var/www/html/",
         "userweb"         => "_www",
         "ezmanagerurl"    => "http://podcasttest.ulb.ac.be/ezmanager/",
         "adminmail"       => "podcast.tech@ulb.ac.be",
         "phpcli"          => "/usr/bin/php",
-        "ffmpegcli"       => "/usr/local/bin/ffmpeg",
+        "ffmpegcli"       => "/usr/bin/ffmpeg",
         "crontab"         => "/usr/bin/crontab",
         "crontabcli"      => "cli_auto_publish.php",
         "downloadprotocol"=> "rsync",
