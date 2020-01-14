@@ -1,5 +1,6 @@
 <?php
     $select = $system->removeCharacters($input["select"]);
+
     if(is_array($languagesList[$select]) && $languagesList[$select]["enabled"] == true){
         $_SESSION["language"] = $select;
     }

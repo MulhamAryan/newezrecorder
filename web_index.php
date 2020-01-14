@@ -1,16 +1,8 @@
 <?php
-
     ob_start();
     session_start();
 
     include "global_config.inc";
-
-    if(isset($input['action']) && !empty($input['action'])) {
-        $action = $input['action'];
-    }
-    else{
-        $action = "";
-    }
 
     include $tmp->loadFile("header.php");
 

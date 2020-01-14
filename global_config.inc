@@ -4,6 +4,12 @@
     date_default_timezone_set("Europe/Brussels");
     $config_version = "2019121201";
     $input = array_merge($_GET, $_POST);
+    if(isset($input['action']) && !empty($input['action'])) {
+        $action = $input['action'];
+    }
+    else{
+        $action = "";
+    }
 
     $config = array(
         "classroom"       => "mulham",
@@ -43,6 +49,7 @@
         "request_dump"    => "download_request_dump.txt",
         "crontabuserfile" => "crontabfile"
     );
+    $config["languages"] = $config["basedir"] . "/" . $config["languages"];
     $config["recorderurl"] = "http://". $config["recorderip"] . "/" . $config["htdocspath"];
     $config["curenttheme"] = $config["templates"] . "/" . $config["theme"];
     $config["passwordfile"] = $config["basedir"] . "/etc/users/htpasswd";
@@ -89,27 +96,23 @@
 
     );
 
-    $plugins_list = [
-        "camcontrollers" => [
+    $plugins_list = array(
+        "camcontrollers" => array(
             "ptz" => true,
             "crestron" => false,
             "onvif" => false,
             "visca" => false
-        ],
+        ),
 
-        "vu_metter" => [
+        "vu_metter" => array(
             "ffmpeg_viewer" => false,
             "crestron" => false,
             "onvif" => false,
             "visca" => false
-        ],
+        ),
 
         "sound_backup" => false,
-
-        "player" => [
-            "m3u" => true
-        ]
-    ];
+    );
 
     $debug = array(
         "debug_mode" => false,
@@ -117,35 +120,9 @@
         "logs_sync" => false
     );
 
-    $languagesList = array(
-        "fr" => array(
-            "enabled" => true,
-            "file" => "francais.php",
-            "name" => "Français"
-        ),
-        "en" => array(
-            "enabled" => true,
-            "file" => "english.php",
-            "name" => "English"
-        ),
-        "nl" => array(
-            "enabled" => true,
-            "file" => "dutch.php",
-            "name" => "Dutch"
-        ),
-    );
-
-    if(empty($_SESSION["language"])){
-        $_SESSION["language"] = "fr";
-        include $config["languages"] . "/francais.php";
-    }
-    else{
-        $selectedLang = $_SESSION["language"];
-        include $config["languages"] . "/" . $languagesList[$selectedLang]["file"];
-    }
-
     $enablemaintenance = false; // if true go to the template directory and modify the text in maintenance.php file.
     $randomSecurityNumber = 98856;
 
     include $config["lib"] . "/loader.php";
+
 ?>

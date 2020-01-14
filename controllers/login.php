@@ -27,7 +27,7 @@
             else{
                 $success = 0;
                 $errorMsg = $login["errorMsg"];
-                $logger->log(EventType::RECORDER_LOGIN, LogLevel::INFO, "Login failed, wrong credentials for login: $login", array(__FUNCTION__));
+                //$logger->log(EventType::RECORDER_LOGIN, LogLevel::INFO, "Login failed, wrong credentials for login: $login", array(__FILE__));
             }
         }
 

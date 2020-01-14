@@ -1,4 +1,6 @@
 <?php
+    include "languages.php";
+
     include "system.php";
     $system = new System();
 

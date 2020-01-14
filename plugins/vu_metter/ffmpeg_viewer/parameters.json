@@ -1,8 +1,9 @@
 {
-    "title":"M3U player",
+    "ip":"10.0.2.253",
+    "title":"ptzoptics_cam_management",
     "description":"This module is designed to control an IP camera supporting PTZ CAM.",
-    "plugin_type":"player",
-    "plugin_name":"m3u",
+    "plugin_type": "camcontroller",
+    "plugin_name":"ptz",
     "config_file":"config.inc",
     "library_file":"library.php"
 }
