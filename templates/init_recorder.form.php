@@ -138,7 +138,9 @@
                 <?php
                     if($camcontroller == true){
                         foreach ($plugin["camcontrollers"]->positionNamesGet() as $scene){
-                            echo '<li style="background-image: url(\'templates/refracted/img/cam_position/' . $scene . '.png\');" onclick="changeCamPosition(\'' . $scene .'\');"></li>';
+                            echo '<li onclick="changeCamPosition(\'' . $scene .'\');">';
+                            echo'<div style="background-image: url(\'' . $config["curenttheme"] . '/img/cam_position/' . $scene . '.png\');"></div><br><span>' . $scene .'</span>';
+                            echo'</li>';
                         }
                     }
                 ?>

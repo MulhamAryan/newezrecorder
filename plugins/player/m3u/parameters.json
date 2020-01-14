@@ -1,0 +1,8 @@
+{
+    "title":"M3U player",
+    "description":"This module is designed to control an IP camera supporting PTZ CAM.",
+    "plugin_type":"player",
+    "plugin_name":"m3u",
+    "config_file":"config.inc",
+    "library_file":"library.php"
+}

@@ -96,13 +96,19 @@
             "onvif" => false,
             "visca" => false
         ],
+
         "vu_metter" => [
             "ffmpeg_viewer" => false,
             "crestron" => false,
             "onvif" => false,
             "visca" => false
         ],
-        "sound_backup" => false
+
+        "sound_backup" => false,
+
+        "player" => [
+            "m3u" => true
+        ]
     ];
 
     $debug = array(
