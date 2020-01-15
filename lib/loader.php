@@ -1,4 +1,5 @@
 <?php
+
     include "languages.php";
 
     include "system.php";

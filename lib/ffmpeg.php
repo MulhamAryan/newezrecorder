@@ -1,4 +1,5 @@
 <?php
+
     class ffmpeg extends System {
 
         private $recordingDir;
@@ -48,12 +49,6 @@
             );
 
             $this->assetDir = $this->folders["local_processing"] . $this->asset . "/";
-        }
-
-        //This function is used to define the type of recording as RTSP
-        function rtsp($link){
-            $cmd = " -f rtsp -rtsp_transport tcp " . $this->thread_queue . " -i rtsp://" . $link;
-            return $cmd;
         }
 
         // This function initialize the recordings operation
@@ -146,6 +141,8 @@
         // !!!!! THIS IS THE FIRST VERSION OF THIS FUNCTION NEED MORE IMPROVE !!!!!
         // !!!!! BECAUSE IT CAN NOT DISTINGUISH THE NUMBER OF QUALITIES IN ONE RECORD !!!!!
         function recordingLaunch($asset,$type,$module,$qualityKey,$qualityValue){
+            global $config;
+
             $working_dir = $this->assetDir . $module;
             $log_file = $working_dir . "/init.log";
 
@@ -153,20 +150,55 @@
                 $insertLogo = " -i " . $this->logofile . " -filter_complex \"overlay=main_w-overlay_w-5:5\" ";
 
             if ($type == "rtsp") {
-                $this->type = $this->rtsp($qualityValue);
+                include_once "ffmpeg_profiles/rtsp.php";
                 $pid_file = $working_dir . "/" . $qualityKey . "/init.pid";
                 $ffmpeg_log = $working_dir . "/" . $qualityKey . "/" . "ffmpeg.log";
                 $recording_direcory = $this->folders["local_processing"] . $asset . "/" . $module . "/" . $qualityKey;
 
-                // RTSP FFMPEG Command line
-                // -vf \"select='eq(pict_type,PICT_TYPE_I)'\" -vsync vfr /Library/newezrecorder/var/$module/i%d.jpg
-                $cmd = $this->ffmpeg_cli . $this->limit_duration . $this->type . " " . $insertLogo . " -vcodec copy -acodec aac -ac 1 -hls_time 3 -hls_list_size 0 -hls_wrap 0 -flags output_corrupt -start_number 1 $recording_direcory/$this->common_movie_name.m3u8 > $ffmpeg_log 2>&1 < /dev/null & echo $! > $pid_file";
+                $parameters = array(
+                    "thread_queue" => $this->thread_queue,
+                    "link" => $qualityValue,
+                    "recording_directory" => $recording_direcory,
+                    "common_movie_name" => $this->common_movie_name,
+                    "logo_option" => $insertLogo,
+                    "thumbnail" => $config["basedir"] . "/" . $config["var"] . "/" . $module . ".jpg"
+                );
+
+                $rtspCmd = rtspprofile($parameters);
+                $cmd = "" . $this->ffmpeg_cli . " ". $this->limit_duration . " ". $rtspCmd . " > " . $ffmpeg_log . " 2>&1 < /dev/null & echo $! > " . $pid_file . "";
                 $this->bashCommandLine($cmd);
 
                 file_put_contents($log_file, "-- [" . date("d/m/Y - H:i:s",time()) ."] : Starting FFMPEG recording for $type $qualityKey successfully" . PHP_EOL, FILE_APPEND | LOCK_EX);
                 //Set the number of recorder after launch
                 $this->isRecording[$module][] = $qualityKey;
 
+            }
+            elseif($type == "v4l2" || $type == "avfoundation"){
+                include_once "ffmpeg_profiles/usbdevice.php";
+                $pid_file = $working_dir . "/" . $qualityKey . "/init.pid";
+                $ffmpeg_log = $working_dir . "/" . $qualityKey . "/" . "ffmpeg.log";
+                $recording_direcory = $this->folders["local_processing"] . $asset . "/" . $module . "/" . $qualityKey;
+
+                $qualityValue = explode(":",$qualityValue);
+                $parameters = array(
+                    "audio" => $qualityValue[1],
+                    "video_software" => $type,
+                    "screen" => $qualityValue[0],
+                    "recording_directory" => $recording_direcory,
+                    "common_movie_name" => $this->common_movie_name,
+                    "thumbnail" => $config["basedir"] . "/" . $config["var"] . "/" . $module . ".jpg"
+                );
+
+                $usbdevice = usbdevice($parameters);
+                $cmd = "" . $this->ffmpeg_cli . " ". $this->limit_duration . " ". $usbdevice . " > " . $ffmpeg_log . " 2>&1 < /dev/null & echo $! > " . $pid_file . "";
+                $this->bashCommandLine($cmd);
+
+                file_put_contents($log_file, "-- [" . date("d/m/Y - H:i:s",time()) ."] : Starting FFMPEG recording for $type $qualityKey successfully" . PHP_EOL, FILE_APPEND | LOCK_EX);
+                //Set the number of recorder after launch
+                $this->isRecording[$module][] = $qualityKey;
+            }
+            else{
+                header("LOCATION:index.php");
             }
         }
 

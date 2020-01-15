@@ -1,5 +1,4 @@
 <?php
-
     $languagesList = array(
         "fr" => array(
             "enabled" => true,

@@ -1,4 +1,5 @@
 <?php
+
     @error_reporting(E_ALL | E_STRICT); // Only on debug mode !
     @ini_set('display_errors', '1');    // Only on debug mode !
     date_default_timezone_set("Europe/Brussels");
@@ -85,9 +86,9 @@
             "enabled"   => true,
             "module"    => "sliderecord",  //This is the first version don't change `sliderecord`
             "ip"        => "10.0.2.102",
-            "type"      => "rtsp",
+            "type"      => "v4l2",
             "quality"   => array(
-                "hd"        => "10.0.2.102:554/1"
+                "hd"        => "/dev/video2:alsa -i default" // "video_device:audio_software -i audio_input"
                 //"sd"        => "10.0.2.102:554/2"// First version please don't enable this option and don't add more than on quality (Will be available in next versions)
             ),
             "icon"      => "image",
