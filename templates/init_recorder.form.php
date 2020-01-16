@@ -1,6 +1,8 @@
 <?php
     $camcontroller = ($plugin["camcontrollers"] != null ? true:false);
 ?>
+<!--<script src="<?php echo $config["curenttheme"];?>/js/player/player.js"></script>-->
+
 <script>
     function stop_recording(fnct){
         if(window.confirm("<?php echo $lang["stop_recording_message"];?>")) {
@@ -37,13 +39,31 @@
             }
         });
     }
+    <!-- This is a realtine player m3u steal on test-->
+
+    setInterval(function (){
+        <?php
+            $recorderNumUrl = count($recorderInfo);
+            foreach ($recorderInfo as $recorderInfoUrlKey => $recorderInfoUrlValue){?>$("#<?php echo $recorderInfoUrlValue["module"] . '_' . $recorderNumUrl;?>").attr("src", "<?php echo $config["curenttheme"];?>/img/<?php echo $recorderInfoUrlValue["module"];?>.jpg?"+new Date().getTime());
+                <?php
+                //echo 'var url'.$recorderNumUrl.' = "'.$config["playerlink"].'/m3u8.php?asset='.$asset.'&recorder='.$recorderInfoUrlValue["module"].'&type=high";' . PHP_EOL; // Realtime player m3u
+                //echo 'playM3u8(url'.$recorderNumUrl.',"video'.$recorderNumUrl.'");' . PHP_EOL; // Realtime player m3u
+                $recorderNumUrl--;
+            }?>
+    }, 1000);
+
 </script>
 <?php
     if($recordingstatus == "stop")
         $hideRecordingScreen = "display:none;";
     else
         $displayPublishOptions = "display:none;";
-
+    if(isset($hideRecordingScreen) && empty($hideRecordingScreen)){
+        $hideRecordingScreen = "";
+    }
+    if(isset($displayPublishOptions) && empty($displayPublishOptions)){
+        $displayPublishOptions = "";
+    }
 ?>
 <div class="recorder">
     <div class="indiv" style="text-align: center">
@@ -86,7 +106,9 @@
                     <div class="<?php echo $class;?> player">
                         <h5><i class="fas fa-<?php echo $recorderInfoValue["icon"];?>"></i> <?php echo $recorderInfoValue["tempname"];?></h5>
                         <hr>
-                        <video id="video<?php echo $recorderNum;?>" width="100%" height="100%" muted autoplay="" ></video>
+                        <!-- This is a realtine player m3u steal on test-->
+                        <!--<video id="video<?php echo $recorderNum;?>" width="100%" height="100%" muted autoplay="" ></video>-->
+                        <img id="<?php echo $recorderInfoValue["module"] . '_' . $recorderNum;?>" src="<?php echo $config["curenttheme"];?>/img/<?php echo $recorderInfoValue["module"];?>.jpg?" style="height: 600px">
                         <div class="view-metter"></div>
                     </div>
                 <?php
@@ -94,17 +116,6 @@
                 }
             ?>
             <div class="clearfix"></div>
-            <script src="<?php echo $config["curenttheme"];?>/js/player/player.js"></script>
-            <script>
-                <?php
-                    $recorderNumUrl = count($recorderInfo);
-                    foreach ($recorderInfo as $recorderInfoUrlKey => $recorderInfoUrlValue){
-                        echo 'var url'.$recorderNumUrl.' = "'.$config["playerlink"].'/m3u8.php?asset='.$asset.'&recorder='.$recorderInfoUrlValue["module"].'&type=hd";' . PHP_EOL;
-                        echo 'playM3u8(url'.$recorderNumUrl.',"video'.$recorderNumUrl.'");' . PHP_EOL;
-                        $recorderNumUrl--;
-                    }
-                ?>
-            </script>
             <hr>
             <div class="controller">
                 <?php
@@ -136,13 +147,13 @@
                 <hr>
                 <ul>
                 <?php
-                    if($camcontroller == true){
+                    /*if($camcontroller == true){
                         foreach ($plugin["camcontrollers"]->positionNamesGet() as $scene){
                             echo '<li onclick="changeCamPosition(\'' . $scene .'\');">';
                             echo'<div style="background-image: url(\'' . $config["curenttheme"] . '/img/cam_position/' . $scene . '.png\');"></div><br><span>' . $scene .'</span>';
                             echo'</li>';
                         }
-                    }
+                    }*///TODO
                 ?>
 
                 </ul>

@@ -161,7 +161,8 @@
                     "recording_directory" => $recording_direcory,
                     "common_movie_name" => $this->common_movie_name,
                     "logo_option" => $insertLogo,
-                    "thumbnail" => $config["basedir"] . "/" . $config["var"] . "/" . $module . ".jpg"
+                    //"thumbnail" => $config["basedir"] . "/" . $config["var"] . "/" . $module . ".jpg"
+                    "thumbnail" => $config["curenttheme"] . "/img/" . $module . ".jpg"
                 );
 
                 $rtspCmd = rtspprofile($parameters);
@@ -186,7 +187,8 @@
                     "screen" => $qualityValue[0],
                     "recording_directory" => $recording_direcory,
                     "common_movie_name" => $this->common_movie_name,
-                    "thumbnail" => $config["basedir"] . "/" . $config["var"] . "/" . $module . ".jpg"
+                    //"thumbnail" => $config["basedir"] . "/" . $config["var"] . "/" . $module . ".jpg"
+                    "thumbnail" => $config["curenttheme"] . "/img/" . $module . ".jpg"
                 );
 
                 $usbdevice = usbdevice($parameters);
@@ -198,7 +200,7 @@
                 $this->isRecording[$module][] = $qualityKey;
             }
             else{
-                header("LOCATION:index.php");
+                header("LOCATION:index.php?error=nomodule"); //TODO
             }
         }
 

@@ -2,8 +2,7 @@
     <form method="post" action="?action=login">
         <div class="fields">
             <div class="divlogo">
-                <span class="ez">EZ</span>
-                <span class="recorderlogo">recorder</span>
+                <img src="<?php echo $config["curenttheme"] . '/img/ezrecorder.png';?>" style="width: 80%">
             </div>
             <hr>
             <?php
@@ -47,7 +46,7 @@
                     <?php
                         foreach ($languagesList as $langListKey => $langListValue){
                             if($langListValue["enabled"] == true)
-                                echo '| <a href="?action=language&select=' . $langListKey . '">' . $langListValue["name"] . ' </a>';
+                                echo '| <a href="?language=' . $langListKey . '">' . $langListValue["name"] . ' </a>';
                         }
                     ?>
                 </div>
