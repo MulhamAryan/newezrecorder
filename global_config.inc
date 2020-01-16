@@ -1,5 +1,4 @@
 <?php
-
     @error_reporting(E_ALL | E_STRICT); // Only on debug mode !
     @ini_set('display_errors', '1');    // Only on debug mode !
     date_default_timezone_set("Europe/Brussels");
