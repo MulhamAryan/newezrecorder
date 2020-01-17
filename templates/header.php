@@ -22,10 +22,7 @@
     <div class="container">
         <div class="header">
             <div class="float-left">
-                <div class="logo">
-                    <img src="<?php echo $config["curenttheme"];?>/img/logo.png" style="width: 150px"/>
-                </div>
-                <div class="logo">
+                <div class="logo" style="padding: 15px">
                     <a href="index.php">
                         <img src="<?php echo $config["curenttheme"] . '/img/ezrecorder.png';?>" style="width: 150px">
                         <!--<span class="ez">EZ</span><span class="recorderword">recorder</span>-->
