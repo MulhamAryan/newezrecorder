@@ -1,0 +1,532 @@
+img, a, fieldset, ul, li, p, h1, h2, h3, h4, h5, h6, div{
+    border:0 none;
+    margin:0;
+    padding:0;
+}
+
+*{
+    margin:0;
+    padding:0;
+}
+
+html{
+    height:100%;
+    background-color: rgb(39, 42, 44);
+}
+
+body{
+    background-color: rgb(39, 42, 44);
+    height:100%;
+    font-size: 14px;
+    color:#fff;
+}
+
+.container {
+    box-sizing: inherit  !important;
+    position: relative;
+    min-height: 100%;
+    width: 100% !important;
+    margin: auto  !important;
+    max-width: 100% !important;
+    padding: 0 !important;
+}
+
+.header {
+    position: relative;
+    min-width: 100%;
+    width: 100%;
+    margin: 0 auto;
+    background: #1C2022;
+    border-bottom: 1px solid #101010;
+}
+
+.header .logo{
+    display: inline-block;
+    padding: 5px 0 5px 5px;
+}
+
+.header .logo a{
+    text-decoration: none;
+}
+
+.header .btn{
+    border-radius: 0;
+    padding: 15px;
+}
+
+.header .ez{
+    margin-left: 10px;
+    vertical-align: middle;
+    font-weight: bold;
+    color: #9ea621;
+    font-size:30px;
+    font-family: sans-serif;
+
+}
+
+.header .recorderword{
+    background-color: #1C2022 !important;
+    width: 100%;
+    margin-top: 26px;
+    color:#FFF;
+    font-size: 25px;
+    vertical-align: middle;
+}
+
+.footer {
+    position:absolute;
+    color:#FFF;
+    min-width: 100px !important;
+    width: 100% !important;
+    background: #1C2022 !important;
+    border-top:1px solid #101010;
+    vertical-align: bottom;
+    bottom: 0;
+}
+
+.footer_wrapper {
+    position: relative;
+    margin: 0 auto;
+}
+
+ul {
+    list-style: none;
+    display: block;
+    margin-block-start: 1em;
+    margin-block-end: 1em;
+    margin-inline-start: 0;
+    margin-inline-end: 0;
+    padding-inline-start: 40px;
+}
+
+.login{
+    position: relative;
+    margin: auto;
+    margin-top: 100px;
+    background-color: #1C2022;
+    padding: 10px;
+    font-size: 14px;
+    color:#ccc;
+    border: 1px solid #101010;
+}
+
+.login a{
+    color:#ccc;
+}
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+textarea:-webkit-autofill:focus,
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus {
+    -webkit-text-fill-color: #101010;
+    -webkit-box-shadow: 0 0 0 1000px #fff inset;
+    transition: background-color 50000s ease-in-out 0s;
+}
+
+input[type=text], .login input[type=password]{
+    border: 1px solid #fff;
+    padding: 8px;
+    width: 100%;
+    outline: none;
+    background-color: #fff;
+}
+.login input[type=submit]{
+    width: 100%;
+}
+.login .fields{
+    padding:20px 40px 0 40px;
+}
+hr{
+    border-top:1px solid #525252 !important;
+    border-bottom: 0;
+}
+
+.player{
+    color: #ccc;
+    padding: 25px;
+    width: 50%;
+    margin: auto;
+    text-align: center;
+    border-left: 1px solid #000;
+}
+
+.player video{
+    border:1px solid #101010;
+    background-color: #101010;
+    width: 97%;
+    float: left;
+    position: relative;
+}
+
+.player .view-metter{
+    width: 2%;
+    border: 1px solid #FF0000;
+    height: 156px;
+    float: right;
+    background-color: #FFF;
+}
+
+.forgot_password{
+    font-weight: bold;
+    font-size: 16px;
+    margin: 20px 20px 10px 20px;
+    text-align: center;
+}
+.divlogo{
+    vertical-align: middle;
+    margin: auto;
+    width: 100%;
+    text-align: center;
+}
+
+.divlogo .ez{
+    vertical-align: middle;
+    font-weight: bold;
+    color: #9ea621;
+    font-size:52px;
+    font-family: sans-serif;
+    display: inline-block;
+}
+
+.divlogo .recorderlogo{
+    vertical-align: middle;
+    font-weight: bold;
+    color: #fff;
+    font-size:42px;
+    font-family: sans-serif;
+    display: inline-block;
+}
+.passwordForm{
+    display: none;
+}
+.close{
+    color: #ff0000;
+}
+
+textarea{
+    border: 1px solid #b3b3b3;
+    padding: 12px;
+    width: 100%;
+    outline: none;
+    background-color: #fff;
+    border-radius: 4px;
+    color: #000 !important;
+}
+.clear{
+    clear: both;
+}
+.recorder{
+    display: inline-block;
+    width: 100%;
+    font-size: 14px;
+    margin-bottom: 100px;
+}
+.recorder .indiv{
+    margin-top: 10px;
+    /*padding: 10px;*/
+    margin-left: auto;
+    margin-right: auto;
+    background-color: #1C2022;
+    color: #FFF;
+    width: 100%;
+    border: 1px solid #101010;
+}
+
+.recorder .form{
+    background-color: #1C2022;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 20px;
+    padding: 20px;
+    border: 1px solid #101010;
+}
+
+.recorder .course_info{
+    text-align: left;
+    padding: 10px;
+    border-top: 1px solid #525252;
+    border-bottom: 1px solid #525252;
+}
+
+@media only screen and (min-width: 756px) {
+    .recorder .form {
+        width: 756px;
+    }
+    .small_help_btn{
+        display: none;
+    }
+    .big_help_btn{
+        display: inline-block;
+    }
+    .login{
+        width: 460px;
+    }
+}
+
+@media only screen and (max-width: 756px) {
+    .small_help_btn{
+        display: inline-block;
+    }
+    .big_help_btn{
+        display: none;
+    }
+    .login{
+        margin-top: 10px;
+    }
+}
+
+.recorder label{
+    padding-top: 4px;
+    font-weight: bold;
+}
+.customRadio{
+    vertical-align: middle;
+    text-align: center;
+    width: 100%;
+    margin: auto;
+}
+.customRadio .radio{
+    margin: auto;
+    border:1px solid #aaaaaa;
+    width:125px;
+    height:111px;
+    cursor:pointer;
+    background-color: #44484a;
+    opacity: 0.7;
+}
+
+.customRadio input[type=radio]{
+    display:none;
+}
+
+.customRadio input[type=radio]:checked + .radio{
+    background-color: #000;
+    font-weight: bold;
+    color: #7da55a;
+    border: 1px solid #7da55a;
+    opacity: 1;
+}
+
+.customRadio i{
+    margin-top: 15px;
+    font-size: 55px;
+}
+
+.recordoptions{
+    width: 100%;
+    display: inline-block;
+    padding: 10px;
+    opacity: 0.9;
+    background-color: #282828;
+}
+
+.recordoptions label{
+    padding: 5px;
+    margin: 0;
+}
+
+.recordoptions input[type=time]{
+    padding: 5px;
+}
+.controller{
+    background-color: #1D2023;
+    width: 100%;
+    text-align: center;
+    padding-bottom: 20px;
+}
+
+.controller .recordingbutton{
+    display: inline-block;
+    width:125px;
+    height:125px;
+    vertical-align: middle;
+    text-align: center;
+    margin: auto;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.controller .recordingbutton i{
+    margin-top: 10px;
+    font-size: 60px;
+}
+.controller #play{
+    background-color: #609442;
+    color:#fff;
+}
+
+.controller #play:hover{
+    background-color: #fff;
+    color: #609442;
+    border: 2px solid #609442;
+}
+
+.controller #stop{
+    background-color: #da4455;
+    color:#fff;
+}
+.controller #stop:hover{
+    background-color: #fff;
+    color:#da4455;
+    border: 2px solid #da4455;
+}
+
+.controller #pause{
+    background-color: #cc6e25;
+    color:#fff;
+}
+
+.controller #pause:hover{
+    background-color: #fff;
+    color:#cc6e25;
+    border: 2px solid #cc6e25;
+}
+
+.controller #camposition{
+    background-color: #6c757d;
+}
+
+.controller #camposition:hover{
+    background-color: #fff;
+    color: #6c757d;
+    border: 2px solid #6c757d;
+}
+
+.publish{
+    border-radius: 3px;
+    display: inline-block;
+    width: 180px;
+    height: 180px;
+    text-align: center;
+    vertical-align: middle;
+    padding: 10px;
+    font-weight: bold;
+    cursor: pointer;
+    margin: 10px;
+}
+
+.publish i{
+    margin-top: 25px;
+    display: inline-block;
+    font-size: 80px;
+    margin-bottom: 10px;
+}
+
+.publishDelete{
+    color:#fff;
+    background-color: #da4455;
+}
+.publishDelete:hover {
+    background-color: #FFF;
+    color: #da4455;
+    border:3px solid #da4455;
+}
+
+.publishPrivate{
+    color: #fff;
+    background-color: #cc6e25;
+}
+
+.publishPrivate:hover{
+    background-color: #FFF;
+    color: #cc6e25;
+    border:3px solid #cc6e25;
+}
+
+.publishPublic{
+    color:#fff;
+    background-color: #609442;
+}
+
+.publishPublic:hover{
+    background-color: #fff;
+    color: #609442;
+    border:3px solid #609442;
+}
+.loadingRecording{
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    padding: 20px;
+    text-align: center;
+    font-weight: bold;
+    display: none;
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 54px;
+    height: 29px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 20px;
+    width: 20px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+input:checked + .slider {
+    background-color: #5e943e;
+}
+
+input:focus + .slider {
+    box-shadow: 0 0 1px #5e943e;
+}
+
+input:checked + .slider:before {
+    -webkit-transform: translateX(26px);
+    -ms-transform: translateX(26px);
+    transform: translateX(26px);
+}
+
+.slider.round {
+    border-radius: 34px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
+
+.campresets ul li{
+    display: inline-block;
+    width: 150px;
+    height: 100px;
+    padding-right: 5px;
+}
+.campresets ul li div{
+    width: 150px;
+    height: 100px;
+    background-size: 100%;
+    background-repeat: no-repeat;
+    background-position: center;
+}
