@@ -1,0 +1,8 @@
+{
+    "title":"player_image",
+    "description":"This plugin is used to get recording image every x seconds",
+    "plugin_type":"player",
+    "plugin_name":"image",
+    "config_file":"config.inc",
+    "library_file":"library.php"
+}

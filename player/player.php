@@ -14,7 +14,7 @@
 
     $m3u8_rep = $config["recordermaindir"] . $config["local_processing"] . "/" . $asset . "/" . $recorder ."/" . $type . "/ffmpegmovie.m3u8";
 
-    $m3u8 = file($m3u8_rep);
+    $m3u8 = file($m3u8_rep); //TODO urgent
 
     $m3u8 = str_replace("ffmpegmovie",$config["playerlink"] . "/hls.php?asset=$asset&recorder=$recorder&type=$type&filename=ffmpegmovie",$m3u8);
 

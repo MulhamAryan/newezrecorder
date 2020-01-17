@@ -50,7 +50,7 @@
     foreach ($pluginloader->getActivePlugin() as $activePluginKey => $activePluginValue){
         if(file_exists($activePluginValue)){
             $plugin[$activePluginKey] = include($activePluginValue);
-            require_once pathinfo($activePluginValue)['dirname'] . "/functions.php";
+            //require_once pathinfo($activePluginValue)['dirname'] . "/functions.php";
         }
         else{
             echo "Plugin library file not found `<b>$activePluginValue</b>`";

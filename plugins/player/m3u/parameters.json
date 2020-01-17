@@ -1,0 +1,8 @@
+{
+    "title":"player_m3u",
+    "description":"This plugin is used to get recording video live",
+    "plugin_type":"player",
+    "plugin_name":"image",
+    "config_file":"config.inc",
+    "library_file":"library.php"
+}

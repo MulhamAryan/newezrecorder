@@ -10,7 +10,7 @@
         </div>
         <form method="post" action="?action=init_recording" id="initRecorder">
             <div class="form-group">
-                <label for="course"><i class="fab fa-discourse"></i> <?php echo $lang["course"];?></label>
+                <label for="course"><?php echo $lang["course"];?></label>
                     <?php
                     if (!isset($coursesList) || empty($coursesList))
                         echo $lang["no_courses_found"];
@@ -28,17 +28,16 @@
                 </div>
                 <hr>
                 <div class="form-group">
-                    <label for="title"><i class="fas fa-heading"></i> <?php echo $lang["title"];?> : </label>
+                    <label for="title"><?php echo $lang["title"];?> : </label>
                     <input type="text" name="title" id="title" maxlength="70" value="<?php echo $lastTitle; ?>" placeholder="<?php echo $lang["title"];?>" required>
                 </div>
                 <hr>
                 <div class="form-group">
-                    <label for="description"><i class="fas fa-align-left"></i> <?php echo $lang["description"];?> : </label>
+                    <label for="description"><?php echo $lang["description"];?> : </label>
                     <textarea id="description" placeholder="<?php echo $lang["description"];?>" name="description"><?php echo $lastDescription;?></textarea>
                 </div>
                 <hr>
                 <div class="form-group">
-                    <i class="fas fa-record-vinyl"></i>
                     <?php echo $lang["select_type"];?> :
                     <br><br>
                     <div class="customRadio">
@@ -61,7 +60,7 @@
                         <span class="slider round"></span>
                     </label>
                     <label for="autostop"><?php echo $lang["options"];?> :</label>
-                    <div class="recordoptions" id="recordoptions">
+                    <div class="recordoptions">
                         <div class="float-left"> <?php echo $lang["auto_stop_after"]; ?> <input type="time" name="autostop" value="<?php echo $lastAutoStopTime;?>" max="12:00" min="00:30" id="stoptime" style="padding: 0 !important;" required> hh:mm</div>
                         <div class="float-right">
                             <?php echo $lang["publish_in"];?> :

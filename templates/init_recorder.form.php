@@ -1,7 +1,6 @@
 <?php
     $camcontroller = ($plugin["camcontrollers"] != null ? true:false);
 ?>
-<!--<script src="<?php echo $config["curenttheme"];?>/js/player/player.js"></script>-->
 
 <script>
     function stop_recording(fnct){
@@ -39,31 +38,16 @@
             }
         });
     }
-    <!-- This is a realtine player m3u steal on test-->
-
-    setInterval(function (){
-        <?php
-            $recorderNumUrl = count($recorderInfo);
-            foreach ($recorderInfo as $recorderInfoUrlKey => $recorderInfoUrlValue){?>$("#<?php echo $recorderInfoUrlValue["module"] . '_' . $recorderNumUrl;?>").attr("src", "<?php echo $config["curenttheme"];?>/img/<?php echo $recorderInfoUrlValue["module"];?>.jpg?"+new Date().getTime());
-                <?php
-                //echo 'var url'.$recorderNumUrl.' = "'.$config["playerlink"].'/m3u8.php?asset='.$asset.'&recorder='.$recorderInfoUrlValue["module"].'&type=high";' . PHP_EOL; // Realtime player m3u
-                //echo 'playM3u8(url'.$recorderNumUrl.',"video'.$recorderNumUrl.'");' . PHP_EOL; // Realtime player m3u
-                $recorderNumUrl--;
-            }?>
-    }, 1000);
-
 </script>
 <?php
-    if($recordingstatus == "stop")
+    if($recordingstatus == "stop"){
         $hideRecordingScreen = "display:none;";
-    else
+    }
+    else{
         $displayPublishOptions = "display:none;";
-    if(isset($hideRecordingScreen) && empty($hideRecordingScreen)){
-        $hideRecordingScreen = "";
     }
-    if(isset($displayPublishOptions) && empty($displayPublishOptions)){
-        $displayPublishOptions = "";
-    }
+    $hideRecordingScreen = isset($hideRecordingScreen) ? $hideRecordingScreen:"";
+    $displayPublishOptions = isset($displayPublishOptions) ? $displayPublishOptions:"";
 ?>
 <div class="recorder">
     <div class="indiv" style="text-align: center">
@@ -84,7 +68,7 @@
                 echo $lang["published_in_public"];
                 ?>
             </div>
-            <a href="index.php"><? echo $lang["start_new"];?></a>
+            <a href="index.php"><?php echo $lang["start_new"];?></a>
             <hr>
         </div>
         <div id="recordingPublish" style="<?php echo $displayPublishOptions;?> padding: 20px;">
@@ -96,25 +80,7 @@
         </div>
         <div id="recordingNow" style="<?php echo $hideRecordingScreen;?>">
             <div class="clearfix"></div>
-            <?php
-                $recorderNum = count($recorderInfo);
-                if($recorderNum != 1){
-                    $class = "float-left";
-                }
-                foreach ($recorderInfo as $recorderInfoKey => $recorderInfoValue){
-                    ?>
-                    <div class="<?php echo $class;?> player">
-                        <h5><i class="fas fa-<?php echo $recorderInfoValue["icon"];?>"></i> <?php echo $recorderInfoValue["tempname"];?></h5>
-                        <hr>
-                        <!-- This is a realtine player m3u steal on test-->
-                        <!--<video id="video<?php echo $recorderNum;?>" width="100%" height="100%" muted autoplay="" ></video>-->
-                        <img id="<?php echo $recorderInfoValue["module"] . '_' . $recorderNum;?>" src="<?php echo $config["curenttheme"];?>/img/<?php echo $recorderInfoValue["module"];?>.jpg?" style="height: 600px">
-                        <div class="view-metter"></div>
-                    </div>
-                <?php
-                    $recorderNum--;
-                }
-            ?>
+            <?php echo $plugin["player"]->player($recorderInfo); ?>
             <div class="clearfix"></div>
             <hr>
             <div class="controller">
@@ -138,22 +104,27 @@
 
                     }
                     ?>
+                <?php echo $plugin["player"]->javascript($recorderInfo); ?>
                 <div <?php echo $start;?> class="recordingbutton" id="play" onclick="recordStatus('play');"><i class="fas fa-play-circle"></i><br><?php echo $lang["start_recording"];?></div>
                 <div <?php echo $pause;?> class="recordingbutton" id="pause" onclick="recordStatus('pause');"><i class="fas fa-pause-circle"></i><br><?php echo $lang["pause_recording"];?></div>
                 <div class="recordingbutton" id="stop" onclick="stop_recording('stop');"><i class="fas fa-stop-circle"></i><br><?php echo $lang["stop_recording"];?></div>
-                <div class="recordingbutton" id="camposition" rel="<?php echo $asset;?>"><i class="fas fa-arrows-alt"></i><br><?php echo $lang["cam_position"];?></div>
+                <?php if($camcontroller == true){ ?><div class="recordingbutton" id="camposition" rel="<?php echo $asset;?>"><i class="fas fa-arrows-alt"></i><br><?php echo $lang["cam_position"];?></div><?php } ?>
             </div>
             <div id="campresets" class="campresets">
                 <hr>
                 <ul>
                 <?php
-                    /*if($camcontroller == true){
+                    if($camcontroller == true){
                         foreach ($plugin["camcontrollers"]->positionNamesGet() as $scene){
                             echo '<li onclick="changeCamPosition(\'' . $scene .'\');">';
-                            echo'<div style="background-image: url(\'' . $config["curenttheme"] . '/img/cam_position/' . $scene . '.png\');"></div><br><span>' . $scene .'</span>';
+                            echo "<div style=\"background-image: url('";
+                            echo $config["curenttheme"];
+                            echo'/img/cam_position/' . $scene . '.png';
+                            echo"');\"";
+                            echo '></div><br><span>' . $scene .'</span>';
                             echo'</li>';
                         }
-                    }*///TODO
+                    }
                 ?>
 
                 </ul>

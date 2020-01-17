@@ -87,8 +87,8 @@
             "ip"        => "10.0.2.102",
             "type"      => "v4l2",
             "quality"   => array(
-                "hd"        => "/dev/video2:alsa -i default" // "video_device:audio_software -i audio_input"
-                //"sd"        => "10.0.2.102:554/2"// First version please don't enable this option and don't add more than on quality (Will be available in next versions)
+                "high"        => "/dev/video2:alsa -i default" // "video_device:audio_software -i audio_input"
+                //"low"        => "10.0.2.102:554/2"// First version please don't enable this option and don't add more than on quality (Will be available in next versions)
             ),
             "icon"      => "image",
             "tempname"  => "Slide"
@@ -109,6 +109,11 @@
             "crestron" => false,
             "onvif" => false,
             "visca" => false
+        ),
+
+        "player" => array(
+            "image" => true,
+            "m3u" => false,
         ),
 
         "sound_backup" => false,
