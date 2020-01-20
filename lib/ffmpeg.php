@@ -34,7 +34,7 @@
             $this->maxcall = 3 ; // Max number of try record
             $this->exists_video = 0; // Check if video exists
             $this->limit_duration = " -t 12:00:00 "; // Max limit duration of one record
-            $this->common_movie_name = "ffmpegmovie";
+            $this->common_movie_name = $config["moviefile"];
             $this->recordExtenstion = ".mov";
             $this->recorderNumber = 0;
             $this->recorderArray = $recorderarray;

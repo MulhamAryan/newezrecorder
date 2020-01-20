@@ -1,0 +1,8 @@
+{
+    "title":"sound_meeter_ts_file",
+    "description":"This plugins get the sound meeter of different recording and quality",
+    "plugin_type": "sound_meeter",
+    "plugin_name":"ts_file",
+    "config_file":"config.inc",
+    "library_file":"library.php"
+}

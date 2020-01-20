@@ -1,5 +1,5 @@
 <?php
-    class ImagePlayer{
+    class ImagePlayer extends Sound_Metter_TS {
         function javascript($recorderInfo){
             global $config;
             $val = '<script>';
@@ -22,10 +22,21 @@
             }
             $val = "";
             foreach ($recorderInfo as $recorderInfoKey => $recorderInfoValue){
+
+                $val .= PHP_EOL . '<script>';
+                $val .= PHP_EOL . $this->smJavascript("update_sound_status",$recorderInfoValue["module"]);
+                $val .= PHP_EOL . $this->smJavascript("init_vu_meter",$recorderInfoValue["module"]);
+                $val .= PHP_EOL . $this->smJavascript("set_vu_level",$recorderInfoValue["module"]);
+                $val .= PHP_EOL . $this->smJavascript("setInterval",$recorderInfoValue["module"]);
+                $val .= '</script>' . PHP_EOL;
+
                 $val .= '<div class="' . $class .' player">';
                 $val .= '<h5><i class="fas fa-' . $recorderInfoValue["icon"] . '"></i> ' . $recorderInfoValue["tempname"] .'</h5><hr>';
-                $val .= '<img id="' . $recorderInfoValue["module"] . '_' . $recorderNum . '" src="' . $config["curenttheme"] . '/img/' . $recorderInfoValue["module"] . '.jpg?" style="height: 400px">';
-                $val .= '<div class="view-metter"></div></div>'; //TODO View metter
+                $val .= '<div style="background-color: #000; text-align: center; height: 400px; position: relative">';
+                $val .= '<img id="' . $recorderInfoValue["module"] . '_' . $recorderNum . '" src="' . $config["curenttheme"] . '/img/' . $recorderInfoValue["module"] . '.jpg?" style="height:100%;width: 98%;left: 0;position: absolute;">';
+                $val .= $this->smHtml($recorderInfoValue["module"]);
+                $val .= '</div>';
+                $val .= '</div>';
                 $recorderNum--;
             }
 

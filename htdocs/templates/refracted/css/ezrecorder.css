@@ -152,6 +152,7 @@ hr{
     margin: auto;
     text-align: center;
     border-left: 1px solid #000;
+    position: relative !important;
 }
 
 .player video{
@@ -163,11 +164,10 @@ hr{
 }
 
 .player .view-metter{
-    width: 2%;
-    border: 1px solid #FF0000;
-    height: 156px;
+    width: 20px;
+    height: 100%;
     float: right;
-    background-color: #FFF;
+    background-color: #FFFFFF;
 }
 
 .forgot_password{

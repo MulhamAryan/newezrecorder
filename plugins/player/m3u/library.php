@@ -1,5 +1,5 @@
 <?php
-    class M3uPlayer{
+    class M3uPlayer extends Sound_Metter_TS {
         function javascript($recorderInfo)
         {
             global $config;
@@ -32,7 +32,8 @@
                 $val .= '<div class="' . $class .' player">';
                 $val .= '<h5><i class="fas fa-' . $recorderInfoValue["icon"] . '"></i> ' . $recorderInfoValue["tempname"] .'</h5><hr>';
                 $val .= '<video id="video' . $recorderNum . '" width="100%" height="100%" muted autoplay=""></video>';
-                $val .= '<div class="view-metter"></div></div>'; //TODO View metter
+                $val .= $this->smHtml("camrecord");
+                $val .= '</div>'; //TODO View metter
                 $recorderNum--;
             }
 

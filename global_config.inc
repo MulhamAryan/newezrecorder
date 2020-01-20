@@ -47,6 +47,7 @@
         "statusfile"       => "recording.json",
         "metadata"         => "metadata.xml",
         "request_dump"     => "download_request_dump.txt",
+        "moviefile"        => "ffmpegmovie",
         "crontabuserfile"  => "crontabfile"
     );
     $config["languages"] = $config["basedir"] . "/" . $config["languages"];
@@ -104,8 +105,8 @@
             "visca" => false
         ),
 
-        "vu_metter" => array(
-            "ffmpeg_viewer" => false,
+        "sound_metter" => array(
+            "ts_file" => true,
             "crestron" => false,
             "onvif" => false,
             "visca" => false
