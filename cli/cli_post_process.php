@@ -8,7 +8,7 @@
 
     if($argc != 4){
         echo 'Wrong method : ' . PHP_EOL;
-        echo 'You have to give 2 parameters only ' . PHP_EOL;
+        echo 'You need to have 2 parameters only ' . PHP_EOL;
         echo '- ' . $config["phpcli"] . 'cli_post_process.php <asset_name> <recorder> <function_name> ' . PHP_EOL;
         echo '- To check the type of recorder please go to `global_config.inc` in `$recorder_modules[num]["module"]` array or put `all` if you want to encode all the recordings.' . PHP_EOL;
         echo '- Possibly functions :'. PHP_EOL;

@@ -135,8 +135,11 @@
                     return array();
                 }
 
-                if(isset($course[$user]))
+                if(isset($course[$user]) && $info == null)
                     return $course[$user];
+
+                elseif($info != null)
+                    return $course[$user][$info];
 
                 return array();
             }

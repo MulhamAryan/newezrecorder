@@ -148,7 +148,9 @@
 
             if ($this->logo == true)
                 $insertLogo = " -i " . $this->logofile . " -filter_complex \"overlay=main_w-overlay_w-5:5\" ";
-
+            else{
+                $insertLogo = "";
+            }
             if ($type == "rtsp") {
                 include_once "ffmpeg_profiles/rtsp.php";
                 $pid_file = $working_dir . "/" . $qualityKey . "/init.pid";
@@ -310,7 +312,7 @@
                 $counter = 1;
             }
             else{
-                $cmd = "ls -Art $dir/hd | grep .ts | tail -1"; // GET Last ffmpegmovie*.ts file
+                $cmd = "ls -Art $dir/high | grep .ts | tail -1"; // GET Last ffmpegmovie*.ts file
                 exec($cmd, $cmdout);
                 preg_match_all('!\d+!', $cmdout[0], $matches);
                 $counter = $matches[0][0];

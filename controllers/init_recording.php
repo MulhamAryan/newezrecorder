@@ -30,6 +30,7 @@
             else{
                 $logger->log(EventType::RECORDER_FFMPEG_INIT, LogLevel::ERROR, "Couldn't start recording (not ignored recorder $getRunningRecorder)", array("controllers/ini_recording.php"), $asset);
             }
+
             //Generate recording status file
             $recStatusArray = array(
                 "userLogin" => $auth->userSession("logged_user"),
@@ -39,7 +40,7 @@
                 "recStatus" => "init",
                 "autoStop" => $advancedoptions,
                 "stopTime" => $autostop,
-                "publishIn" => $publishin,
+                "publishIn" => 1,
                 "recorders" => $recorder
             );
 
@@ -61,7 +62,7 @@
                 "course_name" => "" . $course . "",
                 "origin" => "" . $config["classroom"] . "",
                 "title" => "" . $title . "",
-                "description" => " " . $description . "",
+                "description" => " ",
                 "record_type" => "" . $record_type . "",
                 "moderation" => "false",
                 "author" => '' . $auth->getUserInfo("info",$netid,"full_name") . '',
