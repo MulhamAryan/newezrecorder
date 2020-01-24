@@ -1,14 +1,53 @@
 <?php
     $lang = array();
-    $lang["lang"] = "Français";
+    $lang["lang"] = "English";
     $lang["title"] = "Recorder - ULB Podcast";
     $lang["netid"] = "NetID";
     $lang["password"] = "Password";
     $lang["login"] = "Sign-in";
-    $lang["forgot_password"] = "Forgot your password";
-    $lang["not_in_admin_list"] = "not on admin list";
-    $lang["wrong_password"] = "Wrong password !";
-    $lang["no_login_found"] = "NetID not found in our register !";
+    $lang["forgot_password"] = "Forgot your password ?";
+    $lang["not_in_admin_list"] = "isn't on admin list";
+    $lang["wrong_password"] = "Error incorrect password!";
+    $lang["no_login_found"] = "Error incorrect NetID !";
     $lang["help"] = "Help";
+    $lang["need_help"] = "Need help ?";
     $lang["forgot_password_text"] = "forgot password text";
+    $lang["no_courses_found"] = "No course available, <a href=\"?acttion=help&select=no_courses\" target=\"_blank\">Click here for more information</a>";
+    $lang["date_hour"] = "Date and hour";
+    $lang["author"] = "Author";
+    $lang["course"] = "Course";
+    $lang["title"] = "Title";
+    $lang["description"] = "Description";
+    $lang["continue"] = "Continue";
+    $lang["cancel"] = "Cancel";
+    $lang["select_type"] = "Choose the recording format";
+    $lang["enable_streaming"] = "Online streaming";
+    $lang["auto_stop_after"] = "Automatically stop after";
+    $lang["publish_in"] = "Publish in";
+    $lang["private_album"] = "Private album";
+    $lang["public_album"] = "Public album";
+    $lang["start_recording"] = "Start recording";
+    $lang["pause_recording"] = "Interrupt recording";
+    $lang["stop_recording"] = "Stop recording";
+    $lang["cam_position"] = "Camera <br> position";
+    $lang["auto_stop_actived"] = "Automatic options activated";
+    $lang["auto_stop_at"] = "recording will stop in : ";
+    $lang["auto_stop_to"] = "recording will stop at : ";
+    $lang["and"] = "and";
+    $lang["stop_recording_message"] = "Are you sure you want to stop recording ?";
+    $lang["where_publish"] = "Choose where do you want to publish your recording ?";
+    $lang["delete_record"] = "Delete record";
+    $lang["publish_in_public"] = "Publish in public album";
+    $lang["publish_in_private"] = "Publish in private album";
+    $lang["execution_failed"] = "Warning: This action could not be executed.\\nPlease check that you are still connected to the 'PODC' wifi network and refresh your browser page (ctrl + R / cmd + R) before trying again";
+    $lang["confirm_delete_record"] = "Cancel recording ?\\nAttention: destructive non-reversible operation!";
+    $lang["loading_recording"] = "Preparing your recording session <br> Please wait a few seconds ...";
+    $lang["record_deleted"] = "Record deleted.";
+    $lang["published_in_private"] = "Record saved and being processed. <br/> It will be added to your private album once the operation is complete.";
+    $lang["published_in_public"] = "Record saved and being processed. <br/> It will be added to your public album once the operation is complete.";
+    $lang["start_new"] = "Start a new recording session";
+    $lang["options"] = "Options";
+    $lang["recorder_in_use"] = "Attention: recording in progress! \\nDo you want to stop the actually recording in progress and start a new one ?\\n";
+    //New translation goes here
+
 ?>
