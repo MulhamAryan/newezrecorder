@@ -25,6 +25,15 @@ $(document).ready( function () {
         $("#loadingRecording").fadeIn();
         $("#initRecorder").hide();
     });
+
+    $("#camposition").click(function (){
+        if($("#campresets").is(":hidden")) {
+            $("#campresets").fadeIn();
+        }
+        else{
+            $("#campresets").fadeOut();
+        }
+    });
 });
 
 //Recording fonctions
@@ -89,4 +98,16 @@ function advancedOptionsStatus(status){
         $("#privatealbum").prop("disabled",true);
         $("#stoptime").prop("disabled",true);
     }
+}
+//Camera position function
+function changeCamPosition(position){
+    $.ajax({
+        type: 'GET',
+        url: "ajax.php?action=cam_move&plan=" + position,
+        cache: false,
+        timeout: 10000,
+        error: function(){
+            alert("Error can't change cam position please verify wifi.");
+        }
+    });
 }

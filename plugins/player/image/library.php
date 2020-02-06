@@ -32,7 +32,7 @@
 
                 $val .= '<div class="' . $class .' player">';
                 $val .= '<h5><i class="fas fa-' . $recorderInfoValue["icon"] . '"></i> ' . $recorderInfoValue["tempname"] .'</h5><hr>';
-                $val .= '<div style="background-color: #000; text-align: center; height: 400px; position: relative">';
+                $val .= '<div class="imgscreen">';
                 $val .= '<img id="' . $recorderInfoValue["module"] . '_' . $recorderNum . '" src="' . $config["curenttheme"] . '/img/' . $recorderInfoValue["module"] . '.jpg?" style="height:100%;width: 98%;left: 0;position: absolute;">';
                 $val .= $this->smHtml($recorderInfoValue["module"]);
                 $val .= '</div>';

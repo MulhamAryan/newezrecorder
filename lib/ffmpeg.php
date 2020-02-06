@@ -163,7 +163,6 @@
                     "recording_directory" => $recording_direcory,
                     "common_movie_name" => $this->common_movie_name,
                     "logo_option" => $insertLogo,
-                    //"thumbnail" => $config["basedir"] . "/" . $config["var"] . "/" . $module . ".jpg"
                     "thumbnail" => $config["curenttheme"] . "/img/" . $module . ".jpg"
                 );
 
@@ -184,12 +183,12 @@
 
                 $qualityValue = explode(":",$qualityValue);
                 $parameters = array(
+                    "quality" => $qualityKey,
                     "audio" => $qualityValue[1],
                     "video_software" => $type,
                     "screen" => $qualityValue[0],
                     "recording_directory" => $recording_direcory,
                     "common_movie_name" => $this->common_movie_name,
-                    //"thumbnail" => $config["basedir"] . "/" . $config["var"] . "/" . $module . ".jpg"
                     "thumbnail" => $config["curenttheme"] . "/img/" . $module . ".jpg"
                 );
 

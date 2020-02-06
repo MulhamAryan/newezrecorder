@@ -72,10 +72,10 @@
         array(
             "enabled"   => true,
             "module"    => "camrecord", //This is the first version don't change `camrecord`
-            "ip"        => "10.0.2.102",
+            "ip"        => "10.0.2.177",
             "type"      => "rtsp",
             "quality"   => array(
-                "high"        => "10.0.2.102:554/1"
+                "high"        => "10.0.2.177:554/1"
                 //"low"      => "10.0.2.102:554/2" // First version please don't enable this option and don't add more than on quality (Will be available in next versions)
             ),
             "icon"      => "film",
@@ -84,17 +84,29 @@
 
         array(
             "enabled"   => true,
-            "module"    => "sliderecord",  //This is the first version don't change `sliderecord`
-            "ip"        => "10.217.0.141",
-            "type"      => "rtsp", //v4l2
+            "module"    => "sliderecord", //This is the first version don't change `camrecord`
+            "ip"        => "10.0.2.177",
+            "type"      => "rtsp",
             "quality"   => array(
-                "high"      => "10.217.0.141/extron1"
-                //"high"        => "/dev/video2:alsa -i default" // "video_device:audio_software -i audio_input"
-                //"low"        => "10.0.2.102:554/2"// First version please don't enable this option and don't add more than on quality (Will be available in next versions)
+                "high"        => "10.0.2.177:554/1"
+                //"low"      => "10.0.2.102:554/2" // First version please don't enable this option and don't add more than on quality (Will be available in next versions)
             ),
             "icon"      => "image",
             "tempname"  => "Slide"
         )
+
+        /*array(
+            "enabled"   => false,
+            "module"    => "sliderecord",  //This is the first version don't change `sliderecord`
+            "ip"        => "10.217.0.141",
+            "type"      => "v4l2", //rtsp, v4l2, avfoundation
+            "quality"   => array(
+                "high"        => "/dev/video0" // "video_device:audio_software -i audio_input"
+                //"low"        => "/dev/video2:alsa -i default"// First version please don't enable this option and don't add more than on quality (Will be available in next versions)
+            ),
+            "icon"      => "image",
+            "tempname"  => "Slide"
+        )*/
 
     );
 

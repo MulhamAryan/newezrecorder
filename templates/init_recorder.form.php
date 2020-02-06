@@ -20,24 +20,7 @@
             });
         }
     }
-    //need review
-    $(document).ready(function (){
-        $("#camposition").click(function (){
-            $("#campresets").fadeIn();
-        });
-    });
 
-    function changeCamPosition(position){
-        $.ajax({
-            type: 'GET',
-            url: "ajax.php?action=cam_move&plan=" + position,
-            cache: false,
-            timeout: 10000,
-            error: function(){
-                alert("Error can't change cam position please verify wifi.");
-            }
-        });
-    }
 </script>
 <?php
     if($recordingstatus == "stop"){
@@ -110,25 +93,19 @@
                 <div class="recordingbutton" id="stop" onclick="stop_recording('stop');"><i class="fas fa-stop-circle"></i><br><?php echo $lang["stop_recording"];?></div>
                 <?php if($camcontroller == true){ ?><div class="recordingbutton" id="camposition" rel="<?php echo $asset;?>"><i class="fas fa-arrows-alt"></i><br><?php echo $lang["cam_position"];?></div><?php } ?>
             </div>
-            <div id="campresets" class="campresets">
-                <hr>
-                <ul>
-                <?php
-                    if($camcontroller == true){
-                        foreach ($plugin["camcontrollers"]->positionNamesGet() as $scene){
-                            echo '<li onclick="changeCamPosition(\'' . $scene .'\');">';
-                            echo "<div style=\"background-image: url('";
-                            echo $config["curenttheme"];
-                            echo'/img/cam_position/' . $scene . '.png';
-                            echo"');\"";
-                            echo '></div><br><span>' . $scene .'</span>';
-                            echo'</li>';
-                        }
-                    }
-                ?>
-
-                </ul>
-            </div>
+            <?php if($camcontroller == true){ ?>
+                    <div id="campresets" class="campresets" style="display: none;">
+                        <ul>
+                        <?php
+                            foreach ($plugin["camcontrollers"]->positionNamesGet() as $scene){
+                                echo '<li onclick="changeCamPosition(\'' . $scene .'\');">';
+                                echo "<div style=\"background-image: url('" . $config["curenttheme"] ."/img/cam_position/" . $scene . ".png');\"></div>";
+                                echo '<span>' . $scene .'</span></li>';
+                            }
+                        ?>
+                        </ul>
+                </div>
+            <?php } ?>
         </div>
     </div>
 </div>

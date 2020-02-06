@@ -96,7 +96,6 @@ ul {
     margin-block-end: 1em;
     margin-inline-start: 0;
     margin-inline-end: 0;
-    padding-inline-start: 40px;
 }
 
 .login{
@@ -234,6 +233,7 @@ textarea{
     color: #FFF;
     width: 100%;
     border: 1px solid #101010;
+    max-width: 1680px;
 }
 
 .recorder .form{
@@ -243,6 +243,7 @@ textarea{
     margin-top: 20px;
     padding: 20px;
     border: 1px solid #101010;
+    width: 756px;
 }
 
 .recorder .course_info{
@@ -251,32 +252,59 @@ textarea{
     border-top: 1px solid #525252;
     border-bottom: 1px solid #525252;
 }
-
-@media only screen and (min-width: 756px) {
-    .recorder .form {
-        width: 756px;
+.login{
+    width: 460px;
+}
+@media only screen and (min-width: 1024px){
+    .imgscreen{
+        height: 473px;
+    }
+}
+@media only screen and (min-width: 1024px) and (max-width: 1366px) {
+    .imgscreen{
+        height: 373px;
     }
     .small_help_btn{
         display: none;
     }
-    .big_help_btn{
-        display: inline-block;
-    }
-    .login{
-        width: 460px;
+}
+@media only screen and (min-width: 700px) and (max-width: 1024px){
+    .imgscreen{
+        height: 253px;
     }
 }
 
-@media only screen and (max-width: 756px) {
-    .small_help_btn{
-        display: inline-block;
+@media only screen and (max-width: 700px) {
+    .recorder .form {
+        width: 100% !important;
     }
     .big_help_btn{
         display: none;
     }
     .login{
+        width: 100%;
         margin-top: 10px;
     }
+    .small_help_btn{
+        display: inline-block !important;
+    }
+    .imgscreen{
+        height: 173px;
+    }
+    .player{
+        width: 100%;
+        border-top:1px solid #525252;
+        padding: 10px 5px 10px 0;
+    }
+}
+
+.small_help_btn{
+    display: none;
+}
+.imgscreen{
+    background-color: #000;
+    text-align: center;
+    position: relative;
 }
 
 .recorder label{
@@ -517,11 +545,16 @@ input:checked + .slider:before {
     border-radius: 50%;
 }
 
+.campresets{
+    border-top: 1px solid #525252;
+}
 .campresets ul li{
     display: inline-block;
     width: 150px;
     height: 100px;
     padding-right: 5px;
+    margin-left: 5px;
+    cursor: pointer;
 }
 .campresets ul li div{
     width: 150px;

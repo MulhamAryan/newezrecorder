@@ -76,11 +76,11 @@
                 </div>
                 <div class="float-left">
 
-                        <label class="switch">
+                        <!--<label class="switch">
                             <input type="checkbox" id="streaming" name="streaming" value="1">
                             <span class="slider round"></span>
                         </label>
-                        <label for="streaming"><?php echo $lang["enable_streaming"];?></label>
+                        <label for="streaming"><?php echo $lang["enable_streaming"];?></label>-->
 
                 </div>
                 <div class="clear"></div>
