@@ -28,7 +28,7 @@ class LoggerSyncDaemon {
     public function ensure_is_running() {
         global $config;
         if($this->is_running() == false) {
-            system($config["phpcli"] . " ". $this->cli_sync_daemon . " > " . $config["basedir"] . "/" . $config["var"] . "/log_sync_daemon 2>&1 &");
+            system($config["phpcli"] . " ". $this->cli_sync_daemon . " > " . $config["var"] . "/log_sync_daemon 2>&1 &");
         }
     }
     

@@ -6,7 +6,7 @@
             global $config;
 
             $this->recording_session = null;
-            $this->recording_file = $config["basedir"] . "/" . $config["var"] . "/" . $config["statusfile"];
+            $this->recording_file = $config["var"] . "/" . $config["statusfile"];
             $this->lang = $_SESSION["language"];
 
             if(file_exists($this->recording_file)){

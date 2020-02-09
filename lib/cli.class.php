@@ -122,7 +122,7 @@
             $res = curl_exec($ch);
             $curlinfo = curl_getinfo($ch);
             curl_close($ch);
-            file_put_contents($config["basedir"] ."/" . $config["var"] ."/curl.log", var_export($curlinfo, true) . PHP_EOL . $res, FILE_APPEND);
+            file_put_contents($config["var"] ."/curl.log", var_export($curlinfo, true) . PHP_EOL . $res, FILE_APPEND);
             if ($res === false) {//error
                 $http_code = isset($curlinfo['http_code']) ? $curlinfo['http_code'] : false;
                 $logger->log(EventType::RECORDER_REQUEST_TO_MANAGER, LogLevel::ERROR, "Curl failed to POST data to $server_url. Http code: $http_code", array(__FUNCTION__));

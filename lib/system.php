@@ -8,7 +8,7 @@
 
         function recStatus($array = array()){
             global $config;
-            $recordingStatus = $config["basedir"] . "/" . $config["var"] . "/" . $config["statusfile"];
+            $recordingStatus = $config["var"] . "/" . $config["statusfile"];
             $recordingNow =
                 array(
                     "user_login" => $array["userLogin"],
@@ -33,7 +33,7 @@
 
         function getRecordingStatus($arrayName = ""){
             global $config;
-            $recordingStatus = $config["basedir"] . "/" . $config["var"] . "/" . $config["statusfile"];
+            $recordingStatus = $config["var"] . "/" . $config["statusfile"];
             if(file_exists($recordingStatus)) {
                 $recStatus = file_get_contents($recordingStatus);
                 if(empty($arrayName)){
@@ -88,7 +88,7 @@
             global $logger;
 
             $assetDir = $this->getRecordingAssetDir();
-            $varDir = $config["basedir"] . $config["var"];
+            $varDir = $config["var"];
 
             if($publishin == "trash"){
                 if(file_exists($assetDir) && file_exists($varDir ."/" . $config["statusfile"])) {

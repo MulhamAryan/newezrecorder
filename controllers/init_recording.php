@@ -1,10 +1,11 @@
 <?php
-    $course = htmlspecialchars($input["course"]);
-    $title = htmlspecialchars($input["title"]);
-    $description = htmlspecialchars($input["description"]);
-    $recorder = htmlspecialchars($input["recorder"]);
-    $streaming = htmlspecialchars($input["streaming"]); // Future release
-    $advancedoptions = htmlspecialchars($input["advancedoptions"]);
+    $course          = isset($input["course"]) ? htmlspecialchars($input["course"]) : "";
+    $title           = isset($input["title"]) ? htmlspecialchars($input["title"]) : "";
+    $description     = isset($input["description"]) ? htmlspecialchars($input["description"]) : "";
+    $recorder        = isset($input["recorder"]) ? htmlspecialchars($input["recorder"]) : "";
+    $streaming       = isset($input["streaming"]) ? htmlspecialchars($input["streaming"]) : ""; // Future release TODO
+    $advancedoptions = isset($input["advancedoptions"]) ? htmlspecialchars($input["advancedoptions"]) : "";
+
     $netid = $auth->userSession("logged_user");
 
     if(empty($title) && empty($course) && empty($recorder)) {
@@ -12,8 +13,8 @@
     }
     else{
         if ($advancedoptions == 1) {
-            $autostop = htmlspecialchars($input["autostop"]);
-            $publishin = htmlspecialchars($input["publishin"]);
+            $autostop  = isset($input["autostop"]) ? htmlspecialchars($input["autostop"]) : "";
+            $publishin = isset($input["publishin"]) ? htmlspecialchars($input["publishin"]) : "";
         }
         $date = date("Y_m_d_H\hi");
         $asset = $date . "_" . $course;

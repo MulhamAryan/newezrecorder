@@ -6,7 +6,7 @@
             $val .= 'setInterval(function (){';
             $recorderNumUrl = count($recorderInfo);
             foreach ($recorderInfo as $recorderInfoUrlKey => $recorderInfoUrlValue){
-                $val .= '$("#' . $recorderInfoUrlValue["module"] . '_' . $recorderNumUrl . '").attr("src", "' . $config["curenttheme"] . '/img/' . $recorderInfoUrlValue["module"] . '.jpg?"+new Date().getTime());';
+                $val .= '$("#' . $recorderInfoUrlValue["module"] . '_' . $recorderNumUrl . '").attr("src", "ajax.php?action=image&filename=' . $recorderInfoUrlValue["module"] . '&extension=jpg&"+new Date().getTime());';
                 $recorderNumUrl--;
             }
             $val .= '}, 1000);';
@@ -17,9 +17,8 @@
             global $config;
             $recorderNum = count($recorderInfo);
 
-            if($recorderNum > 1){
-                $class = "float-left";
-            }
+            $class = ($recorderNum > 1 ? "float-left" : "");
+
             $val = "";
             foreach ($recorderInfo as $recorderInfoKey => $recorderInfoValue){
 
@@ -33,7 +32,7 @@
                 $val .= '<div class="' . $class .' player">';
                 $val .= '<h5><i class="fas fa-' . $recorderInfoValue["icon"] . '"></i> ' . $recorderInfoValue["tempname"] .'</h5><hr>';
                 $val .= '<div class="imgscreen">';
-                $val .= '<img id="' . $recorderInfoValue["module"] . '_' . $recorderNum . '" src="' . $config["curenttheme"] . '/img/' . $recorderInfoValue["module"] . '.jpg?" style="height:100%;width: 98%;left: 0;position: absolute;">';
+                $val .= '<img id="' . $recorderInfoValue["module"] . '_' . $recorderNum . '" src="ajax.php?action=image&filename=' . $recorderInfoValue["module"] . '&extension=jpg&" style="height:100%;width: 98%;left: 0;position: absolute;">';
                 $val .= $this->smHtml($recorderInfoValue["module"]);
                 $val .= '</div>';
                 $val .= '</div>';

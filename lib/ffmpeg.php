@@ -163,7 +163,7 @@
                     "recording_directory" => $recording_direcory,
                     "common_movie_name" => $this->common_movie_name,
                     "logo_option" => $insertLogo,
-                    "thumbnail" => $config["curenttheme"] . "/img/" . $module . ".jpg"
+                    "thumbnail" => $config["var"] . "/" . $module . ".jpg"
                 );
 
                 $rtspCmd = rtspprofile($parameters);
@@ -189,7 +189,7 @@
                     "screen" => $qualityValue[0],
                     "recording_directory" => $recording_direcory,
                     "common_movie_name" => $this->common_movie_name,
-                    "thumbnail" => $config["curenttheme"] . "/img/" . $module . ".jpg"
+                    "thumbnail" => $config["curenttheme"] . "/" . $module . ".jpg"
                 );
 
                 $usbdevice = usbdevice($parameters);

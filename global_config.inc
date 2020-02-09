@@ -1,6 +1,6 @@
 <?php
-    //@error_reporting(E_ALL | E_STRICT); // Only on debug mode !
-    //@ini_set('display_errors', '1');    // Only on debug mode !
+    @error_reporting(E_ALL | E_STRICT); // Only on debug mode !
+    @ini_set('display_errors', '1');    // Only on debug mode !
     date_default_timezone_set("Europe/Brussels");
     $config_version = "2019121201";
     $input = array_merge($_GET, $_POST);
@@ -16,7 +16,9 @@
         "apacheusername"   => "podclient", //TODO
         "recorderip"       => "164.15.43.32",
         "htdocspath"       => "newezrecorder",
-        "recordermaindir"  => "/home/podclient/Videos/",
+        "webbasedir"       => "/var/www/html/",
+        "recordermaindir"  => "/var/www/recorderdata/movies/",
+        "var"              => "/var/www/recorderdata/var/",
         "local_processing" => "local_processing",
         "trash"            => "trash",
         "upload_to_server" => "upload_to_server",
@@ -24,7 +26,6 @@
         "basedir"          => __DIR__ . "/",
         "clidir"           => "cli",
         "clipostprocess"   => "cli_post_process.php",
-        "webbasedir"       => "/var/www/html/",
         "userweb"          => "_www",
         "ezmanagerurl"     => "http://podcasttest.ulb.ac.be/ezmanager/",
         "adminmail"        => "podcast.tech@ulb.ac.be",
@@ -42,7 +43,6 @@
         "plugins"          => "plugins",
         "htdocs"           => "htdocs",
         "player"           => "player",
-        "var"              => "var",
         "theme"            => "refracted",
         "statusfile"       => "recording.json",
         "metadata"         => "metadata.xml",
@@ -60,7 +60,7 @@
 
     $config["submit_to_server"] = $config["ezmanagerurl"] . "recorder/index.php";
 
-    $config["database_file"] = $config["basedir"] . "/" . $config["var"] . "/db.sqlite";
+    $config["database_file"] = $config["var"] . "/db.sqlite";
     $config["ezcast_logs_url"] = $config["ezmanagerurl"] . "recorder/logs.php";
     $config["last_log_sent_get_url"] = $config["ezcast_logs_url"] . "?action=last_log_sent&source=".$config["classroom"];
     $config["log_push_url"] = $config["ezcast_logs_url"] . "?action=push_logs";
@@ -70,7 +70,7 @@
 
     $recorder_modules = array(
         array(
-            "enabled"   => true,
+            "enabled"   => false,
             "module"    => "camrecord", //This is the first version don't change `camrecord`
             "ip"        => "10.0.2.177",
             "type"      => "rtsp",
@@ -143,5 +143,3 @@
     $randomSecurityNumber = 98856;
 
     include $config["lib"] . "/loader.php";
-
-?>
