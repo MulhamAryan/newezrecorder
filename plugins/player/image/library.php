@@ -9,7 +9,7 @@
                 $val .= '$("#' . $recorderInfoUrlValue["module"] . '_' . $recorderNumUrl . '").attr("src", "ajax.php?action=image&filename=' . $recorderInfoUrlValue["module"] . '&extension=jpg&"+new Date().getTime());';
                 $recorderNumUrl--;
             }
-            $val .= '}, 1000);';
+            $val .= '}, 3000);';
             $val .= '</script>';
             return $val;
         }

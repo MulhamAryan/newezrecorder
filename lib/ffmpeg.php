@@ -167,7 +167,7 @@
                 );
 
                 $rtspCmd = rtspprofile($parameters);
-                $cmd = "" . $this->ffmpeg_cli . " ". $this->limit_duration . " ". $rtspCmd . " > " . $ffmpeg_log . " 2>&1 < /dev/null & echo $! > " . $pid_file . "";
+                $cmd = "" . $this->ffmpeg_cli . " -threads 1 ". $this->limit_duration . " ". $rtspCmd . " > " . $ffmpeg_log . " 2>&1 < /dev/null & echo $! > " . $pid_file . "";
                 $this->bashCommandLine($cmd);
 
                 file_put_contents($log_file, "-- [" . date("d/m/Y - H:i:s",time()) ."] : Starting FFMPEG recording for $type $qualityKey successfully" . PHP_EOL, FILE_APPEND | LOCK_EX);
@@ -183,17 +183,19 @@
 
                 $qualityValue = explode(":",$qualityValue);
                 $parameters = array(
+                    "thread_queue" => $this->thread_queue,
                     "quality" => $qualityKey,
-                    "audio" => $qualityValue[1],
                     "video_software" => $type,
                     "screen" => $qualityValue[0],
+                    "audio" => $qualityValue[1],
                     "recording_directory" => $recording_direcory,
                     "common_movie_name" => $this->common_movie_name,
-                    "thumbnail" => $config["curenttheme"] . "/" . $module . ".jpg"
+                    "thumbnail" => $config["var"] . "/" . $module . ".jpg"
                 );
 
                 $usbdevice = usbdevice($parameters);
-                $cmd = "" . $this->ffmpeg_cli . " ". $this->limit_duration . " ". $usbdevice . " > " . $ffmpeg_log . " 2>&1 < /dev/null & echo $! > " . $pid_file . "";
+                //$cmd = "" . $this->ffmpeg_cli . " ". $this->limit_duration . " ". $usbdevice . " > " . $ffmpeg_log . " 2>&1 < /dev/null & echo $! > " . $pid_file . "";
+                $cmd = "" . $this->ffmpeg_cli . " ". $this->limit_duration . " -f video4linux2 -thread_queue_size 127 -pixel_format yuv420p -s 1280x720 -framerate 15 -i \"/dev/video0\" -f pulse -ac 1 -thread_queue_size 127 -i default -vcodec libx264 -profile:v main -acodec aac -pix_fmt yuv420p -force_key_frames \"expr:gte(t,n_forced*3)\" -flags -global_header -hls_time 3 -hls_list_size 0 -hls_wrap 0 -start_number 1 $recording_direcory/ffmpegmovie.m3u8 -vf fps=1 -y -update 1 /var/www/recorderdata/var/sliderecord.jpg > " . $ffmpeg_log . " 2>&1 < /dev/null & echo $! > " . $pid_file . "";
                 $this->bashCommandLine($cmd);
 
                 file_put_contents($log_file, "-- [" . date("d/m/Y - H:i:s",time()) ."] : Starting FFMPEG recording for $type $qualityKey successfully" . PHP_EOL, FILE_APPEND | LOCK_EX);

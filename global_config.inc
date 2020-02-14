@@ -70,7 +70,7 @@
 
     $recorder_modules = array(
         array(
-            "enabled"   => false,
+            "enabled"   => true,
             "module"    => "camrecord", //This is the first version don't change `camrecord`
             "ip"        => "10.0.2.177",
             "type"      => "rtsp",
@@ -86,9 +86,9 @@
             "enabled"   => true,
             "module"    => "sliderecord", //This is the first version don't change `camrecord`
             "ip"        => "10.0.2.177",
-            "type"      => "rtsp",
+            "type"      => "v4l2",
             "quality"   => array(
-                "high"        => "10.0.2.177:554/1"
+                "high"        => "/dev/video0:1" //[video_card]:[audio_card_number_using_hw]
                 //"low"      => "10.0.2.102:554/2" // First version please don't enable this option and don't add more than on quality (Will be available in next versions)
             ),
             "icon"      => "image",
