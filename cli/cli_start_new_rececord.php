@@ -1,5 +1,6 @@
 <?php
     include __DIR__ . "/../global_config.inc";
+    $logger = new RecorderLogger();
 
     $username   = $argv[1];
     $course     = $argv[2];

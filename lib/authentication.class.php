@@ -114,7 +114,7 @@
 
         //Get user information and user courses
         function getUserInfo($parameter,$user,$info = null){
-            global $logger;
+            //global $logger;
             global $config;
 
             if($parameter == "info"){
@@ -131,7 +131,7 @@
                     $user = $this->userSession("logged_user");
 
                 if(!isset($course)) {
-                    $logger->log(EventType::RECORDER_LOGIN, LogLevel::WARNING, "Could not get any course from file " . $config["courselist"] . ". Did the server pushed the course list?", array(__FUNCTION__));
+                    //$logger->log(EventType::RECORDER_LOGIN, LogLevel::WARNING, "Could not get any course from file " . $config["courselist"] . ". Did the server pushed the course list?", array(__FUNCTION__));
                     return array();
                 }
 

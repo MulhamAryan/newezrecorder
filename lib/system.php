@@ -8,7 +8,7 @@
 
         function recStatus($array = array()){
             global $config;
-            $recordingStatus = $config["basedir"] . "/" . $config["var"] . "/" . $config["statusfile"];
+            $recordingStatus = $config["var"] . "/" . $config["statusfile"];
             $recordingNow =
                 array(
                     "user_login" => $array["userLogin"],
@@ -20,7 +20,8 @@
                     "auto_stop" => $array["autoStop"],
                     "stop_time" => $array["stopTime"],
                     "publishin" => $array["publishIn"],
-                    "recorders" => $array["recorders"]
+                    "recorders" => $array["recorders"],
+                    "streaming" => $array["streaming"]
                 );
             $recordingNow = json_encode($recordingNow);
 
@@ -33,7 +34,7 @@
 
         function getRecordingStatus($arrayName = ""){
             global $config;
-            $recordingStatus = $config["basedir"] . "/" . $config["var"] . "/" . $config["statusfile"];
+            $recordingStatus = $config["var"] . "/" . $config["statusfile"];
             if(file_exists($recordingStatus)) {
                 $recStatus = file_get_contents($recordingStatus);
                 if(empty($arrayName)){
@@ -79,7 +80,14 @@
         }
 
         function bashCommandLine($command){
+            global $config;
             exec($command, $output);
+            $execArray = array(
+                "time" => date("H:i:s",time()),
+                "command" => $command,
+                "answer" => $output
+            );
+            file_put_contents($config["machinelog"] . "/cmd/" . date("d-m-Y",time()) . ".json", json_encode($execArray) . PHP_EOL, FILE_APPEND | LOCK_EX);
             return $output;
         }
 
@@ -88,7 +96,7 @@
             global $logger;
 
             $assetDir = $this->getRecordingAssetDir();
-            $varDir = $config["basedir"] . $config["var"];
+            $varDir = $config["var"];
 
             if($publishin == "trash"){
                 if(file_exists($assetDir) && file_exists($varDir ."/" . $config["statusfile"])) {
@@ -116,7 +124,7 @@
                     file_put_contents($varDir . "/" . $config["statusfile"],$newRecordingStatus, LOCK_EX);
                     rename($varDir . "/" . $config["statusfile"], $assetDir . "/info." . $config["statusfile"]);
                 }
-                $startMerge = $config["phpcli"] . " " . $config["basedir"]  . $config["clidir"] . "/" . $config["clipostprocess"] . " " . $nowrecording["asset"] . " " . $nowrecording["recorders"] . " startmerge > $assetDir/post_process.log 2>&1 &";
+                $startMerge = $config["phpcli"] . " " . $config["cli_post_process"] . " " . $nowrecording["asset"] . " " . $nowrecording["recorders"] . " startmerge > $assetDir/post_process.log 2>&1 &";
                 $this->bashCommandLine($startMerge);
             }
             else{
@@ -129,9 +137,10 @@
         }
 
         function isProcessRunning($pid) {
+            global $config;
             if (!isset($pid) || $pid == '' || $pid == 0)
                 return false;
-            exec("ps $pid", $output, $result);
+            $output = $this->bashCommandLine($config["ps"] . " $pid");
             return count($output) >= 2;
         }
 
@@ -165,7 +174,7 @@
                 $cronTime = date("i H d m w ",$addTime);
                 $cronCmd = "MAILTO=" . $config["adminmail"] . PHP_EOL;
                 $cronCmd .= "HOME=/tmp" . PHP_EOL;
-                $cronCmd .= $cronTime . $config["phpcli"] . " " . $config["basedir"] . "/" . $config["clidir"] . "/" . $config["crontabcli"] . " " . $this->getRecordingStatus("asset") . PHP_EOL;
+                $cronCmd .= $cronTime . $config["phpcli"] . " " . $config["cli_auto_publish"] . " " . $this->getRecordingStatus("asset") . PHP_EOL;
                 file_put_contents( $this->getRecordingAssetDir() . "/" . $config["crontabuserfile"],$cronCmd);
                 $this->bashCommandLine($config["crontab"] . " " . $this->getRecordingAssetDir() . "/" . $config["crontabuserfile"]);
             }

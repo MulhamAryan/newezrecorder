@@ -12,14 +12,9 @@
     $session = new RecordingSession();
 
     include "logger/logger_recorder.php";
-    $logger = new RecorderLogger();
-
     include "ffmpeg.php";
-
     include $config["basedir"] . $config["templates"] . "/template.class.php";
-
     include "authentication.class.php";
-
     include $config["basedir"] . $config["plugins"] . "/plugin_loader.php";
 
     $auth = new Authentication();

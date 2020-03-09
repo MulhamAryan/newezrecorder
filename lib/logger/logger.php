@@ -119,6 +119,14 @@ class ServersideLogEntry  {
     public static $log_level_name_by_id = false;
 
     public function __construct() {
+        global $config;
+        $this->update_interval = 60;
+        $this->pid_file = $config["var"] . '/sync_logs_daemon.pid';
+        $this->cli_sync_daemon = $config["cli_sync_logs"];
+        $this->sync_batch_size = 1000;
+        $this->max_run_time = 86400; //run max 24 hours. This is to help when global_config has been changed, or if this file has been updated
+        $this->max_failures_before_warning = 15;
+        $this->classroom = $config["classroom"];
         $this->fill_event_type_by_id();
         $this->fill_level_name_by_id();
     }

@@ -17,6 +17,10 @@
         private $type;
         private $assetDir;
         private $recordExtenstion;
+        private $ffmpegPid;
+        private $ffmpegLog;
+        private $streamPid;
+        private $streamLog;
 
         function __construct($recorderarray = array(), $asset)
         {
@@ -40,7 +44,7 @@
             $this->recorderArray = $recorderarray;
             $this->recorderInfo = array();
             $this->isRecording = array();
-            $this->isRecordingFile = "recording.json";
+            $this->isRecordingFile = $config["statusfile"];
             $this->folders = array(
                 "local_processing" => $this->recordingDir . $config["local_processing"]. "/",
                 "trash"            => $this->recordingDir . $config["trash"] . "/",
@@ -49,6 +53,10 @@
             );
 
             $this->assetDir = $this->folders["local_processing"] . $this->asset . "/";
+            $this->ffmpegPid = "init.pid";
+            $this->ffmpegLog = "ffmpeg.log";
+            $this->streamPid = "_stream.pid";
+            $this->streamLog = "_stream.log";
         }
 
         // This function initialize the recordings operation
@@ -133,8 +141,8 @@
         function generatorLogFiles($module,$quality){
             $ffmpeg_log = $this->assetDir . $module;
 
-            file_put_contents($ffmpeg_log . "/$quality/init.pid", "", FILE_APPEND | LOCK_EX);
-            file_put_contents($ffmpeg_log . "/$quality/ffmpeg.log", "", FILE_APPEND | LOCK_EX);
+            file_put_contents($ffmpeg_log . "/$quality/$this->ffmpegPid", "", FILE_APPEND | LOCK_EX);
+            file_put_contents($ffmpeg_log . "/$quality/$this->ffmpegLog", "", FILE_APPEND | LOCK_EX);
         }
 
         // This function is used to launch the recording taking in consideration the quality of recorder
@@ -152,9 +160,9 @@
                 $insertLogo = "";
             }
             if ($type == "rtsp") {
-                include_once "ffmpeg_profiles/rtsp.php";
-                $pid_file = $working_dir . "/" . $qualityKey . "/init.pid";
-                $ffmpeg_log = $working_dir . "/" . $qualityKey . "/" . "ffmpeg.log";
+                include_once "ffmpeg/profiles/rtsp.php";
+                $pid_file = $working_dir . "/" . $qualityKey . "/$this->ffmpegPid";
+                $ffmpeg_log = $working_dir . "/" . $qualityKey . "/" . $this->ffmpegLog;
                 $recording_direcory = $this->folders["local_processing"] . $asset . "/" . $module . "/" . $qualityKey;
 
                 $parameters = array(
@@ -163,38 +171,40 @@
                     "recording_directory" => $recording_direcory,
                     "common_movie_name" => $this->common_movie_name,
                     "logo_option" => $insertLogo,
-                    //"thumbnail" => $config["basedir"] . "/" . $config["var"] . "/" . $module . ".jpg"
-                    "thumbnail" => $config["curenttheme"] . "/img/" . $module . ".jpg"
+                    "thumbnail" => $config["var"] . "/" . $module . ".jpg"
                 );
 
                 $rtspCmd = rtspprofile($parameters);
-                $cmd = "" . $this->ffmpeg_cli . " ". $this->limit_duration . " ". $rtspCmd . " > " . $ffmpeg_log . " 2>&1 < /dev/null & echo $! > " . $pid_file . "";
+                $cmd = "" . $this->ffmpeg_cli . " -threads 1 ". $this->limit_duration . " ". $rtspCmd . " > " . $ffmpeg_log . " 2>&1 < /dev/null & echo $! > " . $pid_file . "";
                 $this->bashCommandLine($cmd);
 
                 file_put_contents($log_file, "-- [" . date("d/m/Y - H:i:s",time()) ."] : Starting FFMPEG recording for $type $qualityKey successfully" . PHP_EOL, FILE_APPEND | LOCK_EX);
+                file_put_contents($log_file, "-- [" . date("d/m/Y - H:i:s",time()) ."] : $cmd" . PHP_EOL, FILE_APPEND | LOCK_EX);
                 //Set the number of recorder after launch
                 $this->isRecording[$module][] = $qualityKey;
 
             }
             elseif($type == "v4l2" || $type == "avfoundation"){
-                include_once "ffmpeg_profiles/usbdevice.php";
-                $pid_file = $working_dir . "/" . $qualityKey . "/init.pid";
-                $ffmpeg_log = $working_dir . "/" . $qualityKey . "/" . "ffmpeg.log";
+                include_once "ffmpeg/profiles/usbdevice.php";
+                $pid_file = $working_dir . "/" . $qualityKey . "/" . $this->ffmpegPid;
+                $ffmpeg_log = $working_dir . "/" . $qualityKey . "/" . $this->ffmpegLog;
                 $recording_direcory = $this->folders["local_processing"] . $asset . "/" . $module . "/" . $qualityKey;
 
                 $qualityValue = explode(":",$qualityValue);
                 $parameters = array(
-                    "audio" => $qualityValue[1],
+                    "thread_queue" => $this->thread_queue,
+                    "quality" => $qualityKey,
                     "video_software" => $type,
                     "screen" => $qualityValue[0],
+                    "audio" => $qualityValue[1],
                     "recording_directory" => $recording_direcory,
                     "common_movie_name" => $this->common_movie_name,
-                    //"thumbnail" => $config["basedir"] . "/" . $config["var"] . "/" . $module . ".jpg"
-                    "thumbnail" => $config["curenttheme"] . "/img/" . $module . ".jpg"
+                    "thumbnail" => $config["var"] . "/" . $module . ".jpg"
                 );
 
                 $usbdevice = usbdevice($parameters);
-                $cmd = "" . $this->ffmpeg_cli . " ". $this->limit_duration . " ". $usbdevice . " > " . $ffmpeg_log . " 2>&1 < /dev/null & echo $! > " . $pid_file . "";
+                //$cmd = "" . $this->ffmpeg_cli . " ". $this->limit_duration . " ". $usbdevice . " > " . $ffmpeg_log . " 2>&1 < /dev/null & echo $! > " . $pid_file . "";
+                $cmd = "" . $this->ffmpeg_cli . " ". $this->limit_duration . " -f video4linux2 -thread_queue_size 127 -pixel_format yuv420p -s 1280x720 -framerate 15 -i \"/dev/video0\" -f pulse -ac 1 -thread_queue_size 127 -i default -vcodec libx264 -profile:v main -acodec aac -pix_fmt yuv420p -force_key_frames \"expr:gte(t,n_forced*3)\" -flags -global_header -hls_time 3 -hls_list_size 0 -hls_wrap 0 -start_number 1 $recording_direcory/ffmpegmovie.m3u8 -vf fps=1 -y -update 1 /var/www/recorderdata/var/sliderecord.jpg > " . $ffmpeg_log . " 2>&1 < /dev/null & echo $! > " . $pid_file . "";
                 $this->bashCommandLine($cmd);
 
                 file_put_contents($log_file, "-- [" . date("d/m/Y - H:i:s",time()) ."] : Starting FFMPEG recording for $type $qualityKey successfully" . PHP_EOL, FILE_APPEND | LOCK_EX);
@@ -253,7 +263,8 @@
                 foreach ($quality as $qlt) {
                     $qltDir = $dir . "/" . $qlt;
                     file_put_contents($this->assetDir . $recorder . "/init.log", "-- [" . date("d/m/Y - H:i:s",time()) ."] : Setting stop for $qlt recording" . PHP_EOL, FILE_APPEND | LOCK_EX);
-                    $this->killPid($qltDir . "/init.pid");
+                    $this->killPid($qltDir . "/$this->ffmpegPid");
+                    $this->killPid($dir . "/" . $qlt . $this->streamPid );
                 }
             }
         }
@@ -313,7 +324,7 @@
             }
             else{
                 $cmd = "ls -Art $dir/high | grep .ts | tail -1"; // GET Last ffmpegmovie*.ts file
-                exec($cmd, $cmdout);
+                $cmdout = $this->bashCommandLine($cmd);
                 preg_match_all('!\d+!', $cmdout[0], $matches);
                 $counter = $matches[0][0];
                 if(empty($counter) || $counter == 0)
@@ -340,8 +351,8 @@
                 $isRecording = $this->getIsRecFileContent();
                 foreach ($isRecording as $isRecordingKey => $isRecordingQuality){
                     foreach ($isRecordingQuality as $quality){
-                        if(posix_getpgid($this->getFfmpegPid($this->assetDir . $isRecordingKey ."/" . $quality . "/init.pid")) != false)
-                            $running[] = $this->assetDir . $isRecordingKey ."/" . $quality . "/init.pid";
+                        if(posix_getpgid($this->getFfmpegPid($this->assetDir . $isRecordingKey ."/" . $quality . "/" . $this->ffmpegPid)) != false)
+                            $running[] = $this->assetDir . $isRecordingKey ."/" . $quality . "/" . $this->ffmpegPid;
                     }
                 }
                 if(empty($running))
@@ -358,6 +369,13 @@
 
         }
 
+        function getStreamPidFileName(){
+            return $this->streamPid;
+        }
+
+        function getStreamLogFileName(){
+            return $this->streamLog;
+        }
     }
 
 ?>

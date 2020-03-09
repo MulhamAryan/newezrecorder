@@ -13,7 +13,7 @@
                 if(is_array($plValue)){
                     $countActive = 0;
                     foreach ($plValue as $activeKey => $activeValue){
-                        if($activeValue == 1) {
+                        if($activeValue == true) {
                             $countActive++;
                             $this->enabled_plugin[$plKey][$activeKey] = true;
                         }

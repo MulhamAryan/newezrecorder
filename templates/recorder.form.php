@@ -1,3 +1,9 @@
+<?php
+    if(file_exists($config["alert_msg_file"])) {
+        $alertMsg = json_decode(file_get_contents($config["alert_msg_file"]), true);
+        echo $tmp->alertDialog($alertMsg["title"],$alertMsg["message"]);
+    }
+?>
 <div class="recorder">
     <div class="form">
         <div class="loadingRecording" id="loadingRecording">

@@ -18,7 +18,13 @@
 
     $m3u8 = str_replace("ffmpegmovie",$config["playerlink"] . "/hls.php?asset=$asset&recorder=$recorder&type=$type&filename=ffmpegmovie",$m3u8);
 
-    foreach ($m3u8 as $m3u8Content){
+    /*foreach ($m3u8 as $m3u8Content){
         echo $m3u8Content;
+    }*/
+    for($i = 0;$i <= 3;$i++){
+        echo $m3u8[$i];
+    }
+    for($y = count($m3u8) - 14;$y < count($m3u8); $y++){
+        echo $m3u8[$y];
     }
  ?>

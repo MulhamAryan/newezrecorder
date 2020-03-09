@@ -330,16 +330,16 @@ class SQLiteDatabase
     {
         global $config;
 
-        $last_id_sent = file_get_contents($config["last_log_sent_get_url"]);
+        $last_id_sent = @file_get_contents($config["last_log_sent_get_url"]);
 
-        if($last_id_sent == false) {
+        if ($last_id_sent == false) {
             //logger may not yet be init // $this->log(EventType::LOGGER, LogLevel::ERROR, "Failed to get last log sent from $this->last_log_sent_get_url", array("RecorderLogger"));
             return false;
         }
 
         $last_id_sent = trim($last_id_sent); //server service does send line returns for some reason
 
-        if(!is_numeric($last_id_sent)) {
+        if (!is_numeric($last_id_sent)) {
             //logger may not yet be init // $this->log(EventType::LOGGER, LogLevel::ERROR, "Failed to get last log sent from $this->last_log_sent_get_url, invalid response: $last_id_sent", array("RecorderLogger"));
             return false;
         }
@@ -353,19 +353,19 @@ class SQLiteDatabase
     {
         global $config;
 
-        $server_event = new ServersideLogEntry();
-        $server_event->id = $recorder_event["id"];
-        $server_event->asset = $recorder_event["asset"];
-        $server_event->origin = "ezrecorder";
+        $server_event                     = new ServersideLogEntry();
+        $server_event->id                 = $recorder_event["id"];
+        $server_event->asset              = $recorder_event["asset"];
+        $server_event->origin             = "ezrecorder";
         $server_event->asset_classroom_id = $config["classroom"];
-        $server_event->asset_course = $recorder_event["course"];
-        $server_event->asset_author = $recorder_event["author"];
-        $server_event->asset_cam_slide = $recorder_event["cam_slide"];
-        $server_event->event_time = $recorder_event["event_time"];
-        $server_event->type_id = $recorder_event["type_id"];
-        $server_event->context = $recorder_event["context"];
-        $server_event->loglevel = $recorder_event["loglevel"];
-        $server_event->message = $recorder_event["message"];
+        $server_event->asset_course       = $recorder_event["course"];
+        $server_event->asset_author       = $recorder_event["author"];
+        $server_event->asset_cam_slide    = $recorder_event["cam_slide"];
+        $server_event->event_time         = $recorder_event["event_time"];
+        $server_event->type_id            = $recorder_event["type_id"];
+        $server_event->context            = $recorder_event["context"];
+        $server_event->loglevel           = $recorder_event["loglevel"];
+        $server_event->message            = $recorder_event["message"];
 
         return $server_event;
     }

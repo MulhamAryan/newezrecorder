@@ -11,12 +11,12 @@
             global $config;
             $this->recorders = $recorders;
             $this->assetName = $assetName;
-            if(file_exists($config["recordermaindir"] . $config["upload_to_server"] . "/" . $assetName . "/info." . $config["statusfile"])){
-                $this->recordingInfo = file_get_contents($config["recordermaindir"] . $config["upload_to_server"] . "/" . $assetName . "/info." . $config["statusfile"]);
+            if(file_exists($config["recordermaindir"] . $config["upload_to_server"] . "/" . $assetName . "/" . $config["statusfile"])){
+                $this->recordingInfo = file_get_contents($config["recordermaindir"] . $config["upload_to_server"] . "/" . $assetName . "/" . $config["statusfile"]);
                 $this->recordingInfo = json_decode($this->recordingInfo, true);
             }
             else{
-                $this->recordingInfo = file_get_contents($config["recordermaindir"] . $config["local_processing"] . "/" . $assetName . "/info." . $config["statusfile"]);
+                $this->recordingInfo = file_get_contents($config["recordermaindir"] . $config["local_processing"] . "/" . $assetName . "/" . $config["statusfile"]);
                 $this->recordingInfo = json_decode($this->recordingInfo, true);
             }
             $recorderArray = $this->getRecorderArray($this->recorders);
@@ -122,7 +122,7 @@
             $res = curl_exec($ch);
             $curlinfo = curl_getinfo($ch);
             curl_close($ch);
-            file_put_contents($config["basedir"] ."/" . $config["var"] ."/curl.log", var_export($curlinfo, true) . PHP_EOL . $res, FILE_APPEND);
+            file_put_contents($config["var"] ."/curl.log", var_export($curlinfo, true) . PHP_EOL . $res, FILE_APPEND);
             if ($res === false) {//error
                 $http_code = isset($curlinfo['http_code']) ? $curlinfo['http_code'] : false;
                 $logger->log(EventType::RECORDER_REQUEST_TO_MANAGER, LogLevel::ERROR, "Curl failed to POST data to $server_url. Http code: $http_code", array(__FUNCTION__));

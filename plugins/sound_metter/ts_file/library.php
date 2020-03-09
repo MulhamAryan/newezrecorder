@@ -74,7 +74,7 @@
 
             elseif($request == "setInterval"){
                 //$val4 = 'init_vu_meter_' . $recorder . '();' . PHP_EOL;
-                $val4 = 'setInterval(function() {update_sound_status_'.$recorder.'();}, 1000);' . PHP_EOL;
+                $val4 = 'setInterval(function() {update_sound_status_'.$recorder.'();}, 3000);' . PHP_EOL;
                 return $val4;
             }
         }

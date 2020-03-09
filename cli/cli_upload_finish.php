@@ -1,6 +1,8 @@
 <?php
     include __DIR__ . "/../global_config.inc";
-    include $config["basedir"] . $config["lib"] . "/cli.class.php";
+    $logger = new RecorderLogger();
+
+    include  $config["lib"] . "/cli.class.php";
 
     if($argc != 2) {
         echo "Wrong arg count";

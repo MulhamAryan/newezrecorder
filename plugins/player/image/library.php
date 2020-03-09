@@ -1,12 +1,12 @@
 <?php
-    class ImagePlayer extends Sound_Metter_TS {
+    class ImagePlayer {
         function javascript($recorderInfo){
             global $config;
             $val = '<script>';
             $val .= 'setInterval(function (){';
             $recorderNumUrl = count($recorderInfo);
             foreach ($recorderInfo as $recorderInfoUrlKey => $recorderInfoUrlValue){
-                $val .= '$("#' . $recorderInfoUrlValue["module"] . '_' . $recorderNumUrl . '").attr("src", "' . $config["curenttheme"] . '/img/' . $recorderInfoUrlValue["module"] . '.jpg?"+new Date().getTime());';
+                $val .= '$("#' . $recorderInfoUrlValue["module"] . '_' . $recorderNumUrl . '").attr("src", "ajax.php?action=image&filename=' . $recorderInfoUrlValue["module"] . '&extension=jpg&"+new Date().getTime());';
                 $recorderNumUrl--;
             }
             $val .= '}, 1000);';
@@ -15,26 +15,30 @@
         }
         function player($recorderInfo){
             global $config;
+            global $plugins_list;
             $recorderNum = count($recorderInfo);
 
-            if($recorderNum > 1){
-                $class = "float-left";
-            }
+            $class = ($recorderNum > 1 ? "float-left" : "");
+
             $val = "";
+            if($plugins_list["sound_metter"]["ts_file"] == true)
+                $smTS = new Sound_Metter_TS();
             foreach ($recorderInfo as $recorderInfoKey => $recorderInfoValue){
-
-                $val .= PHP_EOL . '<script>';
-                $val .= PHP_EOL . $this->smJavascript("update_sound_status",$recorderInfoValue["module"]);
-                $val .= PHP_EOL . $this->smJavascript("init_vu_meter",$recorderInfoValue["module"]);
-                $val .= PHP_EOL . $this->smJavascript("set_vu_level",$recorderInfoValue["module"]);
-                $val .= PHP_EOL . $this->smJavascript("setInterval",$recorderInfoValue["module"]);
-                $val .= '</script>' . PHP_EOL;
-
+                if($plugins_list["sound_metter"]["ts_file"] == true) {
+                    $val .= PHP_EOL . '<script>';
+                    $val .= PHP_EOL . $smTS->smJavascript("update_sound_status", $recorderInfoValue["module"]);
+                    $val .= PHP_EOL . $smTS->smJavascript("init_vu_meter", $recorderInfoValue["module"]);
+                    $val .= PHP_EOL . $smTS->smJavascript("set_vu_level", $recorderInfoValue["module"]);
+                    $val .= PHP_EOL . $smTS->smJavascript("setInterval", $recorderInfoValue["module"]);
+                    $val .= '</script>' . PHP_EOL;
+                }
                 $val .= '<div class="' . $class .' player">';
                 $val .= '<h5><i class="fas fa-' . $recorderInfoValue["icon"] . '"></i> ' . $recorderInfoValue["tempname"] .'</h5><hr>';
-                $val .= '<div style="background-color: #000; text-align: center; height: 400px; position: relative">';
-                $val .= '<img id="' . $recorderInfoValue["module"] . '_' . $recorderNum . '" src="' . $config["curenttheme"] . '/img/' . $recorderInfoValue["module"] . '.jpg?" style="height:100%;width: 98%;left: 0;position: absolute;">';
-                $val .= $this->smHtml($recorderInfoValue["module"]);
+                $val .= '<div class="imgscreen">';
+                $val .= '<img id="' . $recorderInfoValue["module"] . '_' . $recorderNum . '" src="ajax.php?action=image&filename=' . $recorderInfoValue["module"] . '&extension=jpg&" style="height:100%;width: 98%;left: 0;position: absolute;">';
+                if($plugins_list["sound_metter"]["ts_file"] == true) {
+                    $val .= $this->smHtml($recorderInfoValue["module"]);
+                }
                 $val .= '</div>';
                 $val .= '</div>';
                 $recorderNum--;

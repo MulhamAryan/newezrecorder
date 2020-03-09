@@ -10,13 +10,19 @@
     <title><?php echo $lang["title"]; ?></title>
 
     <script src="<?php echo $config["curenttheme"];?>/js/jquery.js"></script>
+    <script src="<?php echo $config["curenttheme"];?>/js/jquery-ui.js"></script>
     <script src="<?php echo $config["curenttheme"];?>/js/ezrecorder.js"></script>
     <script src="<?php echo $config["curenttheme"];?>/js/player/hls.js"></script>
 
     <link rel="stylesheet" href="<?php echo $config["curenttheme"];?>/css/bootstrap.min.css">
     <link rel="stylesheet" href="<?php echo $config["curenttheme"];?>/css/fontawesome/css/all.min.css">
     <link rel="stylesheet" href="<?php echo $config["curenttheme"];?>/css/ezrecorder.css">
-
+    <link rel="stylesheet" href="<?php echo $config["curenttheme"];?>/css/jquery-ui.css">
+    <?php
+        if(file_exists($config["alert_msg_file"])) {
+            echo '<script>$( function() { $( "#dialog-message" ).dialog({ modal: true, buttons: { OK: function() { $( this ).dialog( "close" ); }}});} );</script>' . PHP_EOL;
+        }
+    ?>
 </head>
 <body>
     <div class="container">
