@@ -11,12 +11,12 @@
             global $config;
             $this->recorders = $recorders;
             $this->assetName = $assetName;
-            if(file_exists($config["recordermaindir"] . $config["upload_to_server"] . "/" . $assetName . "/info." . $config["statusfile"])){
-                $this->recordingInfo = file_get_contents($config["recordermaindir"] . $config["upload_to_server"] . "/" . $assetName . "/info." . $config["statusfile"]);
+            if(file_exists($config["recordermaindir"] . $config["upload_to_server"] . "/" . $assetName . "/" . $config["statusfile"])){
+                $this->recordingInfo = file_get_contents($config["recordermaindir"] . $config["upload_to_server"] . "/" . $assetName . "/" . $config["statusfile"]);
                 $this->recordingInfo = json_decode($this->recordingInfo, true);
             }
             else{
-                $this->recordingInfo = file_get_contents($config["recordermaindir"] . $config["local_processing"] . "/" . $assetName . "/info." . $config["statusfile"]);
+                $this->recordingInfo = file_get_contents($config["recordermaindir"] . $config["local_processing"] . "/" . $assetName . "/" . $config["statusfile"]);
                 $this->recordingInfo = json_decode($this->recordingInfo, true);
             }
             $recorderArray = $this->getRecorderArray($this->recorders);

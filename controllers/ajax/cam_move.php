@@ -1,6 +1,8 @@
 <?php
 
     if($auth->userSession("is_logged") == true){
+        $logger = new RecorderLogger();
+
         $scene = $system->removeCharacters($_GET["plan"]);
         $asset = $system->getRecordingStatus("asset");
         $move = $plugin["camcontrollers"]->positionMove($scene);

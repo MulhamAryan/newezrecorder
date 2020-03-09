@@ -1,6 +1,8 @@
 <?php
     include __DIR__ . "/../global_config.inc";
-    include $config["basedir"] . $config["lib"] . "/cli.class.php";
+    $logger = new RecorderLogger();
+
+    include $config["lib"] . "/cli.class.php";
 
     $asset_name = $argv[1];
     $recorder = $argv[2];
@@ -8,7 +10,7 @@
 
     if($argc != 4){
         echo 'Wrong method : ' . PHP_EOL;
-        echo 'You need to have 2 parameters only ' . PHP_EOL;
+        echo 'You need to have 3 parameters only ' . PHP_EOL;
         echo '- ' . $config["phpcli"] . 'cli_post_process.php <asset_name> <recorder> <function_name> ' . PHP_EOL;
         echo '- To check the type of recorder please go to `global_config.inc` in `$recorder_modules[num]["module"]` array or put `all` if you want to encode all the recordings.' . PHP_EOL;
         echo '- Possibly functions :'. PHP_EOL;
@@ -23,7 +25,7 @@
             $assetDir = $config["recordermaindir"] . $config["local_processing"] . "/" . $asset_name;
             copy($assetDir . "/_" . $config["metadata"],$assetDir . "/" . $config["metadata"]);
             sleep(2);
-            $uploadToServer = $config["phpcli"] . " " . $config["basedir"]  . $config["clidir"] . "/" . $config["clipostprocess"] . " " . $asset_name . " " . $recorder . " upload_to_server>$assetDir/post_process.log 2>&1";
+            $uploadToServer = $config["phpcli"] . " " . $config["cli_post_process"] . " " . $asset_name . " " . $recorder . " upload_to_server>$assetDir/post_process.log 2>&1";
             $cli->bashCommandLine($uploadToServer);
         }
         elseif ($function == "upload_to_server"){

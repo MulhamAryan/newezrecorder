@@ -6,6 +6,8 @@
     $user = $auth->userSession("logged_user");
 
     if($nowrecording != false && $auth->userSession("logged_user") == $nowrecording["user_login"] && in_array($status,$posibilites) == true){
+        $logger = new RecorderLogger();
+
         $recordingStatus = $config["var"] . "/" . $config["statusfile"];
 
         $recorderInfo = $system->getRecorderArray($nowrecording["recorders"]);

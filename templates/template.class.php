@@ -25,6 +25,12 @@
                 return "selected";
         }
 
+        function alertDialog($title,$text){
+            $value = '<div id="dialog-message" title="' . $title . '">';
+            $value .= $text;
+            $value .= '</div>';
+            return $value;
+        }
     }
 
     $tmp = new templates();

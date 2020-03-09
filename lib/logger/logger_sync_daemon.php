@@ -13,22 +13,11 @@ class LoggerSyncDaemon {
     public $max_failures_before_warning;
     public $classroom;
 
-    function __construct()
-    {
-        global $config;
-        $this->update_interval = 60;
-        $this->pid_file = $config["basedir"] . '/var/sync_logs_daemon.pid';
-        $this->cli_sync_daemon = $config["basedir"] .'/cli/cli_sync_logs.php';
-        $this->sync_batch_size = 1000;
-        $this->max_run_time = 86400; //run max 24 hours. This is to help when global_config has been changed, or if this file has been updated
-        $this->max_failures_before_warning = 15;
-        $this->classroom = $config["classroom"];
-    }
-
     public function ensure_is_running() {
         global $config;
+        global $system;
         if($this->is_running() == false) {
-            system($config["phpcli"] . " ". $this->cli_sync_daemon . " > " . $config["var"] . "/log_sync_daemon 2>&1 &");
+            $system->bashCommandLine($config["phpcli"] . " ". $this->cli_sync_daemon . " > " . $config["var"] . "/log_sync_daemon 2>&1 &");
         }
     }
     
@@ -43,7 +32,6 @@ class LoggerSyncDaemon {
     
     public function sync_logs() {
         global $logger;
-        //global $log_push_url;
         global $config;
         global $database;
         
@@ -107,9 +95,7 @@ class LoggerSyncDaemon {
     }
     
     public function run($check_if_running = true) {
-        /* it seems we sometimes have several sync_daemon using ensure_is_running. This is because cli_sync_logs is started as a background process
-         * and the PID may not be written yet when ensure_is_running is called. The next check is there to fix this.
-         */
+
 
         if($check_if_running) {
             if($this->is_running())

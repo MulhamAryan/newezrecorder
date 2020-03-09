@@ -31,10 +31,15 @@
             default:
                 return false;
                 break;
-
         }
     }
     else{
+        if($action == "api"){
+            include $config["ajax"] . "/api.php";
+        }
+        else{
+            header("LOCATION:index.php?ajax_not_found");
+        }
         return false;
     }
 ?>

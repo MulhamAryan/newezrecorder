@@ -3,15 +3,20 @@
     $title           = isset($input["title"]) ? htmlspecialchars($input["title"]) : "";
     $description     = isset($input["description"]) ? htmlspecialchars($input["description"]) : "";
     $recorder        = isset($input["recorder"]) ? htmlspecialchars($input["recorder"]) : "";
-    $streaming       = isset($input["streaming"]) ? htmlspecialchars($input["streaming"]) : ""; // Future release TODO
+    $streaming       = isset($input["streaming"]) ? htmlspecialchars($input["streaming"]) : "";
     $advancedoptions = isset($input["advancedoptions"]) ? htmlspecialchars($input["advancedoptions"]) : "";
 
     $netid = $auth->userSession("logged_user");
 
     if(empty($title) && empty($course) && empty($recorder)) {
-        header("LOCATION:?");
+        header("LOCATION:?set_recording_fails_no_info_provided");
     }
     else{
+        if($streaming == 1)
+            $streaming = true;
+        else
+            $streaming = false;
+
         if ($advancedoptions == 1) {
             $autostop  = isset($input["autostop"]) ? htmlspecialchars($input["autostop"]) : "";
             $publishin = isset($input["publishin"]) ? htmlspecialchars($input["publishin"]) : "";
@@ -42,7 +47,8 @@
                 "autoStop" => $advancedoptions,
                 "stopTime" => $autostop,
                 "publishIn" => 1,
-                "recorders" => $recorder
+                "recorders" => $recorder,
+                "streaming" => $streaming
             );
 
             // This is a temporary patch until we develop the new concept of recording on EZRendrer, EZAdmin and EZManager
@@ -69,13 +75,26 @@
                 "author" => '' . $auth->getUserInfo("info",$netid,"full_name") . '',
                 "netid" => "" . $netid . "",
                 "record_date" => "" . $date . "",
-                "streaming" => "false",
+                "streaming" => $streaming,
                 "super_highres" => "false"
             );
             $system->recStatus($recStatusArray);
             $system->generateMetadataFile($metaInfo,$asset);
             $session->setRecordingInfo($netid, $course, $title, $description, $recorder,$advancedoptions,$autostop,$publishin);
-
+            //Start Streaming if it's enable for each recorder and qualities
+            if($streaming == true){
+                $activeRecordersFile = $system->getRecordingAssetDir() . "/" . $config["statusfile"];
+                $activeRecorders     = json_decode(file_get_contents($activeRecordersFile), true);
+                foreach ($activeRecorders as $recorderKey => $recorderValue){
+                    foreach ($recorderValue as $quality) {
+                        $streamPid = $system->getRecordingAssetDir() . "/" . $recorderKey . "/" . $quality . $ffmpeg->getStreamPidFileName();
+                        $streamLog = $system->getRecordingAssetDir() . "/" . $recorderKey . "/" . $quality . $ffmpeg->getStreamLogFileName();
+                        $cmd = $config["phpcli"] . " " . $config["cli_stream_send"] ."  $recorderKey $quality  > $streamLog 2>&1 < /dev/null & echo $! > " . $streamPid;
+                        $system->bashCommandLine($cmd);
+                        sleep(1);
+                    }
+                }
+            }
         }
 
         header("LOCATION:?");

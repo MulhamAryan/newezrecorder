@@ -1,3 +1,9 @@
+<?php
+    if(file_exists($config["alert_msg_file"])) {
+        $alertMsg = json_decode(file_get_contents($config["alert_msg_file"]), true);
+        echo $tmp->alertDialog($alertMsg["title"],$alertMsg["message"]);
+    }
+?>
 <div class="recorder">
     <div class="form">
         <div class="loadingRecording" id="loadingRecording">
@@ -76,11 +82,11 @@
                 </div>
                 <div class="float-left">
 
-                        <!--<label class="switch">
+                        <label class="switch">
                             <input type="checkbox" id="streaming" name="streaming" value="1">
                             <span class="slider round"></span>
                         </label>
-                        <label for="streaming"><?php echo $lang["enable_streaming"];?></label>-->
+                        <label for="streaming"><?php echo $lang["enable_streaming"];?></label>
 
                 </div>
                 <div class="clear"></div>
