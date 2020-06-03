@@ -12,7 +12,7 @@
 
         $recorderInfo = $system->getRecorderArray($nowrecording["recorders"]);
 
-        $ffmpeg = new ffmpeg($recorderInfo, $nowrecording["asset"]);
+        $ffmpeg = new ffmpeg($nowrecording["asset"],$recorderInfo);
 
         if($status == "play"){
             if($nowrecording["recording_status"] == "pause"){
@@ -58,7 +58,8 @@
             "auto_stop" => $nowrecording["auto_stop"],
             "stop_time" => $nowrecording["stop_time"],
             "publishin" => $nowrecording["publishin"],
-            "recorders" => $nowrecording["recorders"]
+            "recorders" => $nowrecording["recorders"],
+            "streaming" => $nowrecording["streaming"]
         );
 
         $newArrayValue = json_encode($newArrayValue);

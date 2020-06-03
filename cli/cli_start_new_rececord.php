@@ -65,7 +65,7 @@
 
         echo "Creating new record : " . $asset . PHP_EOL;
 
-        $ffmpeg = new ffmpeg($recorderInfo, $asset);
+        $ffmpeg = new ffmpeg($asset,$recorderInfo);
         $ffmpeg->launch();
 
         $nowrecording = json_decode($system->getRecordingStatus(),true);

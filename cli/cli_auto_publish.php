@@ -6,7 +6,7 @@
     $posibilites = array("trash","private","public");
     if(!empty($nowrecording)) {
         $publishin = ($publishin == 1 ? "private" : "public");
-        $ffmpeg = new ffmpeg($nowrecording["recorders"],$nowrecording["asset"]);
+        $ffmpeg = new ffmpeg($nowrecording["asset"],$nowrecording["recorders"]);
         $ffmpeg->setMediaStatus("stop"); // Set stop of all recording directories
         $ffmpeg->stopRecording(); // Stop and kill all the recordings
         $system->prepareMerge($publishin, $nowrecording); // Prepare the merge functions to launch cli_post_process.php

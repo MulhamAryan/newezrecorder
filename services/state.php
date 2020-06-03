@@ -31,6 +31,20 @@
             "asset" => $recordingInfo["asset"],
             "course" => $recordingInfo["course"],
             "streaming" => $recordingInfo["streaming"],
+            "record_type" => $recordingInfo["recorders"]
+        );
+    }
+    else{
+        $recordingArray = array(
+            "recording" => "0",
+            "status_general" => "",
+            "status_cam" => "",
+            "status_slides" => "",
+            "author" => "",
+            "author_full_name" => "",
+            "asset" => "",
+            "course" => "",
+            "streaming" => "",
             "record_type" => ""
         );
     }

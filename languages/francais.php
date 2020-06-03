@@ -1,7 +1,7 @@
 <?php
     $lang = array();
     $lang["lang"] = "Français";
-    $lang["title"] = "Recorder - ULB Podcast";
+    $lang["recordertitle"] = "EZrecorder - ULB Podcast";
     $lang["netid"] = "NetID";
     $lang["password"] = "Mot de passe";
     $lang["login"] = "Se connecter";

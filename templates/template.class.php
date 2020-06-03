@@ -1,18 +1,23 @@
 <?php
     class templates{
         function error($msg){
-            return "<div class=\"alert alert-danger\" role=\"alert\">$msg</div>";
+            return "<div class=\"alert alert-danger\" role=\"alert\">{$msg}</div>";
         }
 
-        function loadFile($tmpFile){
+        function success($msg){
+            return "<div class=\"alert alert-success\" role=\"alert\">{$msg}</div>";
+        }
+
+        function loadTempFile($tmpFile){
             global $config;
             global $lang;
 
             if(file_exists($config["basedir"] . $config["templates"] . "/" . $tmpFile)){
                 return $config["basedir"] . $config["templates"] . "/" . $tmpFile;
             }
-            else
+            else {
                 return "Error: template $tmpFile not found";
+            }
         }
 
         function isChecked($value1,$value2){
@@ -26,10 +31,7 @@
         }
 
         function alertDialog($title,$text){
-            $value = '<div id="dialog-message" title="' . $title . '">';
-            $value .= $text;
-            $value .= '</div>';
-            return $value;
+            return "<div id=\"dialog-message\" title=\"{$title}\">{$text}</div>";
         }
     }
 

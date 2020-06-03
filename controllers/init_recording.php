@@ -12,10 +12,11 @@
         header("LOCATION:?set_recording_fails_no_info_provided");
     }
     else{
+
         if($streaming == 1)
-            $streaming = true;
+            $streaming = "true";
         else
-            $streaming = false;
+            $streaming = "false";
 
         if ($advancedoptions == 1) {
             $autostop  = isset($input["autostop"]) ? htmlspecialchars($input["autostop"]) : "";
@@ -27,7 +28,7 @@
         $recorderInfo = $system->getRecorderArray($recorder);
 
         if ($system->getRecordingStatus() == false) {
-            $ffmpeg = new ffmpeg($recorderInfo, $asset);
+            $ffmpeg = new ffmpeg($asset,$recorderInfo);
             $ffmpeg->launch();
             $getRunningRecorder = $ffmpeg->getRunningRecorder();
             if($ffmpeg->isRunning("init_check") == "all") {
@@ -72,17 +73,17 @@
                 "description" => " ",
                 "record_type" => "" . $record_type . "",
                 "moderation" => "false",
-                "author" => '' . $auth->getUserInfo("info",$netid,"full_name") . '',
+                "author" => "" . $auth->getUserInfo("info",$netid,"full_name") . "",
                 "netid" => "" . $netid . "",
                 "record_date" => "" . $date . "",
-                "streaming" => $streaming,
+                "streaming" => "" . $streaming . "",
                 "super_highres" => "false"
             );
             $system->recStatus($recStatusArray);
             $system->generateMetadataFile($metaInfo,$asset);
             $session->setRecordingInfo($netid, $course, $title, $description, $recorder,$advancedoptions,$autostop,$publishin);
             //Start Streaming if it's enable for each recorder and qualities
-            if($streaming == true){
+            if($streaming == "true"){
                 $activeRecordersFile = $system->getRecordingAssetDir() . "/" . $config["statusfile"];
                 $activeRecorders     = json_decode(file_get_contents($activeRecordersFile), true);
                 foreach ($activeRecorders as $recorderKey => $recorderValue){
@@ -99,6 +100,6 @@
 
         header("LOCATION:?");
 
-        include $tmp->loadFile("init_recorder.form.php");
+        include $tmp->loadTempFile("init_recorder.form.php");
     }
 ?>

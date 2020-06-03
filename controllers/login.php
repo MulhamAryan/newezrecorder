@@ -31,7 +31,7 @@
             }
         }
 
-        include $tmp->loadFile("login.form.php");
+        include $tmp->loadTempFile("login.form.php");
 
     }
     else{

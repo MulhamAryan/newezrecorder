@@ -81,13 +81,15 @@
                     <input type="reset" name="cancel" value="<?php echo $lang["cancel"];?>" class="btn btn-secondary" onclick="location.href='?action=logout';">
                 </div>
                 <div class="float-left">
-
+                        <?php
+                            if($config["enablestreaming"] == true){
+                        ?>
                         <label class="switch">
                             <input type="checkbox" id="streaming" name="streaming" value="1">
                             <span class="slider round"></span>
                         </label>
                         <label for="streaming"><?php echo $lang["enable_streaming"];?></label>
-
+                        <?php } ?>
                 </div>
                 <div class="clear"></div>
             <div class="clearfix"></div>

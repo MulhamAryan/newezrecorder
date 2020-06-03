@@ -2,8 +2,8 @@
     /* ------
         Refracted EZrecorder Beta Test Version
     */
-    @error_reporting(E_ALL | E_STRICT); // Only on debug mode !
-    @ini_set('display_errors', '1');    // Only on debug mode !
+    error_reporting(E_ALL | E_STRICT); // Only on debug mode !
+    ini_set('display_errors', '1');    // Only on debug mode !
     date_default_timezone_set("Europe/Brussels");
     $config_version = "2020030101";
     $input = array_merge($_GET, $_POST);
@@ -17,7 +17,7 @@
     $config = array(
         "classroom"        => "mulham",
         "userweb"          => "_www",
-        "apacheusername"   => "podclient", //TODO
+        "apacheusername"   => "podclient",
         "recorderip"       => "10.142.128.209",
         "htdocspath"       => "ezrecorder",
         "serverurl"        => "podcasttest.ulb.ac.be",
@@ -27,7 +27,7 @@
         //
         "controllers"      => "controllers",
         "ajaxdir"          => "ajax",
-        "lib"              => "lib",
+        "lib"              => "library",
         "clidir"           => "cli",
         "plugins"          => "plugins",
         "templates"        => "templates",
@@ -53,7 +53,9 @@
         "metadata"         => "metadata.xml",
         "request_dump"     => "download_request_dump.txt",
         "moviefile"        => "ffmpegmovie",
-        "crontabuserfile"  => "crontabfile"
+        "crontabuserfile"  => "crontabfile",
+        //
+        "enablestreaming"  => false
     );
     // EZrecorder recording informations files and folders ----------------------------------------------------------------------------------------------------------------------------------------------------------------
     $config["recordermaindir"]       = $config["recorderdata"] . "/movies/"; // Where all recording are stocked
@@ -70,6 +72,7 @@
     $config["ajax"]                  = $config["controllers"] . "/" . $config["ajaxdir"]; // Ajax files controllers
     $config["recorder"]              = $config["basedir"] . "/etc/config/recorder.json"; // Recorders information and qualities can be changed from this files
     $config["listplugins"]           = $config["basedir"] . "/etc/config/plugins.json"; // Active plugins and plugins list are stocked in this file
+    $config["languagesls"]           = $config["basedir"] . "/etc/config/languages.json"; // Active plugins and plugins list are stocked in this file
     $config["alert_msg_file"]        = $config["var"] . "/alert.json"; // When this file exist it mean there is an alert for the user before starting recording
     $config["database_file"]         = $config["var"] . "/db.sqlite"; // SQLite database file
     $config["languages"]             = $config["basedir"] . "/" . $config["languages"]; // All languages files directory
@@ -90,36 +93,11 @@
     $config["apiactive"]             = 1; // If 1 api activated other not activated
     $config["apiuser"]               = "user"; // Api username
     $config["apikey"]                = "password"; // Api password
+
     // Recorders and qualities info getter
     $recorder_modules = json_decode(file_get_contents($config["recorder"]),true);
     // Plugins list info getter
-    //$plugins_list     = json_decode(file_get_contents($config["listplugins"]),true); // TODO
-
-    $plugins_list = array(
-        "camcontrollers" => array(
-            "ptz" => true,
-            "crestron" => false,
-            "onvif" => false,
-            "visca" => false
-        ),
-
-        "sound_metter" => array(
-            "ts_file" => false
-        ),
-
-        "player" => array(
-            "image" => true,
-            "m3u" => false,
-        ),
-
-        "sound_backup" => false,
-    );
-
-    $debug = array(
-        "debug_mode" => false,
-        "send_debug_to_server" => false,
-        "logs_sync" => false
-    );
+    $plugins_list     = json_decode(file_get_contents($config["listplugins"]),true);
 
     $enablemaintenance = false; // if true go to the template directory and modify the text in maintenance.php file.
     $randomSecurityNumber = 98856;
