@@ -1,2 +1,6 @@
-etc/
-var/
+etc/api/credential.json
+etc/config/plugins.json
+etc/config/recorder.json
+etc/users/admin.inc
+etc/users/courselist.php
+etc/users/htpasswd

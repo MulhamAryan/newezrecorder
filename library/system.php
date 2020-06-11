@@ -1,4 +1,5 @@
 <?php
+
     class System{
         function removeCharacters($string){
             $string = str_replace(' ', '-', $string);
