@@ -9,25 +9,9 @@
     $recorderType = $system->getRecordingStatus("recorders");
     $toStream     = $system->getRecordingStatus("recorders");
 
-
-    /*
-    if(empty($asset) && empty($course)){
-        print "No recording found to stream !" . PHP_EOL;
-        $logger->log(EventType::RECORDER_STREAMING, LogLevel::WARNING, "No recording found to stream", array(basename(__FILE__)));
-        exit(1);
-    }
-    */
     $streamRecorder = $argv[1];
     $streamQuality  = $argv[2];
-    /*
-    $post_array['course'] = $course;
-    $post_array['asset'] = $asset_time;
-    $post_array['quality'] = $quality;
-    $post_array['record_type'] = $meta_assoc['record_type'];
-    //$post_array['module_type'] = $meta_assoc['module_type'];
-    $post_array['protocol'] = "http";
-    $post_array['action'] = 'streaming_content_add';
-    */
+
     $cli = new cli($asset,$streamRecorder);
     //PATCH
     if($recorderType == "camrecord")

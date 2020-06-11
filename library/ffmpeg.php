@@ -22,34 +22,35 @@
         private $streamPid;
         private $streamLog;
 
-        function __construct($asset,$recorderarray = array())
+        public function __construct(string $asset,array $recorderarray = null)
         {
+            parent::__construct();
             global $config;
-
-            $this->basedir = $config["basedir"];
-            $this->recordingDir = $config["recordermaindir"];
+            $this->config = $config;
+            $this->basedir = $this->config["basedir"];
+            $this->recordingDir = $this->config["recordermaindir"];
             $this->type = ""; // Type of record (rtsp,m3u8,avFoundation ...)
-            $this->ffmpeg_cli  = $config["ffmpegcli"]; // FFMPEG BIN file
+            $this->ffmpeg_cli  = $this->config["ffmpegcli"]; // FFMPEG BIN file
             $this->logo = 0; // if put ULB logo on record (Don't enable at this moment -vcodec copy can't work with filter now) for future release
-            $this->logofile = $config["webbasedir"] . "images/watermark.jpg"; // Watermark file
+            $this->logofile = $this->config["webbasedir"] . "images/watermark.jpg"; // Watermark file
             $this->module_path = "";
             $this->thread_queue = "-thread_queue_size 127"; // Thread message queue blocking
             $this->asset = $asset; // The asset name
             $this->maxcall = 3 ; // Max number of try record
             $this->exists_video = 0; // Check if video exists
             $this->limit_duration = " -t 12:00:00 "; // Max limit duration of one record
-            $this->common_movie_name = $config["moviefile"];
+            $this->common_movie_name = $this->config["moviefile"];
             $this->recordExtenstion = ".mov";
             $this->recorderNumber = 0;
             $this->recorderArray = $recorderarray;
             $this->recorderInfo = array();
             $this->isRecording = array();
-            $this->isRecordingFile = $config["statusfile"];
+            $this->isRecordingFile = $this->config["statusfile"];
             $this->folders = array(
-                "local_processing" => $this->recordingDir . $config["local_processing"]. "/",
-                "trash"            => $this->recordingDir . $config["trash"] . "/",
-                "upload_to_server" => $this->recordingDir . $config["upload_to_server"] . "/",
-                "upload_ok"        => $this->recordingDir . $config["upload_ok"]. "/"
+                "local_processing" => $this->recordingDir . $this->config["local_processing"]. "/",
+                "trash"            => $this->recordingDir . $this->config["trash"] . "/",
+                "upload_to_server" => $this->recordingDir . $this->config["upload_to_server"] . "/",
+                "upload_ok"        => $this->recordingDir . $this->config["upload_ok"]. "/"
             );
 
             $this->assetDir = $this->folders["local_processing"] . $this->asset . "/";
@@ -57,7 +58,6 @@
             $this->ffmpegLog = "ffmpeg.log";
             $this->streamPid = "_stream.pid";
             $this->streamLog = "_stream.log";
-
         }
 
         // This function initialize the recordings operation
@@ -67,7 +67,7 @@
         // 4- Create all the log files for every recorder and every quality using function `$this->generatorLogFiles($RECORDERNAME);`
         // 5- Launch the ffmpeg command lines to start recording using function `$this->recordingLaunch($LINK,$ASSETNAME,$RECORDINGTYPE,$RECORDERNAME,$QUALITY);`
 
-        function launch(){
+        public function launch(){
             //$this->recorderArray : Check the number of recorder
             foreach ($this->recorderArray as $recorderInfo){
                 $log_file = $this->assetDir . $recorderInfo["module"] . "/init.log";
@@ -93,7 +93,7 @@
             sleep(2);
         }
 
-        function generateConcatFile(){
+        public function generateConcatFile(){
             foreach ($this->getIsRecFileContent() as $recinfoKey => $recinfoValue){
                 $recDir = $this->assetDir . $recinfoKey;
                 $cut_list = trim(file_get_contents($recDir . "/_cut_list.txt"));
@@ -124,7 +124,7 @@
         }
 
         // This function is used to create all the recording directory and the different qualities
-        function createRecordingDirecory($module,$quality){
+        public function createRecordingDirecory($module,$quality){
             //Creating the main recording directory
             if(!is_dir($this->assetDir))
                 mkdir($this->assetDir, 0777);
@@ -140,7 +140,7 @@
         }
 
         // This function is used to create all the log files
-        function generatorLogFiles($module,$quality){
+        public function generatorLogFiles($module,$quality){
             $ffmpeg_log = $this->assetDir . $module;
 
             file_put_contents($ffmpeg_log . "/$quality/$this->ffmpegPid", "", FILE_APPEND | LOCK_EX);
@@ -150,7 +150,7 @@
         // This function is used to launch the recording taking in consideration the quality of recorder
         // !!!!! THIS IS THE FIRST VERSION OF THIS FUNCTION NEED MORE IMPROVE !!!!!
         // !!!!! BECAUSE IT CAN NOT DISTINGUISH THE NUMBER OF QUALITIES IN ONE RECORD !!!!!
-        function recordingLaunch($asset,$type,$module,$qualityKey,$qualityValue){
+        public function recordingLaunch($asset,$type,$module,$qualityKey,$qualityValue){
             global $config;
 
             $working_dir = $this->assetDir . $module;
@@ -173,7 +173,7 @@
                     "recording_directory" => $recording_direcory,
                     "common_movie_name" => $this->common_movie_name,
                     "logo_option" => $insertLogo,
-                    "thumbnail" => $config["var"] . "/" . $module . ".jpg"
+                    "thumbnail" => $this->config["var"] . "/" . $module . ".jpg"
                 );
 
                 $rtspCmd = rtspprofile($parameters);
@@ -201,7 +201,7 @@
                     "audio" => $qualityValue[1],
                     "recording_directory" => $recording_direcory,
                     "common_movie_name" => $this->common_movie_name,
-                    "thumbnail" => $config["var"] . "/" . $module . ".jpg"
+                    "thumbnail" => $this->config["var"] . "/" . $module . ".jpg"
                 );
 
                 $usbdevice = usbdevice($parameters);
@@ -219,7 +219,7 @@
         }
 
         // This function is used to set status of the recording media `play, pause, resume or stop`
-        function setMediaStatus($status){
+        public function setMediaStatus($status){
             // $status : must content play, pause, resume or stop
             $validate = array("play","pause", "resume", "stop");
             if(in_array($status, $validate)){
@@ -233,7 +233,7 @@
         }
 
         // Get the pid of one record by file name
-        function getFfmpegPid($pidFile){
+        public function getFfmpegPid($pidFile){
             if(file_exists($pidFile))
                 $pid = trim(file_get_contents($pidFile));
             else
@@ -243,7 +243,7 @@
         }
 
         // Kill the pid of one record by file name
-        function killPid($pidFile){
+        public function killPid($pidFile){
             $pid = $this->getFfmpegPid($pidFile);
             if($pid != false){
                 if(posix_kill($pid,9) == true) {
@@ -257,8 +257,8 @@
             }
 
         }
-
-        function stopRecording(){
+        //Stop recording processes
+        public function stopRecording(){
             $recordingFileInfo = $this->getIsRecFileContent();
             foreach ($recordingFileInfo as $recorder=>$quality){
                 $dir = $this->assetDir . $recorder;
@@ -271,7 +271,7 @@
             }
         }
 
-        function mergeRecordPerFile($recorder,$quality){
+        public function mergeRecordPerFile($recorder,$quality){
             file_put_contents($this->assetDir . $recorder . "/init.log", "-- [" . date("d/m/Y - H:i:s",time()) ."] : Starting concat merge video for $recorder and $quality" . PHP_EOL, FILE_APPEND | LOCK_EX);
             $recorderDir = $this->assetDir . $recorder;
             $ffmpeg_merge_cmd = $this->ffmpeg_cli . " -f concat -safe 0 -i " . $recorderDir . "/" . $quality . "concat.txt -c copy " . $recorderDir . "/" . $quality . $recorder . $this->recordExtenstion . " >" . $recorderDir . "/" . $quality . "merge_movies.log 2>&1";
@@ -298,7 +298,7 @@
             file_put_contents($this->assetDir . "/post_process.log", "-- [" . date("d/m/Y - H:i:s",time()) ."] : $message " . PHP_EOL, FILE_APPEND | LOCK_EX);
         }
 
-        function mergeAllRecord(){
+        public function mergeAllRecord(){
             foreach ($this->getIsRecFileContent() as $recorderInfoKey=>$recorderInfoValue){
                 foreach ($recorderInfoValue as $qualityInfo){
                     $this->mergeRecordPerFile($recorderInfoKey,$qualityInfo);
@@ -307,19 +307,19 @@
         }
 
         // This function is used to get the number of recorded qualities in all recorder
-        function getIsRecFileContent(){
+        public function getIsRecFileContent(){
             $recordingFileInfo = file_get_contents($this->assetDir . "/" . $this->isRecordingFile);
             $recordingFileInfo = json_decode($recordingFileInfo);
             return $recordingFileInfo;
         }
 
-        function getRecordingExtension()
+        public function getRecordingExtension()
         {
             return $this->recordExtenstion;
         }
 
         // This function is used to modify the _cut_list.txt file
-        function cutListFile($dir,$txt){
+        public function cutListFile($dir,$txt){
             $getType = explode(":",$txt);
             if($getType[0] == "init"){
                 $counter = 1;
@@ -336,7 +336,7 @@
             file_put_contents($dir . '/_cut_list.txt', $txt . PHP_EOL , FILE_APPEND | LOCK_EX);
         }
 
-        function getRunningRecorder(){
+        public function getRunningRecorder(){
             $isRecording = $this->getIsRecFileContent();
             $result = (!empty($result) ? $result : "");
             foreach ($isRecording as $isRecordingKey => $isRecordingQuality){
@@ -348,7 +348,7 @@
             return $result;
         }
 
-        function isRunning($option = null){
+        public function isRunning($option = null){
             if(empty($option)){
                 $isRecording = $this->getIsRecFileContent();
                 foreach ($isRecording as $isRecordingKey => $isRecordingQuality){
@@ -371,11 +371,11 @@
 
         }
 
-        function getStreamPidFileName(){
+        public function getStreamPidFileName(){
             return $this->streamPid;
         }
 
-        function getStreamLogFileName(){
+        public function getStreamLogFileName(){
             return $this->streamLog;
         }
     }
