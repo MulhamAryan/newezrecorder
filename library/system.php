@@ -60,7 +60,10 @@
                         }
                     }
                 }
-                $recorderInfo[] = $newRecorder;
+                if(!empty($newRecorder))
+                    $recorderInfo[] = $newRecorder;
+                else
+                    $recorderInfo = "";
             } else {
                 $recorderInfo = $recorder_modules;
             }

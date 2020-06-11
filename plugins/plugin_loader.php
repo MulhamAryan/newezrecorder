@@ -19,29 +19,16 @@
                                 $this->enabled_plugin[$activeKey][$pluginKey] = true;
                             }
                             if($countActive > 1){
-                                echo "Error <b>$countActive</b> plugins in <b>$activeKey</b> Found active please enable only one in `<b>". $config["basedir"] . "global_config.inc</b>` file<br>";
+                                echo "Error <b>$countActive</b> plugins in <b>$activeKey</b> active found, please enable only one in `<b>" . $config["listplugins"] . "</b>`";
+                                echo "<pre>";
+                                var_dump($this->enabled_plugin[$activeKey]);
+                                echo "</pre>";
                                 exit();
                             }
                         }
                     }
                 }
             }
-            /*foreach ($plugins_list as $plKey => $plValue){
-                if(is_array($plValue)){
-                    $countActive = 0;
-                    foreach ($plValue as $activeKey => $activeValue){
-                        if($activeValue == true) {
-                            $countActive++;
-                            $this->enabled_plugin[$plKey][$activeKey] = true;
-                        }
-                        if($countActive > 1){
-                            echo "Error <b>$countActive</b> plugins in <b>$plKey</b> Found active please enable only one in `<b>". $config["basedir"] . "global_config.inc</b>` file<br>";
-                            exit();
-                        }
-                    }
-                }
-            }
-            */
         }
         function getActivePlugin(){
             foreach ($this->enabled_plugin as $enabledPluginKey => $enabledPluginValue){

@@ -47,6 +47,7 @@
         "ffmpegcli"        => "/usr/local/ffmpeg/ffmpeg",
         "crontab"          => "/usr/bin/crontab",
         "ps"               => "/bin/ps",
+        "ping"             => "/bin/ping",
         "downloadprotocol" => "rsync",
         //
         "statusfile"       => "recording.json",
