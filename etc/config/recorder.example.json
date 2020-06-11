@@ -1,0 +1,25 @@
+[
+  {
+    "enabled":true,
+    "module":"camrecord",
+    "ip":"",
+    "type":"rtsp",
+    "quality":
+    {
+      "high":"[ip] -r 30 -crf 1 -profile:v main -preset faster -b:v 1M -maxrate 1M -bufsize 2M -c:v libx264"
+    },
+    "icon":"film",
+    "tempname":"Camera"
+  },
+  {
+    "enabled":true,
+    "module":"sliderecord",
+    "ip":"",
+    "type":"rtsp",
+    "quality": {
+      "high":"[ip] -c:v copy -c:a copy"
+    },
+    "icon":"image",
+    "tempname":"Slide"
+  }
+]

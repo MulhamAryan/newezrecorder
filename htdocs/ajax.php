@@ -1,4 +1,3 @@
 <?php
-    include "/usr/local/newezrecorder/web_ajax.php";
-    
-?>
+    include "config.php";
+    include "web_ajax.php";

@@ -22,7 +22,7 @@
         private $streamPid;
         private $streamLog;
 
-        function __construct($recorderarray = array(), $asset)
+        function __construct($asset,$recorderarray = array())
         {
             global $config;
 
@@ -57,6 +57,7 @@
             $this->ffmpegLog = "ffmpeg.log";
             $this->streamPid = "_stream.pid";
             $this->streamLog = "_stream.log";
+
         }
 
         // This function initialize the recordings operation
@@ -111,6 +112,7 @@
                     $qualityDir = $recDir . "/" . $qualityMerge . "/";
                     for($i = 0;$i<count($array["start"]);$i++){
                         unset($concatTextFile);
+                        $concatTextFile = "";
                         for($j = $array["start"][$i]; $j < $array["end"][$i];$j++){
                             $concatTextFile .= "file '" . $qualityDir . $this->common_movie_name . $j . ".ts'" . PHP_EOL;
                         }

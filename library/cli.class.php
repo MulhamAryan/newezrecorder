@@ -11,14 +11,13 @@
             global $config;
             $this->recorders = $recorders;
             $this->assetName = $assetName;
-            if(file_exists($config["recordermaindir"] . $config["upload_to_server"] . "/" . $assetName . "/" . $config["statusfile"])){
-                $this->recordingInfo = file_get_contents($config["recordermaindir"] . $config["upload_to_server"] . "/" . $assetName . "/" . $config["statusfile"]);
-                $this->recordingInfo = json_decode($this->recordingInfo, true);
+            if(file_exists($config["recordermaindir"] . $config["upload_to_server"] . "/" . $assetName . "/info." . $config["statusfile"])){
+                $this->recordingInfo = file_get_contents($config["recordermaindir"] . $config["upload_to_server"] . "/" . $assetName . "/info." . $config["statusfile"]);
             }
             else{
-                $this->recordingInfo = file_get_contents($config["recordermaindir"] . $config["local_processing"] . "/" . $assetName . "/" . $config["statusfile"]);
-                $this->recordingInfo = json_decode($this->recordingInfo, true);
+                $this->recordingInfo = file_get_contents($config["recordermaindir"] . $config["upload_to_server"] . "/" . $assetName . "/" . $config["statusfile"]);
             }
+            $this->recordingInfo = json_decode($this->recordingInfo, true);
             $recorderArray = $this->getRecorderArray($this->recorders);
             ffmpeg::__construct($recorderArray,$this->assetName);
         }
@@ -35,17 +34,7 @@
 
         function startUploadToServer(){
             global $config;
-            $assetDir = $config["recordermaindir"] . $config["local_processing"] . "/" . $this->assetName;
-            if(!file_exists($assetDir)){
-                $assetDir = $config["recordermaindir"] . $config["upload_to_server"] . "/" . $this->assetName;
-            }
-            else{
-                rename($assetDir, $config["recordermaindir"] . $config["upload_to_server"] . "/" . $this->assetName);
-                $assetDir = $config["recordermaindir"] . $config["upload_to_server"] . "/" . $this->assetName;
-                file_put_contents($assetDir . "/post_process.log", "-- [" . date("d/m/Y - H:i:s",time()) ."] : $this->assetName asset moved successefully to " . $config["upload_to_server"] . PHP_EOL, FILE_APPEND | LOCK_EX);
-            }
-
-            file_put_contents($assetDir . "/post_process.log", "-- [" . date("d/m/Y - H:i:s",time()) ."] : Starting upload_to_server ." . PHP_EOL, FILE_APPEND | LOCK_EX);
+            $assetDir = $config["recordermaindir"] . $config["upload_to_server"] . "/" . $this->assetName;
 
             if(file_exists("$assetDir/download_request_dump.txt"))
                 unlink("$assetDir/download_request_dump.txt");

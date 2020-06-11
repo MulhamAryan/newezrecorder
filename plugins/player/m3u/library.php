@@ -1,5 +1,5 @@
 <?php
-    class M3uPlayer extends Sound_Metter_TS {
+    class M3uPlayer extends Sound_Meter_TS {
         function javascript($recorderInfo)
         {
             global $config;

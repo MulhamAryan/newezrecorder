@@ -7,7 +7,7 @@
     <meta name="docsearch:language" content="fr">
     <meta name="docsearch:version" content="1.0">
 
-    <title><?php echo $lang["title"]; ?></title>
+    <title><?php echo $lang["recordertitle"]; ?></title>
 
     <script src="<?php echo $config["curenttheme"];?>/js/jquery.js"></script>
     <script src="<?php echo $config["curenttheme"];?>/js/jquery-ui.js"></script>

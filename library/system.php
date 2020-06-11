@@ -1,4 +1,5 @@
 <?php
+
     class System{
         function removeCharacters($string){
             $string = str_replace(' ', '-', $string);
@@ -60,7 +61,10 @@
                         }
                     }
                 }
-                $recorderInfo[] = $newRecorder;
+                if(!empty($newRecorder))
+                    $recorderInfo[] = $newRecorder;
+                else
+                    $recorderInfo = "";
             } else {
                 $recorderInfo = $recorder_modules;
             }
@@ -130,10 +134,6 @@
             else{
                 return "unknown_function";
             }
-        }
-
-        function createDownloadRequestFile($array){
-
         }
 
         function isProcessRunning($pid) {

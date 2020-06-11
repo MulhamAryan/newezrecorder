@@ -1,21 +1,5 @@
 <?php
-    $languagesList = array(
-        "fr" => array(
-            "enabled" => true,
-            "file" => "francais.php",
-            "name" => "Français"
-        ),
-        "en" => array(
-            "enabled" => true,
-            "file" => "english.php",
-            "name" => "English"
-        ),
-        "nl" => array(
-            "enabled" => true,
-            "file" => "dutch.php",
-            "name" => "Dutch"
-        ),
-    );
+    $languagesList = json_decode(file_get_contents($config["languagesls"]),true);
 
     if(!empty($input["language"])){
         $select = $input["language"];

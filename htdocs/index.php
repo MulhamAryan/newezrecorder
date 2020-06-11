@@ -1,4 +1,3 @@
 <?php
-    include "/usr/local/newezrecorder/web_index.php";
-    
-?>
+    include "config.php";
+    include "web_index.php";

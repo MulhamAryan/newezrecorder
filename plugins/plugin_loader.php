@@ -9,23 +9,27 @@
             $this->active_plugin_dir = array();
             $this->paramaters = "parameters.json";
 
-            foreach ($plugins_list as $plKey => $plValue){
-                if(is_array($plValue)){
+            foreach ($plugins_list as $plValue){
+                if(is_array($plValue)) {
                     $countActive = 0;
-                    foreach ($plValue as $activeKey => $activeValue){
-                        if($activeValue == true) {
-                            $countActive++;
-                            $this->enabled_plugin[$plKey][$activeKey] = true;
-                        }
-                        if($countActive > 1){
-                            echo "Error <b>$countActive</b> plugins in <b>$plKey</b> Found active please enable only one in `<b>". $config["basedir"] . "global_config.inc</b>` file<br>";
-                            exit();
+                    foreach ($plValue as $activeKey => $activeValue) {
+                        foreach ($activeValue as $pluginKey => $pluginValue) {
+                            if($pluginValue == true) {
+                                $countActive++;
+                                $this->enabled_plugin[$activeKey][$pluginKey] = true;
+                            }
+                            if($countActive > 1){
+                                echo "Error <b>$countActive</b> plugins in <b>$activeKey</b> active found, please enable only one in `<b>" . $config["listplugins"] . "</b>`";
+                                echo "<pre>";
+                                var_dump($this->enabled_plugin[$activeKey]);
+                                echo "</pre>";
+                                exit();
+                            }
                         }
                     }
                 }
             }
         }
-
         function getActivePlugin(){
             foreach ($this->enabled_plugin as $enabledPluginKey => $enabledPluginValue){
                 foreach ($enabledPluginValue as $epvk => $epvv){
@@ -42,20 +46,21 @@
             }
             return $this->active_plugin_dir;
         }
-
+        public function getIsActive($plugintype,$pluginname){
+            if(@$this->enabled_plugin[$plugintype][$pluginname])
+                return true;
+            else
+                return false;
+        }
     }
 
     $pluginloader = new PluginLoader($plugins_list);
-
     foreach ($pluginloader->getActivePlugin() as $activePluginKey => $activePluginValue){
         if(file_exists($activePluginValue)){
             $plugin[$activePluginKey] = include($activePluginValue);
-            //require_once pathinfo($activePluginValue)['dirname'] . "/functions.php";
         }
         else{
             echo "Plugin library file not found `<b>$activePluginValue</b>`";
             exit();
         }
     }
-
-?>

@@ -11,8 +11,6 @@
             <div class="progress">
                 <div class="progress-bar progress-bar-striped progress-bar-animated bg-success" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: 100%"></div>
             </div>
-
-
         </div>
         <form method="post" action="?action=init_recording" id="initRecorder">
             <div class="form-group">
@@ -47,13 +45,19 @@
                     <?php echo $lang["select_type"];?> :
                     <br><br>
                     <div class="customRadio">
-                        <?php $i = 1; if($disableFullList == 0){?><input type="radio" name="recorder" value="all" id="r<?php echo $i;?>" <?php echo $tmp->isChecked($lastRecorder,"all");?> /><label class="radio" for="r<?php echo $i;?>"><i class="fas fa-photo-video"></i><br>Camera + Slide</label>
+                        <?php $i = 1; if($disableFullList == 0){?>
+                            <div style="display: inline-block">
+                                <input type="radio" name="recorder" value="all" id="r<?php echo $i;?>" <?php echo $tmp->isChecked($lastRecorder,"all");?>/>
+                                <label class="radio" for="r<?php echo $i;?>"><i class="fas fa-photo-video"></i><br>Camera + Slide</label>
+                            </div>
                             <?php $i++; }
                         foreach ($recorder_modules as $recorderKey => $recorderValue){
                             if($recorderValue["enabled"] == true) {
                                 ?>
-                                <input type="radio" name="recorder" value="<?php echo $recorderValue["module"]; ?>" id="r<?php echo $i; ?>" <?php echo $tmp->isChecked($lastRecorder,$recorderValue["module"]);?>/>
-                                <label class="radio" for="r<?php echo $i; ?>"><i class="fas fa-<?php echo $recorderValue["icon"]; ?>"></i><br><?php echo $recorderValue["tempname"]; ?></label>
+                                <div style="display: inline-block">
+                                    <input type="radio" name="recorder" value="<?php echo $recorderValue["module"]; ?>" id="r<?php echo $i; ?>" <?php echo $tmp->isChecked($lastRecorder,$recorderValue["module"]);?>/>
+                                    <label class="radio" for="r<?php echo $i; ?>"><i class="fas fa-<?php echo $recorderValue["icon"]; ?>"></i><br><?php echo $recorderValue["tempname"]; ?></label>
+                                </div>
                                 <?php
                             }
                             $i++;
@@ -81,13 +85,15 @@
                     <input type="reset" name="cancel" value="<?php echo $lang["cancel"];?>" class="btn btn-secondary" onclick="location.href='?action=logout';">
                 </div>
                 <div class="float-left">
-
+                        <?php
+                            if($config["enablestreaming"] == true){
+                        ?>
                         <label class="switch">
                             <input type="checkbox" id="streaming" name="streaming" value="1">
                             <span class="slider round"></span>
                         </label>
                         <label for="streaming"><?php echo $lang["enable_streaming"];?></label>
-
+                        <?php } ?>
                 </div>
                 <div class="clear"></div>
             <div class="clearfix"></div>

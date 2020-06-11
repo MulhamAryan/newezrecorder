@@ -1,11 +1,11 @@
 <?php
-    ob_start();
+    ob_start("ob_gzhandler");
     session_start();
 
     include "global_config.inc";
     $logger = new RecorderLogger();
 
-    include $tmp->loadFile("header.php");
+    include $tmp->loadTempFile("header.php");
 
     if($enablemaintenance == false) {
         if ($auth->userSession("is_logged") == true) {
@@ -20,7 +20,6 @@
                 default:
                     include $config["controllers"] . "/index.php";
                     break;
-
             }
         } else {
             if($action == "recording_force_quit"){
@@ -32,8 +31,8 @@
         }
     }
     else{
-        include $tmp->loadFile("maintenance.php");
+        include $tmp->loadTempFile("maintenance.php");
     }
 
-    include $tmp->loadFile("footer.php");
+    include $tmp->loadTempFile("footer.php");
 ?>

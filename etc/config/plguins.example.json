@@ -1,0 +1,24 @@
+[
+  {
+    "camcontrollers": {
+      "ptz": true,
+      "crestron": false,
+      "onvif": false,
+      "visca": false
+    }
+  },
+  {
+    "sound_meter": {
+      "ts_file": true,
+      "crestron": false,
+      "onvif": false,
+      "visca": false
+    }
+  },
+  {
+    "player": {
+      "image":true,
+      "m3u":false
+    }
+  }
+]

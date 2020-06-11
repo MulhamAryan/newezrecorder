@@ -30,7 +30,7 @@
                 }
             }
 
-            include $tmp->loadFile("recorder.form.php");
+            include $tmp->loadTempFile("recorder.form.php");
         }
         else{
             $recordingInfo = $system->getRecordingStatus();
@@ -54,7 +54,7 @@
 
             $recorderInfo = $system->getRecorderArray($recorder);
 
-            $ffmpeg = new ffmpeg($recorderInfo, $asset);
+            $ffmpeg = new ffmpeg($asset,$recorderInfo);
 
             if(!empty($recordingInfo["start_time"]) && !empty($recordingInfo["auto_stop"])) {
                 $recordingInfo["stop_time"] = explode(":", $recordingInfo["stop_time"]);
@@ -66,7 +66,7 @@
                 $startedConverted = (!empty($startedConverted) ? $converted:"");
             }
 
-            include $tmp->loadFile("init_recorder.form.php");
+            include $tmp->loadTempFile("init_recorder.form.php");
         }
     }
     else{

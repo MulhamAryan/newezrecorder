@@ -1,3 +1,3 @@
 <?php
-    include "/usr/local/newezrecorder/player/hls.php";
-?>
+    include "../config.php";
+    include "player/hls.php";

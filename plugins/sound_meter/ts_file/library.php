@@ -1,5 +1,5 @@
 <?php
-    class Sound_Metter_TS{
+    class Sound_Meter_TS{
         function __construct()
         {
             global $config;
@@ -81,6 +81,6 @@
     }
 
 
-    $SoundMetter = new Sound_Metter_TS();
+    $SoundMetter = new Sound_Meter_TS();
     return $SoundMetter;
 ?>

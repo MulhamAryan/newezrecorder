@@ -20,19 +20,22 @@
     else{
         $cli = new cli($asset_name,$recorder);
         if($function == "startmerge"){
+            $assetDir = $config["recordermaindir"] . $config["local_processing"] . "/" . $asset_name;// Asset directory before being moved to upload_to_server
             $logger->log(EventType::RECORDER_CAPTURE_POST_PROCESSING, LogLevel::INFO, "Started videos post processing", array(basename(__FILE__)), $asset_name);
             $cli->startMerge();
-            $assetDir = $config["recordermaindir"] . $config["local_processing"] . "/" . $asset_name;
             copy($assetDir . "/_" . $config["metadata"],$assetDir . "/" . $config["metadata"]);
-            sleep(2);
-            $uploadToServer = $config["phpcli"] . " " . $config["cli_post_process"] . " " . $asset_name . " " . $recorder . " upload_to_server>$assetDir/post_process.log 2>&1";
-            $cli->bashCommandLine($uploadToServer);
+            sleep(1);
+            rename($assetDir, $config["recordermaindir"] . $config["upload_to_server"] . "/" . $asset_name);
+
+            $assetDir = $config["recordermaindir"] . $config["upload_to_server"] . "/" . $asset_name;// Asset directory after being moved to upload_to_server
+            file_put_contents($assetDir . "/post_process.log", "-- [" . date("d/m/Y - H:i:s",time()) ."] : $asset_name asset moved successefully to " . $config["upload_to_server"] . PHP_EOL, FILE_APPEND | LOCK_EX);
+            $cli->bashCommandLine($config["phpcli"] . " " . $config["cli_post_process"] . " " . $asset_name . " " . $recorder . " upload_to_server > $assetDir/" . $config["upload_to_server"] .".log 2>&1");
         }
         elseif ($function == "upload_to_server"){
-            $assetDir = $config["recordermaindir"] . $config["local_processing"] . "/" . $asset_name;
+            $assetDir = $config["recordermaindir"] . $config["upload_to_server"] . "/" . $asset_name;
             $logger->log(EventType::RECORDER_CAPTURE_POST_PROCESSING, LogLevel::INFO, "Starting upload to server", array(basename(__FILE__)), $asset_name);
+            file_put_contents($assetDir . "/post_process.log", "-- [" . date("d/m/Y - H:i:s",time()) ."] : $asset_name starting upload to server" . PHP_EOL, FILE_APPEND | LOCK_EX);
             $cli->startUploadToServer();
-
         }
 
     }

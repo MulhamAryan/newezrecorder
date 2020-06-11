@@ -1,0 +1,17 @@
+{
+  "fr" : {
+    "enabled" : true,
+    "name" : "Français",
+    "file" : "francais.php"
+  },
+  "en" : {
+    "enabled" : true,
+    "file" : "english.php",
+    "name" : "English"
+  },
+  "nl" : {
+    "enabled": true,
+    "file": "dutch.php",
+    "name": "Dutch"
+  }
+}
