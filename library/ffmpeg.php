@@ -21,6 +21,10 @@
         private $ffmpegLog;
         private $streamPid;
         private $streamLog;
+        private $hls_time;
+        /**
+         * @var int
+         */
 
         public function __construct(string $asset,array $recorderarray = null)
         {
@@ -54,6 +58,7 @@
             );
 
             $this->assetDir = $this->folders["local_processing"] . $this->asset . "/";
+            $this->hls_time = 4;
             $this->ffmpegPid = "init.pid";
             $this->ffmpegLog = "ffmpeg.log";
             $this->streamPid = "_stream.pid";
@@ -168,12 +173,13 @@
                 $recording_direcory = $this->folders["local_processing"] . $asset . "/" . $module . "/" . $qualityKey;
 
                 $parameters = array(
-                    "thread_queue" => $this->thread_queue,
-                    "link" => $qualityValue,
+                    "thread_queue"        => $this->thread_queue,
+                    "link"                => $qualityValue,
                     "recording_directory" => $recording_direcory,
-                    "common_movie_name" => $this->common_movie_name,
-                    "logo_option" => $insertLogo,
-                    "thumbnail" => $this->config["var"] . "/" . $module . ".jpg"
+                    "common_movie_name"   => $this->common_movie_name,
+                    "logo_option"         => $insertLogo,
+                    "thumbnail"           => $this->config["var"] . "/" . $module . ".jpg",
+                    "hls_time"            => $this->hls_time
                 );
 
                 $rtspCmd = rtspprofile($parameters);
@@ -186,7 +192,7 @@
                 $this->isRecording[$module][] = $qualityKey;
 
             }
-            elseif($type == "v4l2" || $type == "avfoundation"){
+            elseif($type == "v4l2" || $type == "avfoundation"){ //TODO not for prod ondev
                 include_once "ffmpeg/profiles/usbdevice.php";
                 $pid_file = $working_dir . "/" . $qualityKey . "/" . $this->ffmpegPid;
                 $ffmpeg_log = $working_dir . "/" . $qualityKey . "/" . $this->ffmpegLog;
@@ -206,7 +212,7 @@
 
                 $usbdevice = usbdevice($parameters);
                 //$cmd = "" . $this->ffmpeg_cli . " ". $this->limit_duration . " ". $usbdevice . " > " . $ffmpeg_log . " 2>&1 < /dev/null & echo $! > " . $pid_file . "";
-                $cmd = "" . $this->ffmpeg_cli . " ". $this->limit_duration . " -f video4linux2 -thread_queue_size 127 -pixel_format yuv420p -s 1280x720 -framerate 15 -i \"/dev/video0\" -f pulse -ac 1 -thread_queue_size 127 -i default -vcodec libx264 -profile:v main -acodec aac -pix_fmt yuv420p -force_key_frames \"expr:gte(t,n_forced*3)\" -flags -global_header -hls_time 3 -hls_list_size 0 -hls_wrap 0 -start_number 1 $recording_direcory/ffmpegmovie.m3u8 -vf fps=1 -y -update 1 /var/www/recorderdata/var/sliderecord.jpg > " . $ffmpeg_log . " 2>&1 < /dev/null & echo $! > " . $pid_file . "";
+                $cmd = $this->ffmpeg_cli . " ". $this->limit_duration . " -f video4linux2 -thread_queue_size 127 -pixel_format yuv420p -s 1280x720 -framerate 15 -i \"/dev/video0\" -f pulse -ac 1 -thread_queue_size 127 -i default -vcodec libx264 -profile:v main -acodec aac -pix_fmt yuv420p -force_key_frames \"expr:gte(t,n_forced*3)\" -flags -global_header -hls_time 3 -hls_list_size 0 -hls_wrap 0 -start_number 1 $recording_direcory/ffmpegmovie.m3u8 -vf fps=1 -y -update 1 /var/www/recorderdata/var/sliderecord.jpg > " . $ffmpeg_log . " 2>&1 < /dev/null & echo $! > " . $pid_file . "";
                 $this->bashCommandLine($cmd);
 
                 file_put_contents($log_file, "-- [" . date("d/m/Y - H:i:s",time()) ."] : Starting FFMPEG recording for $type $qualityKey successfully" . PHP_EOL, FILE_APPEND | LOCK_EX);

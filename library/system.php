@@ -93,6 +93,16 @@
             file_put_contents($metadataFile,$xml->asXML());
         }
 
+        public function getMetadata(string $local = null, string $asset = null){
+            if(empty($local) || empty($asset)){
+                $recordInfo = json_decode($this->getRecordingStatus());
+                $asset = $recordInfo->asset;
+                $local = $this->config["local_processing"];
+            }
+            $metadata = simplexml_load_file($this->config["recordermaindir"] . "/" . $local . "/" . $asset . "/_" . $this->config["metadata"]);
+            return $metadata;
+        }
+
         public function bashCommandLine($command){
             exec($command, $output);
             $execArray = array(
@@ -207,5 +217,23 @@
             else{
                 return false;
             }
+        }
+
+        public function initStreaming()
+        {
+            $streamingInfo = array(
+                "ip" => $this->config["recorderip"],
+                "protocol" => $this->config["streamprotocol"],
+                "course" => $this->getMetadata()->course_name,
+                "asset" => $this->getMetadata()->record_date,
+                "record_type" => $this->getMetadata()->record_type,
+                //"module_type" => $module_type,
+                "module_quality" => $this->config["streamquality"],
+                "classroom" => $this->config["classroom"],
+                "netid" => $this->getMetadata()->netid,
+                "author" => $this->getMetadata()->author,
+                "title" => $this->getMetadata()->title
+            );
+            return $streamingInfo;
         }
     }

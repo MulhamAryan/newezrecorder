@@ -84,8 +84,11 @@
             $session->setRecordingInfo($netid, $course, $title, $description, $recorder,$advancedoptions,$autostop,$publishin);
             //Start Streaming if it's enable for each recorder and qualities
             if($streaming == "true"){
+                $logger->log(EventType::RECORDER_FFMPEG_INIT, LogLevel::DEBUG, "Streaming is enabled", array(__FUNCTION__), $asset);
+
                 $activeRecordersFile = $system->getRecordingAssetDir() . "/" . $config["statusfile"];
                 $activeRecorders     = json_decode(file_get_contents($activeRecordersFile), true);
+                $system->initStreaming();
                 foreach ($activeRecorders as $recorderKey => $recorderValue){
                     foreach ($recorderValue as $quality) {
                         $streamPid = $system->getRecordingAssetDir() . "/" . $recorderKey . "/" . $quality . $ffmpeg->getStreamPidFileName();

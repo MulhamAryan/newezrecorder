@@ -56,7 +56,9 @@
         "moviefile"        => "ffmpegmovie",
         "crontabuserfile"  => "crontabfile",
         //
-        "enablestreaming"  => false
+        "enablestreaming"  => true,
+        "streamprotocol"   => "http",
+        "streamquality"    => "highlow"
     );
     // EZrecorder recording informations files and folders ----------------------------------------------------------------------------------------------------------------------------------------------------------------
     $config["recordermaindir"]       = $config["recorderdata"] . "/movies/"; // Where all recording are stocked
@@ -94,7 +96,6 @@
     $config["apiactive"]             = 1; // If 1 api activated other not activated
     $config["apiuser"]               = "user"; // Api username
     $config["apikey"]                = "password"; // Api password
-
     // Recorders and qualities info getter
     $recorder_modules = json_decode(file_get_contents($config["recorder"]),true);
     // Plugins list info getter
@@ -103,4 +104,4 @@
     $enablemaintenance = false; // if true go to the template directory and modify the text in maintenance.php file.
     $randomSecurityNumber = 98856;
     include $config["lib"] . "/loader.php";
-
+    //var_dump($system->initStreaming());
