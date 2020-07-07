@@ -90,7 +90,7 @@ class SQLiteDatabase
             $this->create_database();
         }
 
-        if($debug["debug_mode"])
+        if($config["debug_mode"])
             $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
         self::$statements = [

@@ -162,7 +162,7 @@ class ServersideLogEntry  {
     protected function _log(&$type, &$level, &$message, array &$context = array(), &$asset = "dummy",
                             &$author = null, &$cam_slide = null, &$course = null, &$classroom = null)
     {
-        global $debug_mode;
+        global $config;
         global $service;
 
         if(!isset($message) || !$message)
@@ -206,7 +206,7 @@ class ServersideLogEntry  {
         if(Logger::$print_logs)
             echo $print_str . PHP_EOL;
 
-        if($debug_mode
+        if($config["debug_mode"]
             && $type != EventType::PHP //PHP events are already printed in custom_error_handling.php
             && (!isset($service) || $service == false) //some services will try to parse the response, and our <script> may interfere in this case
             && php_sapi_name() != "cli") //don't print in CLI
