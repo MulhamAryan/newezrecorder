@@ -148,10 +148,10 @@ echo -e "- Changing owner of /var/www/html/ezrecorder -> $podclient done !"
 echo "<?php chdir(\"$parentdir/\");" >> "/var/www/html/ezrecorder/config.php"
 echo -e "- Creating config.php file in /var/www/html/ezrecorder/  done !"
 
-cp $parentdir/etc/config/plugins.example.json plugins.json
+cp $parentdir/etc/config/plugins.example.json $parentdir/etc/config/plugins.json
 echo -e "- Creating plugins.json file  done !"
 
-cp $parentdir/etc/config/recorder.example.json recorder.json
+cp $parentdir/etc/config/recorder.example.json $parentdir/etc/config/recorder.json
 echo -e "- Creating recorder.json file  done !"
 
 echo -e "\e[1m\e[32m--------------------------------------------------------------\033[0m"
