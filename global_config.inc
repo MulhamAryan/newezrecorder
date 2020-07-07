@@ -58,7 +58,9 @@
         //
         "enablestreaming"  => true,
         "streamprotocol"   => "http",
-        "streamquality"    => "highlow"
+        "streamquality"    => "highlow",
+        //
+        "debug_mode"       => false
     );
     // EZrecorder recording informations files and folders ----------------------------------------------------------------------------------------------------------------------------------------------------------------
     $config["recordermaindir"]       = $config["recorderdata"] . "/movies/"; // Where all recording are stocked

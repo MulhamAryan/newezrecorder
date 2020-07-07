@@ -98,7 +98,7 @@ echo -e "\e[1m\e[32m------------------------------------------------------------
 
 echo "The script now is going to create differents directories"
 read -p "- Enter recorderdata path in '/var/www/' default -> [recorderdata] : " recorderdata_path
-recorderdata_path=${recorderdata_path:-recorderdata2}
+recorderdata_path=${recorderdata_path:-recorderdata}
 mkdir "/var/www/$recorderdata_path/"
 echo -e "- \e[1m$recorderdata_path\033[0m successfully created in              : \e[1m'/var/www/$recorderdata_path'\033[0m"
 mkdir "/var/www/$recorderdata_path/movies/"
@@ -136,4 +136,4 @@ echo -e "\e[1m\e[32m------------------------------------------------------------
 echo -e "\e[1m\e[32m---     All directories has been successfully created      ---"
 echo -e "\e[1m\e[32m--------------------------------------------------------------\033[0m"
 
-echo "The script now is going to create global_config.inc file"
+echo "The script now is going to create recorder configuration file"

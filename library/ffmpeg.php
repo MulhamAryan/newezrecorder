@@ -22,9 +22,6 @@
         private $streamPid;
         private $streamLog;
         private $hls_time;
-        /**
-         * @var int
-         */
 
         public function __construct(string $asset,array $recorderarray = null)
         {
@@ -156,7 +153,6 @@
         // !!!!! THIS IS THE FIRST VERSION OF THIS FUNCTION NEED MORE IMPROVE !!!!!
         // !!!!! BECAUSE IT CAN NOT DISTINGUISH THE NUMBER OF QUALITIES IN ONE RECORD !!!!!
         public function recordingLaunch($asset,$type,$module,$qualityKey,$qualityValue){
-            global $config;
 
             $working_dir = $this->assetDir . $module;
             $log_file = $working_dir . "/init.log";
@@ -173,6 +169,7 @@
                 $recording_direcory = $this->folders["local_processing"] . $asset . "/" . $module . "/" . $qualityKey;
 
                 $parameters = array(
+                    "quality"             => $qualityKey,
                     "thread_queue"        => $this->thread_queue,
                     "link"                => $qualityValue,
                     "recording_directory" => $recording_direcory,

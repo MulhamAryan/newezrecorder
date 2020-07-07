@@ -219,8 +219,9 @@
             }
         }
 
-        public function initStreaming()
+        public function initStreaming(string $recorder)
         {
+
             $streamingInfo = array(
                 "ip" => $this->config["recorderip"],
                 "protocol" => $this->config["streamprotocol"],
@@ -234,6 +235,31 @@
                 "author" => $this->getMetadata()->author,
                 "title" => $this->getMetadata()->title
             );
+            $activeRecordersFile = $this->getRecordingAssetDir() . "/" . $this->config["statusfile"];
+            $activeRecorders     = json_decode(file_get_contents($activeRecordersFile), true);
+
+            foreach ($activeRecorders as $recorderKey => $recorderValue){
+                foreach ($recorderValue as $quality) {
+                    $streamPid = $this->getRecordingAssetDir() . "/" . $recorderKey . "/" . $quality . $this->getStreamPidFileName();
+                    $streamLog = $this->getRecordingAssetDir() . "/" . $recorderKey . "/" . $quality . $this->getStreamLogFileName();
+                    $cmd = $this->config["phpcli"] . " " . $this->config["cli_stream_send"] ."  $recorderKey $quality  > $streamLog 2>&1 < /dev/null & echo $! > " . $streamPid;
+                    $this->bashCommandLine($cmd);
+                    sleep(1);
+                }
+            }
             return $streamingInfo;
+        }
+
+        public function patchRecordName(string $recorder){
+
+            if($recorder == "camrecord")
+                return "cam";
+
+            elseif($recorder == "sliderecord")
+                return "slide";
+
+            else
+                return "cam";
+
         }
     }
