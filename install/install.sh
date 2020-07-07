@@ -95,7 +95,7 @@ fi
 echo -e "\e[1m\e[32m--------------------------------------------------------------\033[0m"
 echo -e "\e[1m\e[32m---        All packages and extensions are installed       ---"
 echo -e "\e[1m\e[32m--------------------------------------------------------------\033[0m"
-
+parentdir="$(dirname "$PWD")"
 echo "The script now is going to create differents directories"
 read -p "- Enter the username of machine default -> [podclient] : " podclient
 podclient=${podclient:-podclient}
@@ -127,18 +127,32 @@ chown -R $apache_user:$apache_user "/var/www/$recorderdata_path/"
 echo -e "- chown -R $apache_user:$apache_user /var/www/$recorderdata_path/ done !"
 chmod -R 0777 "/var/www/$recorderdata_path/"
 echo -e "- chmod -R 0777 /var/www/$recorderdata_path/ done !"
+
 adduser $apache_user video
 usermod -a -G video $apache_user
 echo -e "- Adding user $apache_user to video group done !"
+
 adduser $apache_user audio
 usermod -a -G audio $apache_user
 echo -e "- Adding user $apache_user to sound group done !"
-cp -r /usr/local/ezrecorder/htdocs/ /var/www/html/ezrecorder
+
+cp -r $parentdir/htdocs/ /var/www/html/ezrecorder
 echo -e "- htdocs folder copied to /var/www/html/ezrecorder"
-chown -R $podclient:$podclient /usr/local/ezrecorder/
+
+chown -R $podclient:$podclient $parentdir
+echo -e "- Changing owner of $parentdir -> $podclient done !"
+
 chown -R $podclient:$podclient /var/www/html/ezrecorder/
-echo -e "- Changing owner of /usr/local/ezrecorder/ -> $podclient done !"
 echo -e "- Changing owner of /var/www/html/ezrecorder -> $podclient done !"
+
+echo "<?php chdir(\"$parentdir/\");" >> "/var/www/html/ezrecorder/config.php"
+echo -e "- Creating config.php file in /var/www/html/ezrecorder/  done !"
+
+cp $parentdir/etc/config/plugins.example.json plugins.json
+echo -e "- Creating plugins.json file  done !"
+
+cp $parentdir/etc/config/recorder.example.json recorder.json
+echo -e "- Creating recorder.json file  done !"
 
 echo -e "\e[1m\e[32m--------------------------------------------------------------\033[0m"
 echo -e "\e[1m\e[32m---     All directories has been successfully created      ---"
