@@ -6,7 +6,7 @@
     class Authentication{
 
         //Check if authentication file exists with correct permissions and mod
-        function checkFileSystem(){
+        public function checkFileSystem(){
             global $config;
             if (!file_exists($config["passwordfile"]) || !is_readable($config["passwordfile"])) {
                 return $config["passwordfile"] . ': not found or not readable';
@@ -23,7 +23,7 @@
         }
 
         //Check user information while login
-        function checkUserInfo($username, $password)
+        public function checkUserInfo(string $username, string $password)
         {
             global $config;
             global $lang;
@@ -90,7 +90,7 @@
         }
 
         //Get user session information
-        function userSession($parameter){
+        public function userSession(string $parameter){
             if($parameter == "is_logged"){
                 if(!empty($_SESSION["user_login"]) && $_SESSION["recorder_logged"] = true){
                     return true;
@@ -113,7 +113,7 @@
         }
 
         //Get user information and user courses
-        function getUserInfo($parameter,$user,$info = null){
+        public function getUserInfo(string $parameter,$user,$info = null){
             //global $logger;
             global $config;
 

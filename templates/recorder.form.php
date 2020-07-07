@@ -54,7 +54,7 @@
                         foreach ($recorder_modules as $recorderKey => $recorderValue){
                             if($recorderValue["enabled"] == true) {
                                 ?>
-                                <div style="display: inline-block">
+                                <div style="display: inline-block;">
                                     <input type="radio" name="recorder" value="<?php echo $recorderValue["module"]; ?>" id="r<?php echo $i; ?>" <?php echo $tmp->isChecked($lastRecorder,$recorderValue["module"]);?>/>
                                     <label class="radio" for="r<?php echo $i; ?>"><i class="fas fa-<?php echo $recorderValue["icon"]; ?>"></i><br><?php echo $recorderValue["tempname"]; ?></label>
                                 </div>
