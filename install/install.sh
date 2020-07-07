@@ -97,6 +97,8 @@ echo -e "\e[1m\e[32m---        All packages and extensions are installed       -
 echo -e "\e[1m\e[32m--------------------------------------------------------------\033[0m"
 
 echo "The script now is going to create differents directories"
+read -p "- Enter the username of machine default -> [podclient] : " podclient
+podclient=${podclient:-podclient}
 read -p "- Enter recorderdata path in '/var/www/' default -> [recorderdata] : " recorderdata_path
 recorderdata_path=${recorderdata_path:-recorderdata}
 mkdir "/var/www/$recorderdata_path/"
@@ -131,6 +133,12 @@ echo -e "- Adding user $apache_user to video group done !"
 adduser $apache_user audio
 usermod -a -G audio $apache_user
 echo -e "- Adding user $apache_user to sound group done !"
+cp -r /usr/local/ezrecorder/htdocs/ /var/www/html/ezrecorder
+echo -e "- htdocs folder copied to /var/www/html/ezrecorder"
+chown -R $podclient:$podclient /usr/local/ezrecorder/
+chown -R $podclient:$podclient /var/www/html/ezrecorder/
+echo -e "- Changing owner of /usr/local/ezrecorder/ -> $podclient done !"
+echo -e "- Changing owner of /var/www/html/ezrecorder -> $podclient done !"
 
 echo -e "\e[1m\e[32m--------------------------------------------------------------\033[0m"
 echo -e "\e[1m\e[32m---     All directories has been successfully created      ---"
