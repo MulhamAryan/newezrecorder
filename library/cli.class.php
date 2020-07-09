@@ -107,7 +107,7 @@
             return 0;
         }
 
-        public function requestUpload($server_url, $recorder_array){
+        /*public function requestUpload($server_url, $recorder_array){
             global $logger;
             
             $ch = curl_init($server_url);
@@ -134,7 +134,7 @@
 
             return $res;
         }
-
+        */
         public function finishUploadToServer($asset) {
             
             global $logger;

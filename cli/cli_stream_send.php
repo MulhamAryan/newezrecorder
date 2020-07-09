@@ -27,7 +27,7 @@
     $post_array['asset'] = $assetTime;
     $post_array['quality'] = $streamQuality;
     $post_array['record_type'] = $recorderType;
-    $post_array['module_type'] = $recorderType;
+    $post_array['module_type'] = $recorderType; // TODO NEED TO SPECIFY WHICH CONTENT WE ARE SENDING CAM OR SLIDE !!!
     $post_array['protocol'] = "http";
     $post_array['action'] = 'streaming_content_add';
 
@@ -68,7 +68,7 @@
             // there is a new segment to send to the server
             $post_array = array_merge($post_array, $m3u8_segment);
             // sends a request to the server with the next .ts segment
-            $result = $cli->requestUpload($config["ezcast_submit_url"], $post_array);
+            $result = $system->requestUpload($config["ezcast_submit_url"], $post_array);
             if (strpos($result, 'Curl error') !== false) {
                 // an error occured with CURL
                 echo date("h:i:s") . ": curl error occured ($result) -> " . $m3u8_segment['filename'] . PHP_EOL;

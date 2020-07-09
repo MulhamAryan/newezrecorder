@@ -44,7 +44,6 @@
         //
         "adminmail"        => "podcast.tech@ulb.ac.be",
         "phpcli"           => "/usr/bin/php",
-        "ffmpegcli"        => "/usr/local/ffmpeg/ffmpeg",
         "crontab"          => "/usr/bin/crontab",
         "ps"               => "/bin/ps",
         "ping"             => "/bin/ping",
@@ -60,7 +59,13 @@
         "streamprotocol"   => "http",
         "streamquality"    => "highlow",
         //
-        "debug_mode"       => false
+        "debug_mode"       => false,
+        //FFMPEG General Variables
+        "ffmpegcli"        => "/usr/local/ffmpeg/ffmpeg",
+        "ffmpegPid"        => "init.pid",
+        "ffmpegLog"        => "ffmpeg.log",
+        "streamPid"        => "_stream.pid",
+        "streamLog"        => "_stream.log"
     );
     // EZrecorder recording informations files and folders ----------------------------------------------------------------------------------------------------------------------------------------------------------------
     $config["recordermaindir"]       = $config["recorderdata"] . "/movies/"; // Where all recording are stocked
@@ -106,4 +111,11 @@
     $enablemaintenance = false; // if true go to the template directory and modify the text in maintenance.php file.
     $randomSecurityNumber = 98856;
     include $config["lib"] . "/loader.php";
+    /*echo '<pre>';
+    $var = $system->getRecorderArray("all");
+    unset($var[0]["quality"]["low"]);
+    var_dump($var);
+    echo '</pre>';
+    exit();
     //var_dump($system->initStreaming());
+    */

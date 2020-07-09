@@ -14,7 +14,6 @@
         private $ffmpeg_cli;
         private $logo;
         private $limit_duration;
-        private $type;
         private $assetDir;
         private $recordExtenstion;
         private $ffmpegPid;
@@ -22,44 +21,46 @@
         private $streamPid;
         private $streamLog;
         private $hls_time;
+        private $steaming;
+        /**
+         * @var string
+         */
 
-        public function __construct(string $asset,array $recorderarray = null)
+        public function __construct(string $asset,array $recorderarray = null, string $steaming = null)
         {
             parent::__construct();
             global $config;
-            $this->config = $config;
-            $this->basedir = $this->config["basedir"];
-            $this->recordingDir = $this->config["recordermaindir"];
-            $this->type = ""; // Type of record (rtsp,m3u8,avFoundation ...)
-            $this->ffmpeg_cli  = $this->config["ffmpegcli"]; // FFMPEG BIN file
-            $this->logo = 0; // if put ULB logo on record (Don't enable at this moment -vcodec copy can't work with filter now) for future release
-            $this->logofile = $this->config["webbasedir"] . "images/watermark.jpg"; // Watermark file
-            $this->module_path = "";
-            $this->thread_queue = "-thread_queue_size 127"; // Thread message queue blocking
-            $this->asset = $asset; // The asset name
-            $this->maxcall = 3 ; // Max number of try record
-            $this->exists_video = 0; // Check if video exists
-            $this->limit_duration = " -t 12:00:00 "; // Max limit duration of one record
+            $this->config            = $config;
+            $this->basedir           = $this->config["basedir"];
+            $this->recordingDir      = $this->config["recordermaindir"];
+            $this->ffmpeg_cli        = $this->config["ffmpegcli"]; // FFMPEG BIN file
+            $this->logo              = 0; // if put Institution logo on record (Don't enable at this moment -vcodec copy can't work with filter now) for future release
+            $this->logofile          = $this->config["webbasedir"] . "images/watermark.jpg"; // Watermark file
+            $this->thread_queue      = "-thread_queue_size 127"; // Thread message queue blocking
+            $this->asset             = $asset; // The asset name
+            $this->maxcall           = 3 ; // Max number of try record
+            $this->exists_video      = 0; // Check if video exists
+            $this->limit_duration    = " -t 12:00:00 "; // Max limit duration of one record
             $this->common_movie_name = $this->config["moviefile"];
-            $this->recordExtenstion = ".mov";
-            $this->recorderNumber = 0;
-            $this->recorderArray = $recorderarray;
-            $this->recorderInfo = array();
-            $this->isRecording = array();
-            $this->isRecordingFile = $this->config["statusfile"];
+            $this->recordExtenstion  = ".mov";
+            $this->recorderNumber    = 0;
+            $this->recorderArray     = $recorderarray;
+            $this->recorderInfo      = array();
+            $this->isRecording       = array();
+            $this->isRecordingFile   = $this->config["statusfile"];
+            $this->steaming          = $steaming;
             $this->folders = array(
                 "local_processing" => $this->recordingDir . $this->config["local_processing"]. "/",
                 "trash"            => $this->recordingDir . $this->config["trash"] . "/",
                 "upload_to_server" => $this->recordingDir . $this->config["upload_to_server"] . "/",
                 "upload_ok"        => $this->recordingDir . $this->config["upload_ok"]. "/"
             );
-
             $this->assetDir = $this->folders["local_processing"] . $this->asset . "/";
             $this->hls_time = 4;
-            $this->ffmpegPid = "init.pid";
-            $this->ffmpegLog = "ffmpeg.log";
-            $this->streamPid = "_stream.pid";
-            $this->streamLog = "_stream.log";
+            $this->ffmpegPid = $this->config["ffmpegPid"];
+            $this->ffmpegLog = $this->config["ffmpegLog"];
+            $this->streamPid = $this->config["streamPid"];
+            $this->streamLog = $this->config["streamLog"];
         }
 
         // This function initialize the recordings operation
@@ -84,6 +85,7 @@
                     // Generate an start recording commands with different qualities
                     $this->recordingLaunch($this->asset, $recorderInfo["type"], $recorderInfo["module"], $qualityKey, $qualityValue);
                     sleep(1);
+                    if($this->steaming == "false") break; //Use break when we are not streaming we don't need to record mutli resolution at this moment :)
                 }
 
                 // Generate _cut_list.txt file for every recorder and quality
@@ -92,7 +94,7 @@
             }
 
             file_put_contents($this->assetDir . "/" . $this->isRecordingFile, json_encode($this->isRecording), LOCK_EX);
-            sleep(2);
+            sleep(1);
         }
 
         public function generateConcatFile(){
@@ -121,6 +123,7 @@
                     }
                     file_put_contents($recDir . "/" . $qualityMerge . "concat.txt", $concatTextFile, FILE_APPEND | LOCK_EX);
                     file_put_contents($recDir . "/init.log", "-- [" . date("d/m/Y - H:i:s",time()) ."] : Concat file `". $qualityMerge . "concat.txt` generated for $recinfoKey $qualityMerge successfully" . PHP_EOL, FILE_APPEND | LOCK_EX);
+                    break; //Use this to stop concat of other qualities not needed
                 }
             }
         }
@@ -305,6 +308,7 @@
             foreach ($this->getIsRecFileContent() as $recorderInfoKey=>$recorderInfoValue){
                 foreach ($recorderInfoValue as $qualityInfo){
                     $this->mergeRecordPerFile($recorderInfoKey,$qualityInfo);
+                    break;//Use this to stop concat of other qualities not needed
                 }
             }
         }

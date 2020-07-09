@@ -13,11 +13,12 @@
     }
     else{
 
-        if($streaming == 1)
+        if($streaming == 1){
             $streaming = "true";
-        else
+        }
+        else {
             $streaming = "false";
-
+        }
         if ($advancedoptions == 1) {
             $autostop  = isset($input["autostop"]) ? htmlspecialchars($input["autostop"]) : "";
             $publishin = isset($input["publishin"]) ? htmlspecialchars($input["publishin"]) : "";
@@ -28,7 +29,7 @@
         $recorderInfo = $system->getRecorderArray($recorder);
 
         if ($system->getRecordingStatus() == false) {
-            $ffmpeg = new ffmpeg($asset,$recorderInfo);
+            $ffmpeg = new ffmpeg($asset,$recorderInfo,$streaming);
             $ffmpeg->launch();
             $getRunningRecorder = $ffmpeg->getRunningRecorder();
             if($ffmpeg->isRunning("init_check") == "all") {
@@ -81,24 +82,18 @@
             );
             $system->recStatus($recStatusArray);
             $system->generateMetadataFile($metaInfo,$asset);
-            $session->setRecordingInfo($netid, $course, $title, $description, $recorder,$advancedoptions,$autostop,$publishin);
+            $session->setRecordingInfo($netid, $course, $title, $description, $recorder, $advancedoptions, $autostop, $publishin);
             //Start Streaming if it's enable for each recorder and qualities
             if($streaming == "true"){
+
                 $logger->log(EventType::RECORDER_FFMPEG_INIT, LogLevel::DEBUG, "Streaming is enabled", array(__FUNCTION__), $asset);
-
-                $system->initStreaming($recorder);
-
-                $activeRecordersFile = $system->getRecordingAssetDir() . "/" . $config["statusfile"];
-                $activeRecorders     = json_decode(file_get_contents($activeRecordersFile), true);
-                foreach ($activeRecorders as $recorderKey => $recorderValue){
-                    foreach ($recorderValue as $quality) {
-                        $streamPid = $system->getRecordingAssetDir() . "/" . $recorderKey . "/" . $quality . $ffmpeg->getStreamPidFileName();
-                        $streamLog = $system->getRecordingAssetDir() . "/" . $recorderKey . "/" . $quality . $ffmpeg->getStreamLogFileName();
-                        $cmd = $config["phpcli"] . " " . $config["cli_stream_send"] ."  $recorderKey $quality  > $streamLog 2>&1 < /dev/null & echo $! > " . $streamPid;
-                        $system->bashCommandLine($cmd);
-                        sleep(1);
-                    }
+                $initStreaming = $system->initStreaming();
+                if($initStreaming == true)
+                    $logger->log(EventType::RECORDER_FFMPEG_INIT, LogLevel::NOTICE, "Started background streaming", array(__FUNCTION__), $asset);
+                else{
+                    $logger->log(EventType::RECORDER_FFMPEG_INIT, LogLevel::ERROR, "Failed to start Streaming with info ", array(__FUNCTION__), $asset);
                 }
+
             }
         }
 
