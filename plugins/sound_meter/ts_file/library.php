@@ -21,7 +21,7 @@
         }
 
         function extractVolume($output) {
-            $mean_volume = -74;
+            $mean_volume = -999.00;
             foreach ($output as $line){
                 $part = strstr($line, "mean_volume:");
                 if($part == false)
@@ -29,6 +29,7 @@
                 $mean_volume = filter_var($part, FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
             }
             return $mean_volume;
+            //return -50;
         }
         function smHtml($recorder){
             $val = '<canvas class="view-metter" id="' . $recorder . '_sound"  style="position: relative; border: black 1px solid" width="15" height="156"></canvas>';

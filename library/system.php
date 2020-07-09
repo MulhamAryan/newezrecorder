@@ -1,10 +1,18 @@
 <?php
 
     class System{
+        /**
+         * @var RecorderLogger
+         */
+        public $logger;
+        public $config;
+
         public function __construct()
         {
             global $config;
+            global $logger;
             $this->config = $config;
+            $this->logger = $logger;
         }
 
         public function __destruct()
@@ -115,7 +123,6 @@
         }
 
         public function prepareMerge($publishin,$nowrecording){
-            global $logger;
             $assetDir = $this->getRecordingAssetDir();
             $varDir = $this->config["var"];
 
@@ -123,7 +130,7 @@
                 if(file_exists($assetDir) && file_exists($varDir ."/" . $this->config["statusfile"])) {
                     rename($varDir . "/" . $this->config["statusfile"], $assetDir . "/recordinginfo.json");
                     rename($assetDir, $this->config["recordermaindir"] . $this->config["trash"] . "/" . $nowrecording["asset"]);
-                    $logger->log(EventType::TEST, LogLevel::INFO, "Asset moved to " .$this->config["trash"], array(__FUNCTION__), $nowrecording["asset"]);
+                    $this->logger->log(EventType::TEST, LogLevel::INFO, "Asset moved to " .$this->config["trash"], array(__FUNCTION__), $nowrecording["asset"]);
                     return true;
                 }
                 else{
@@ -219,35 +226,70 @@
             }
         }
 
-        public function initStreaming(string $recorder)
-        {
+        public function requestUpload($server_url, $recorder_array){
+            global $logger;
 
-            $streamingInfo = array(
-                "ip" => $this->config["recorderip"],
-                "protocol" => $this->config["streamprotocol"],
-                "course" => $this->getMetadata()->course_name,
-                "asset" => $this->getMetadata()->record_date,
-                "record_type" => $this->getMetadata()->record_type,
-                //"module_type" => $module_type,
-                "module_quality" => $this->config["streamquality"],
-                "classroom" => $this->config["classroom"],
-                "netid" => $this->getMetadata()->netid,
-                "author" => $this->getMetadata()->author,
-                "title" => $this->getMetadata()->title
-            );
+            $ch = curl_init($server_url);
+            curl_setopt($ch, CURLOPT_POST, 1); //activate POST parameters
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $recorder_array);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); //don't send answer to stdout but in returned string
+            curl_setopt($ch, CURLOPT_CONNECTTIMEOUT ,30);
+            curl_setopt($ch, CURLOPT_TIMEOUT, 30); //timeout in seconds
+            $res = curl_exec($ch);
+            $curlinfo = curl_getinfo($ch);
+            curl_close($ch);
+            file_put_contents($this->config["var"] ."/curl.log", var_export($curlinfo, true) . PHP_EOL . $res, FILE_APPEND);
+            if ($res === false) {//error
+                $http_code = isset($curlinfo['http_code']) ? $curlinfo['http_code'] : false;
+                $logger->log(EventType::RECORDER_REQUEST_TO_MANAGER, LogLevel::ERROR, "Curl failed to POST data to $server_url. Http code: $http_code", array(__FUNCTION__));
+
+                return "Curl error. Http code: $http_code";
+            }
+
+            $logger->log(EventType::RECORDER_REQUEST_TO_MANAGER, LogLevel::DEBUG, "server_request_send $server_url, result= $res", array(__FUNCTION__));
+
+            //All went well send http response in stderr to be logged
+            //fputs(STDERR, "curl result: $res", 2000);
+
+            return $res;
+        }
+
+        public function initStreaming()
+        {
             $activeRecordersFile = $this->getRecordingAssetDir() . "/" . $this->config["statusfile"];
             $activeRecorders     = json_decode(file_get_contents($activeRecordersFile), true);
 
             foreach ($activeRecorders as $recorderKey => $recorderValue){
-                foreach ($recorderValue as $quality) {
-                    $streamPid = $this->getRecordingAssetDir() . "/" . $recorderKey . "/" . $quality . $this->getStreamPidFileName();
-                    $streamLog = $this->getRecordingAssetDir() . "/" . $recorderKey . "/" . $quality . $this->getStreamLogFileName();
-                    $cmd = $this->config["phpcli"] . " " . $this->config["cli_stream_send"] ."  $recorderKey $quality  > $streamLog 2>&1 < /dev/null & echo $! > " . $streamPid;
-                    $this->bashCommandLine($cmd);
+                $streamingInfo = array(
+                    "action"         => "streaming_init",
+                    "ip"             => $this->config["recorderip"],
+                    "protocol"       => $this->config["streamprotocol"],
+                    "module_quality" => $this->config["streamquality"],
+                    "classroom"      => $this->config["classroom"],
+                    "module_type"    => $this->patchRecordName($recorderKey),
+                    "course"         => (string) $this->getMetadata()->course_name,
+                    "asset"          => (string) $this->getMetadata()->record_date,
+                    "record_type"    => (string) $this->getMetadata()->record_type,
+                    "netid"          => (string) $this->getMetadata()->netid,
+                    "author"         => (string) $this->getMetadata()->author,
+                    "title"          => (string) $this->getMetadata()->title
+                );
+                $requestStream = $this->requestUpload($this->config["ezcast_submit_url"],$streamingInfo);
+                if (strpos($requestStream, 'Curl error') !== false) {
+                    return false;
+                }
+                else {
+                    foreach ($recorderValue as $quality) {
+                        $streamPid = "{$this->getRecordingAssetDir()}/{$recorderKey}/{$quality}.{$this->config["streamPid"]}";
+                        $streamLog = "{$this->getRecordingAssetDir()}/{$recorderKey}/{$quality}.{$this->config["streamLog"]}";
+                        $cmd = "{$this->config["phpcli"]} {$this->config["cli_stream_send"]} {$recorderKey} {$quality} > {$streamLog} 2>&1 < /dev/null & echo $! > {$streamPid}";
+                        $this->bashCommandLine($cmd);
+                        sleep(0.5);
+                    }
                     sleep(1);
                 }
             }
-            return $streamingInfo;
+            return true;
         }
 
         public function patchRecordName(string $recorder){
