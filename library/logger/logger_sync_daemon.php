@@ -17,7 +17,7 @@ class LoggerSyncDaemon {
         global $config;
         global $system;
         if($this->is_running() == false) {
-            $system->bashCommandLine($config["phpcli"] . " ". $this->cli_sync_daemon . " > " . $config["var"] . "/log_sync_daemon 2>&1 &");
+            $system->bashCommandLine($config["main"]->phpcli . " ". $this->cli_sync_daemon . " > " . $config["var"] . "/log_sync_daemon 2>&1 &");
         }
     }
     

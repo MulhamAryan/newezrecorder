@@ -12,7 +12,7 @@
     $recorder = $_GET["recorder"];
     $type = $_GET["type"];
 
-    $m3u8_rep = $config["recordermaindir"] . $config["local_processing"] . "/" . $asset . "/" . $recorder ."/" . $type . "/ffmpegmovie.m3u8";
+    $m3u8_rep = $config["recordermaindir"] . $config["main"]->local_processing . "/" . $asset . "/" . $recorder ."/" . $type . "/ffmpegmovie.m3u8";
 
     $m3u8 = file($m3u8_rep); //TODO urgent
 

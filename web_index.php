@@ -7,26 +7,26 @@
 
     include $tmp->loadTempFile("header.php");
 
-    if($enablemaintenance == false) {
+    if($config["main"]->maintenance == false) {
         if ($auth->userSession("is_logged") == true) {
             switch ($action) {
                 case $action:
-                    if (file_exists($config["controllers"] . "/" . $action . ".php"))
-                        include $config["controllers"] . "/" . $action . ".php";
+                    if (file_exists($config["main"]->controllers . "/" . $action . ".php"))
+                        include $config["main"]->controllers . "/" . $action . ".php";
                     else
-                        include $config["controllers"] . "/index.php";
+                        include $config["main"]->controllers . "/index.php";
                     break;
 
                 default:
-                    include $config["controllers"] . "/index.php";
+                    include $config["main"]->controllers . "/index.php";
                     break;
             }
         } else {
             if($action == "recording_force_quit"){
-                include $config["controllers"] . "/recording_force_quit.php";
+                include $config["main"]->controllers . "/recording_force_quit.php";
             }
             else{
-                include $config["controllers"] . "/login.php";
+                include $config["main"]->controllers . "/login.php";
             }
         }
     }

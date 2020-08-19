@@ -8,11 +8,11 @@
     if($nowrecording != false && $auth->userSession("logged_user") == $nowrecording["user_login"] && in_array($status,$posibilites) == true){
         $logger = new RecorderLogger();
 
-        $recordingStatus = $config["var"] . "/" . $config["statusfile"];
+        $recordingStatus = $config["var"] . "/" . $config["main"]->statusfile;
 
         $recorderInfo = $system->getRecorderArray($nowrecording["recorders"]);
 
-        $ffmpeg = new ffmpeg($nowrecording["asset"],$recorderInfo);
+        $ffmpeg = new ffmpeg(array("asset" => $nowrecording["asset"], "recorder_info" => $recorderInfo));
 
         if($status == "play"){
             if($nowrecording["recording_status"] == "pause"){
@@ -31,7 +31,7 @@
                     $logger->log(EventType::RECORDER_CREATE_CRONTAB, LogLevel::NOTICE, "Cronjob is enabled : stop after " . $nowrecording["stop_time"] . " and publish in " . $publishin, array(basename(__FILE__)), $nowrecording["asset"]);
                 }
                 $getRunningRecorder = $ffmpeg->getRunningRecorder();
-                $logger->log(EventType::ASSET_CREATED, LogLevel::NOTICE,"Starting recorders by $user request. Requested type: $getRunningRecorder", array(basename(__FILE__)), $nowrecording["asset"], $user, $nowrecording["recorders"] , $nowrecording["course"], $config["classroom"]);
+                $logger->log(EventType::ASSET_CREATED, LogLevel::NOTICE,"Starting recorders by $user request. Requested type: $getRunningRecorder", array(basename(__FILE__)), $nowrecording["asset"], $user, $nowrecording["recorders"] , $nowrecording["course"], $config["main"]->classroom);
             }
         }
         elseif($status == "pause"){

@@ -13,15 +13,15 @@
             $this->recorders = $recorders;
             $this->assetName = $assetName;
 
-            if(file_exists($this->config["recordermaindir"] . $this->config["upload_to_server"] . "/" . $assetName . "/info." . $this->config["statusfile"])){
-                $this->recordingInfo = file_get_contents($this->config["recordermaindir"] . $this->config["upload_to_server"] . "/" . $assetName . "/info." . $this->config["statusfile"]);
+            if(file_exists($this->config["recordermaindir"] . $this->config["main"]->upload_to_server . "/" . $assetName . "/info." . $this->config["main"]->statusfile)){
+                $this->recordingInfo = file_get_contents($this->config["recordermaindir"] . $this->config["main"]->upload_to_server . "/" . $assetName . "/info." . $this->config["main"]->statusfile);
             }
             else{
-                $this->recordingInfo = file_get_contents($this->config["recordermaindir"] . $this->config["local_processing"] . "/" . $assetName . "/" . $this->config["statusfile"]);
+                $this->recordingInfo = file_get_contents($this->config["recordermaindir"] . $this->config["main"]->local_processing . "/" . $assetName . "/" . $this->config["main"]->statusfile);
             }
             $this->recordingInfo = json_decode($this->recordingInfo, true);
             $recorderArray = $this->getRecorderArray($this->recorders);
-            ffmpeg::__construct($this->assetName,$recorderArray);
+            ffmpeg::__construct(array("asset" => $this->assetName, "recorder_info" => $recorderArray));
         }
 
         public function __destruct()
@@ -32,7 +32,7 @@
 
         public function startMerge(){
             
-            $assetDir = $this->config["recordermaindir"] . $this->config["local_processing"] . "/" . $this->assetName;
+            $assetDir = $this->config["recordermaindir"] . $this->config["main"]->local_processing . "/" . $this->assetName;
             ffmpeg::generateConcatFile();
             sleep(3);
             file_put_contents($assetDir . "/post_process.log", "-- [" . date("d/m/Y - H:i:s",time()) ."] : Starting merge -> $this->recorders " . PHP_EOL, FILE_APPEND | LOCK_EX);
@@ -42,7 +42,7 @@
 
         public function startUploadToServer(){
             
-            $assetDir = $this->config["recordermaindir"] . $this->config["upload_to_server"] . "/" . $this->assetName;
+            $assetDir = $this->config["recordermaindir"] . $this->config["main"]->upload_to_server . "/" . $this->assetName;
 
             if(file_exists("$assetDir/download_request_dump.txt"))
                 unlink("$assetDir/download_request_dump.txt");
@@ -76,14 +76,14 @@
                 "record_type" => $record_type,
                 "record_date" => $record_date,
                 "course_name" => $this->recordingInfo["course"],
-                "php_cli" => $this->config["phpcli"],
-                "metadata_file" => $assetDir ."/" . $this->config["metadata"]
+                "php_cli" => $this->config["main"]->phpcli,
+                "metadata_file" => $assetDir ."/" . $this->config["main"]->metadata
             );
             if($camEnabled == true){
                 $cam_info = array(
-                    "ip" => $this->config["recorderip"],
-                    "protocol" => $this->config["downloadprotocol"],
-                    "username" => $this->config["apacheusername"],
+                    "ip" => $this->config["main"]->recorderip,
+                    "protocol" => $this->config["main"]->downloadprotocol,
+                    "username" => $this->config["main"]->apacheusername,
                     "filename" => $assetDir . "/cam" . ffmpeg::getRecordingExtension()
                 );
                 $downloadRequestArray["cam_info"] = serialize($cam_info);
@@ -91,15 +91,15 @@
 
             if($slideEnabled == true){
                 $slide_info = array(
-                    "ip" => $this->config["recorderip"],
-                    "protocol" => $this->config["downloadprotocol"],
-                    "username" => $this->config["apacheusername"],
+                    "ip" => $this->config["main"]->recorderip,
+                    "protocol" => $this->config["main"]->downloadprotocol,
+                    "username" => $this->config["main"]->apacheusername,
                     "filename" => $assetDir . "/slide" . ffmpeg::getRecordingExtension()
                 );
                 $downloadRequestArray["slide_info"] = serialize($slide_info);
             }
             $downloadRequestArray["recorder_version"] = "2.0";
-            file_put_contents("$assetDir/" . $this->config["request_dump"], var_export($downloadRequestArray, true) . PHP_EOL, FILE_APPEND);
+            file_put_contents("$assetDir/" . $this->config["main"]->request_dump, var_export($downloadRequestArray, true) . PHP_EOL, FILE_APPEND);
             $curl_success = strpos($this->requestUpload($this->config["ezcast_submit_url"], $downloadRequestArray), 'Curl error') === false;
             if(!$curl_success)
                 return "error";
@@ -144,13 +144,13 @@
             $logger->log(EventType::RECORDER_UPLOAD_TO_EZCAST, LogLevel::DEBUG, __FILE__ . " called with args: $asset", array(__FILE__), $asset);
 
             //move asset folder from upload_to_server to upload_ok dir
-            $ok = rename($this->config["recordermaindir"] . "/" .$this->config["upload_to_server"] . "/" . $asset,$this->config["recordermaindir"] . "/" .$this->config["upload_ok"] . "/" . $asset);
+            $ok = rename($this->config["recordermaindir"] . "/" .$this->config["main"]->upload_to_server . "/" . $asset,$this->config["recordermaindir"] . "/" .$this->config["main"]->upload_ok . "/" . $asset);
             if(!$ok) {
-                $logger->log(EventType::RECORDER_UPLOAD_TO_EZCAST, LogLevel::CRITICAL, "Could not move asset folder from " . $this->config["upload_to_server"] . " to " . $this->config["upload_ok"] . " dir (failed on local or on remote)", array(__FILE__), $asset);
+                $logger->log(EventType::RECORDER_UPLOAD_TO_EZCAST, LogLevel::CRITICAL, "Could not move asset folder from " . $this->config["main"]->upload_to_server . " to " . $this->config["main"]->upload_ok . " dir (failed on local or on remote)", array(__FILE__), $asset);
                 return false;
             }
             else{
-                $logger->log(EventType::TEST, LogLevel::INFO, "Local asset moved from " . $this->config["upload_to_server"] . " to " . $this->config["upload_ok"] . " dir", array(__FUNCTION__), $asset);
+                $logger->log(EventType::TEST, LogLevel::INFO, "Local asset moved from " . $this->config["main"]->upload_to_server . " to " . $this->config["main"]->upload_ok . " dir", array(__FUNCTION__), $asset);
                 return true;
             }
         }

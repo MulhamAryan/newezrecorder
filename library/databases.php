@@ -90,7 +90,7 @@ class SQLiteDatabase
             $this->create_database();
         }
 
-        if($config["debug_mode"])
+        if($config["main"]->debug_mode)
             $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
         self::$statements = [
@@ -357,7 +357,7 @@ class SQLiteDatabase
         $server_event->id                 = $recorder_event["id"];
         $server_event->asset              = $recorder_event["asset"];
         $server_event->origin             = "ezrecorder";
-        $server_event->asset_classroom_id = $config["classroom"];
+        $server_event->asset_classroom_id = $config["main"]->classroom;
         $server_event->asset_course       = $recorder_event["course"];
         $server_event->asset_author       = $recorder_event["author"];
         $server_event->asset_cam_slide    = $recorder_event["cam_slide"];

@@ -126,7 +126,7 @@ class ServersideLogEntry  {
         $this->sync_batch_size = 1000;
         $this->max_run_time = 86400; //run max 24 hours. This is to help when global_config has been changed, or if this file has been updated
         $this->max_failures_before_warning = 15;
-        $this->classroom = $config["classroom"];
+        $this->classroom = $config["main"]->classroom;
         $this->fill_event_type_by_id();
         $this->fill_level_name_by_id();
     }
@@ -206,7 +206,7 @@ class ServersideLogEntry  {
         if(Logger::$print_logs)
             echo $print_str . PHP_EOL;
 
-        if($config["debug_mode"]
+        if($config["main"]->debug_mode
             && $type != EventType::PHP //PHP events are already printed in custom_error_handling.php
             && (!isset($service) || $service == false) //some services will try to parse the response, and our <script> may interfere in this case
             && php_sapi_name() != "cli") //don't print in CLI

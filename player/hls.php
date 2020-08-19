@@ -14,7 +14,7 @@
 
     $type = $_GET["type"];
 
-    $hls_rep = $config["recordermaindir"] . $config["local_processing"] . "/" . $asset . "/" . $recorder ."/" . $type . "/" . $file;
+    $hls_rep = $config["recordermaindir"] . $config["main"]->local_processing . "/" . $asset . "/" . $recorder ."/" . $type . "/" . $file;
     if(file_exists($hls_rep))
         echo file_get_contents($hls_rep);
 

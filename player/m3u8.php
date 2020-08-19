@@ -6,7 +6,7 @@
 
     $asset = $_GET["asset"];
     $asset = preg_replace('/[^a-zA-Z0-9_-]/i', '_', $asset);
-    $assetDir = $config["recordermaindir"] . $config["local_processing"] . "/" . $asset;
+    $assetDir = $config["recordermaindir"] . $config["main"]->local_processing . "/" . $asset;
     $recorder = $_GET["recorder"];
     $possibleRecorder = array("camrecord","sliderecord"); //Temporary Patch//
     $type = $_GET["type"];

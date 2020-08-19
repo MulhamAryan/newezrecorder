@@ -6,6 +6,6 @@
     if($function == "init"){
         $_SESSION["user_login"] = $userNetid;
         $_SESSION["recorder_logged"] = true;
-        //include $config["controllers"] . "/init_recording.php";
+        //include $config["main"]->controllers . "/init_recording.php";
     }
 ?>

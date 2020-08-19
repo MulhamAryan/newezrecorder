@@ -8,7 +8,8 @@
             $infoRec = json_decode($infoRec, true);
 
             $recorderNumUrl = count($recorderInfo);
-            $val = '<script src="' . $config["curenttheme"] . '/js/player/player.js"></script>';
+            $val = '<script src="' . $config["curenttheme"] .'/js/player/hls.js"></script>';
+            $val .= '<script src="' . $config["curenttheme"] . '/js/player/player.js"></script>';
             $val .= '<script>';
             foreach ($recorderInfo as $recorderInfoUrlKey => $recorderInfoUrlValue) {
                 $val .= 'var url' . $recorderNumUrl . ' = "' . $config["playerlink"] . '/m3u8.php?asset=' . $infoRec["asset"] . '&recorder=' . $recorderInfoUrlValue["module"] . '&type=high";';
