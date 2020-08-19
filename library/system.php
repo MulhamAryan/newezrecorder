@@ -27,7 +27,7 @@
         }
 
         public function recStatus($array = array()){
-            $recordingStatus = $this->config["var"] . "/" . $this->config["statusfile"];
+            $recordingStatus = $this->config["var"] . "/" . $this->config["main"]->statusfile;
             $recordingNow =
                 array(
                     "user_login" => $array["userLogin"],
@@ -53,7 +53,7 @@
 
         public function getRecordingStatus($arrayName = ""){
 
-            $recordingStatus = $this->config["var"] . "/" . $this->config["statusfile"];
+            $recordingStatus = $this->config["var"] . "/" . $this->config["main"]->statusfile;
             if(file_exists($recordingStatus)) {
                 $recStatus = file_get_contents($recordingStatus);
                 if(empty($arrayName)){
@@ -91,7 +91,7 @@
 
         public function generateMetadataFile($metaInfo,$asset){
             
-            $metadataFile = $this->config["recordermaindir"] . $this->config["local_processing"] . "/". $asset . "/_" . $this->config["metadata"];
+            $metadataFile = $this->config["recordermaindir"] . $this->config["main"]->local_processing . "/". $asset . "/_" . $this->config["main"]->metadata;
 
             $xmlstr = "<?xml version='1.0' standalone='yes'?>\n<metadata>\n</metadata>\n";
             $xml = new SimpleXMLElement($xmlstr);
@@ -105,9 +105,9 @@
             if(empty($local) || empty($asset)){
                 $recordInfo = json_decode($this->getRecordingStatus());
                 $asset = $recordInfo->asset;
-                $local = $this->config["local_processing"];
+                $local = $this->config["main"]->local_processing;
             }
-            $metadata = simplexml_load_file($this->config["recordermaindir"] . "/" . $local . "/" . $asset . "/_" . $this->config["metadata"]);
+            $metadata = simplexml_load_file($this->config["recordermaindir"] . "/" . $local . "/" . $asset . "/_" . $this->config["main"]->metadata);
             return $metadata;
         }
 
@@ -127,10 +127,10 @@
             $varDir = $this->config["var"];
 
             if($publishin == "trash"){
-                if(file_exists($assetDir) && file_exists($varDir ."/" . $this->config["statusfile"])) {
-                    rename($varDir . "/" . $this->config["statusfile"], $assetDir . "/recordinginfo.json");
-                    rename($assetDir, $this->config["recordermaindir"] . $this->config["trash"] . "/" . $nowrecording["asset"]);
-                    $this->logger->log(EventType::TEST, LogLevel::INFO, "Asset moved to " .$this->config["trash"], array(__FUNCTION__), $nowrecording["asset"]);
+                if(file_exists($assetDir) && file_exists($varDir ."/" . $this->config["main"]->statusfile)) {
+                    rename($varDir . "/" . $this->config["main"]->statusfile, $assetDir . "/recordinginfo.json");
+                    rename($assetDir, $this->config["recordermaindir"] . $this->config["main"]->trash . "/" . $nowrecording["asset"]);
+                    $this->logger->log(EventType::TEST, LogLevel::INFO, "Asset moved to " .$this->config["main"]->trash, array(__FUNCTION__), $nowrecording["asset"]);
                     return true;
                 }
                 else{
@@ -146,13 +146,13 @@
                     $moderation = "false";
                 }
 
-                if(file_exists($varDir . "/" . $this->config["statusfile"])) {
+                if(file_exists($varDir . "/" . $this->config["main"]->statusfile)) {
                     $nowrecording["publishin"] = $moderation;
                     $newRecordingStatus = json_encode($nowrecording);
-                    file_put_contents($varDir . "/" . $this->config["statusfile"],$newRecordingStatus, LOCK_EX);
-                    rename($varDir . "/" . $this->config["statusfile"], $assetDir . "/info." . $this->config["statusfile"]);
+                    file_put_contents($varDir . "/" . $this->config["main"]->statusfile,$newRecordingStatus, LOCK_EX);
+                    rename($varDir . "/" . $this->config["main"]->statusfile, $assetDir . "/info." . $this->config["main"]->statusfile);
                 }
-                $startMerge = $this->config["phpcli"] . " " . $this->config["cli_post_process"] . " " . $nowrecording["asset"] . " " . $nowrecording["recorders"] . " startmerge > $assetDir/post_process.log 2>&1 &";
+                $startMerge = $this->config["main"]->phpcli . " " . $this->config["cli_post_process"] . " " . $nowrecording["asset"] . " " . $nowrecording["recorders"] . " startmerge > $assetDir/post_process.log 2>&1 &";
                 $this->bashCommandLine($startMerge);
             }
             else{
@@ -163,7 +163,7 @@
         public function isProcessRunning($pid) {
             if (!isset($pid) || $pid == '' || $pid == 0)
                 return false;
-            $output = $this->bashCommandLine($this->config["ps"] . " $pid");
+            $output = $this->bashCommandLine($this->config["main"]->ps . " $pid");
             return count($output) >= 2;
         }
 
@@ -181,8 +181,8 @@
         }
 
         public function getRecordingAssetDir(){
-            if(file_exists($this->config["recordermaindir"] . "/" . $this->config["local_processing"] . "/" . $this->getRecordingStatus("asset")))
-                return $this->config["recordermaindir"] . "/" . $this->config["local_processing"] . "/" . $this->getRecordingStatus("asset");
+            if(file_exists($this->config["recordermaindir"] . "/" . $this->config["main"]->local_processing . "/" . $this->getRecordingStatus("asset")))
+                return $this->config["recordermaindir"] . "/" . $this->config["main"]->local_processing . "/" . $this->getRecordingStatus("asset");
             else
                 return "no asset found";
         }
@@ -193,23 +193,23 @@
             if(count($time) > 1) {
                 $addTime = time() + ((int)$time[0] * 60 * 60) + ((int)$time[1] * 60);
                 $cronTime = date("i H d m w ",$addTime);
-                $cronCmd = "MAILTO=" . $this->config["adminmail"] . PHP_EOL;
+                $cronCmd = "MAILTO=" . $this->config["main"]->adminmail . PHP_EOL;
                 $cronCmd .= "HOME=/tmp" . PHP_EOL;
-                $cronCmd .= $cronTime . $this->config["phpcli"] . " " . $this->config["cli_auto_publish"] . " " . $this->getRecordingStatus("asset") . PHP_EOL;
-                file_put_contents( $this->getRecordingAssetDir() . "/" . $this->config["crontabuserfile"],$cronCmd);
-                $this->bashCommandLine($this->config["crontab"] . " " . $this->getRecordingAssetDir() . "/" . $this->config["crontabuserfile"]);
+                $cronCmd .= $cronTime . $this->config["main"]->phpcli . " " . $this->config["cli_auto_publish"] . " " . $this->getRecordingStatus("asset") . PHP_EOL;
+                file_put_contents( $this->getRecordingAssetDir() . "/" . $this->config["main"]->crontabuserfile,$cronCmd);
+                $this->bashCommandLine($this->config["main"]->crontab . " " . $this->getRecordingAssetDir() . "/" . $this->config["main"]->crontabuserfile);
             }
         }
 
         public function crontabReset(){
-            $this->bashCommandLine($this->config["crontab"] . " -r");
+            $this->bashCommandLine($this->config["main"]->crontab . " -r");
         }
 
         public function pingComponents($type){
             $type = $this->removeCharacters($type);
             $getRecorder = $this->getRecorderArray($type);
             if(!empty($getRecorder) && $getRecorder[0]["enabled"] == true){
-                $ch = curl_init($this->config["ping"]);
+                $ch = curl_init($this->config["main"]->ping);
                 curl_setopt($ch, CURLOPT_NOBODY, true);
                 curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
                 curl_exec($ch);
@@ -256,15 +256,15 @@
 
         public function initStreaming()
         {
-            $activeRecordersFile = $this->getRecordingAssetDir() . "/" . $this->config["statusfile"];
+            $activeRecordersFile = $this->getRecordingAssetDir() . "/" . $this->config["main"]->statusfile;
             $activeRecorders     = json_decode(file_get_contents($activeRecordersFile), true);
 
             foreach ($activeRecorders as $recorderKey => $recorderValue){
                 $streamingInfo = array(
                     "action"         => "streaming_init",
-                    "ip"             => $this->config["recorderip"],
-                    "protocol"       => $this->config["streamprotocol"],
-                    "module_quality" => $this->config["streamquality"],
+                    "ip"             => $this->config["main"]->recorderip,
+                    "protocol"       => $this->config["main"]->streamprotocol,
+                    "module_quality" => $this->config["main"]->streamquality,
                     "classroom"      => $this->config["classroom"],
                     "module_type"    => $this->patchRecordName($recorderKey),
                     "course"         => (string) $this->getMetadata()->course_name,
@@ -280,9 +280,9 @@
                 }
                 else {
                     foreach ($recorderValue as $quality) {
-                        $streamPid = "{$this->getRecordingAssetDir()}/{$recorderKey}/{$quality}.{$this->config["streamPid"]}";
-                        $streamLog = "{$this->getRecordingAssetDir()}/{$recorderKey}/{$quality}.{$this->config["streamLog"]}";
-                        $cmd = "{$this->config["phpcli"]} {$this->config["cli_stream_send"]} {$recorderKey} {$quality} > {$streamLog} 2>&1 < /dev/null & echo $! > {$streamPid}";
+                        $streamPid = "{$this->getRecordingAssetDir()}/{$recorderKey}/{$quality}.{$this->config["main"]->streamPid}";
+                        $streamLog = "{$this->getRecordingAssetDir()}/{$recorderKey}/{$quality}.{$this->config["main"]->streamLog}";
+                        $cmd = "{$this->config["main"]->phpcli} {$this->config["cli_stream_send"]} {$recorderKey} {$quality} > {$streamLog} 2>&1 < /dev/null & echo $! > {$streamPid}";
                         $this->bashCommandLine($cmd);
                         sleep(0.5);
                     }

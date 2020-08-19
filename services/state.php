@@ -1,7 +1,7 @@
 <?php
     include __DIR__ . "/../global_config.inc";
-    if(file_exists($config["var"] . "/" . $config["statusfile"])) {
-        $recordingInfo = json_decode(file_get_contents($config["var"] . "/" . $config["statusfile"]),true); //TODO there is a function system class can do that
+    if(file_exists($config["var"] . "/" . $config["main"]->statusfile)) {
+        $recordingInfo = json_decode(file_get_contents($config["var"] . "/" . $config["main"]->statusfile),true); //TODO there is a function system class can do that
         //PATCH
         if($recordingInfo["recording_status"] == "play")
             $recordingInfo["recording_status"] = "recording";

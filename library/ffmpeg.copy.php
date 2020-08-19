@@ -33,7 +33,7 @@
          * @var string
          */
 
-        public function __construct(array $ffmpeginfo)
+        public function __construct(string $asset,array $recorderarray = null, string $steaming = null)
         {
             parent::__construct();
             global $config;
@@ -45,18 +45,18 @@
             $this->logofile          = $this->config["main"]->webbasedir . "images/watermark.jpg"; // Watermark file
             $this->thread_queue      = "-thread_queue_size 127"; // Thread message queue blocking
             $this->max_thread        = 1; // Max thread for CPU Usages
-            $this->asset             = $ffmpeginfo["asset"]; // The asset name
+            $this->asset             = $asset; // The asset name
             $this->maxcall           = 3; // Max number of try record
             $this->exists_video      = 0; // Check if video exists
             $this->limit_duration    = " -t 12:00:00 "; // Max limit duration of one record
             $this->common_movie_name = $this->config["main"]->moviefile;
             $this->recordExtenstion  = ".mov";
             $this->recorderNumber    = 0;
-            $this->recorderArray     = $ffmpeginfo["recorder_info"];
+            $this->recorderArray     = $recorderarray;
             $this->recorderInfo      = array();
             $this->isRecording       = array();
             $this->isRecordingFile   = $this->config["main"]->statusfile;
-            $this->steaming          = ($ffmpeginfo["steaming"] == null ? "false" : "true");
+            $this->steaming          = $steaming;
             $this->folders = array(
                 "local_processing" => $this->recordingDir . $this->config["main"]->local_processing. "/",
                 "trash"            => $this->recordingDir . $this->config["main"]->trash . "/",
@@ -92,7 +92,7 @@
 
                     // Generate an start recording commands with different qualities
                     $this->recordingLaunch($this->asset, $recorderInfo["type"], $recorderInfo["module"], $qualityKey, $qualityValue);
-                    sleep(0.5);
+                    sleep(1);
                     if($this->steaming == "false") break; //Use break when we are not streaming we don't need to record mutli resolution at this moment :)
                 }
 
@@ -175,13 +175,15 @@
             }
             if ($type == "rtsp") {
                 include_once "ffmpeg/profiles/rtsp.php";
-                $pid_file = "{$working_dir}/{$qualityKey}/{$this->ffmpegPid}";
-                $ffmpeg_log = "{$working_dir}/{$qualityKey}/{$this->ffmpegLog}";
+                $pid_file = $working_dir . "/" . $qualityKey . "/$this->ffmpegPid";
+                $ffmpeg_log = $working_dir . "/" . $qualityKey . "/" . $this->ffmpegLog;
                 $recording_direcory = $this->folders["local_processing"] . $asset . "/" . $module . "/" . $qualityKey;
 
                 $parameters = array(
-                    "qualityValue"        => $qualityValue,
                     "quality"             => $qualityKey,
+                    "thread_queue"        => $this->thread_queue,
+                    "max_thread"          => $this->max_thread,
+                    "link"                => $qualityValue,
                     "recording_directory" => $recording_direcory,
                     "common_movie_name"   => $this->common_movie_name,
                     "logo_option"         => $insertLogo,

@@ -12,8 +12,8 @@
             global $config;
             global $lang;
 
-            if(file_exists($config["basedir"] . $config["templates"] . "/" . $tmpFile)){
-                return $config["basedir"] . $config["templates"] . "/" . $tmpFile;
+            if(file_exists($config["basedir"] . $config["main"]->templates . "/" . $tmpFile)){
+                return $config["basedir"] . $config["main"]->templates . "/" . $tmpFile;
             }
             else {
                 return "Error: template $tmpFile not found";

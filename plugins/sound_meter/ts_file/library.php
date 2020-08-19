@@ -14,8 +14,8 @@
             exec($cmd, $cmdout);
             preg_match_all('!\d+!', $cmdout[0], $matches);
             $counter = $matches[0][0];
-            $resultFile = $path . "/" . $config["moviefile"] . $counter . ".ts";
-            $ffmpegCmd = $config["ffmpegcli"] . " -i $resultFile -af 'volumedetect' -f null /dev/null 2>&1";
+            $resultFile = $path . "/" . $config["main"]->moviefile . $counter . ".ts";
+            $ffmpegCmd = $config["main"]->ffmpegcli . " -i $resultFile -af 'volumedetect' -f null /dev/null 2>&1";
             exec($ffmpegCmd, $cmdoutput, $returncode);
             return $this->extractVolume($cmdoutput);
         }

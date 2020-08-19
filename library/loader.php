@@ -1,5 +1,10 @@
 <?php
 
+    if($config["main"]->debug_mode) {
+        error_reporting(E_ALL | E_STRICT); // Only on debug mode !
+        ini_set('display_errors', '1'); // Only on debug mode !
+    }
+
     include "languages.php";
 
     include "system.php";
@@ -13,9 +18,9 @@
 
     include "logger/logger_recorder.php";
     include "ffmpeg.php";
-    include $config["basedir"] . $config["templates"] . "/template.class.php";
+    include $config["basedir"] . $config["main"]->templates . "/template.class.php";
     include "authentication.class.php";
-    include $config["basedir"] . $config["plugins"] . "/plugin_loader.php";
+    include $config["basedir"] . $config["main"]->plugins . "/plugin_loader.php";
 
     $auth = new Authentication();
 ?>

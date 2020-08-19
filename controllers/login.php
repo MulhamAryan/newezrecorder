@@ -14,7 +14,7 @@
                     $course = $checkLock["course"];
                     $start_time = date("d/m/Y H:i:s", $checkLock["init_time"]);
                     $logger->log(EventType::RECORDER_LOGIN, LogLevel::WARNING, "User " . $login["user_login"] . " tried to login but session was locked, asking him if he wants to interrupt the current record", array(basename(__FILE__)), $checkLock["asset"],$login["user_login"]);
-                    $_SESSION["forced_recorder_logged"] = md5($randomSecurityNumber * date("dmY"));
+                    $_SESSION["forced_recorder_logged"] = md5($config["main"]->randomsecurenumber * date("dmY"));
                     $_SESSION["forced_user_login"] = $login["user_login"];
                 }
                 else {

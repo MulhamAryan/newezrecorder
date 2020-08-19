@@ -16,7 +16,7 @@
 
     if($argc != 6){
         echo 'Wrong method : ' . PHP_EOL;
-        echo "Command should be : " . $config["phpcli"] . " " . basename(__FILE__) . " <username> <courseid> <recorder> <stopafter> '<title>'" . PHP_EOL;
+        echo "Command should be : " . $config["main"]->phpcli . " " . basename(__FILE__) . " <username> <courseid> <recorder> <stopafter> '<title>'" . PHP_EOL;
         echo "-> <username>  : usernetID should exists in user list." . PHP_EOL;
         echo "-> <courseid>  : Should be in user course list." . PHP_EOL;
         echo "-> <title>     : Course title should be between two simple quote to take spaces 'example of title'" . PHP_EOL;
@@ -65,7 +65,7 @@
 
         echo "Creating new record : " . $asset . PHP_EOL;
 
-        $ffmpeg = new ffmpeg($asset,$recorderInfo);
+        $ffmpeg = new ffmpeg(array("asset" => $asset, "recorder_info" => $recorderInfo));
         $ffmpeg->launch();
 
         $nowrecording = json_decode($system->getRecordingStatus(),true);
@@ -95,7 +95,7 @@
 
         $metaInfo = array(
             "course_name" => "" . $course . "",
-            "origin" => "" . $config["classroom"] . "",
+            "origin" => "" . $config["main"]->classroom . "",
             "title" => "" . $title . "",
             "description" => " ",
             "record_type" => "" . $record_type . "",
@@ -120,7 +120,7 @@
         $logger->log(EventType::RECORDER_CREATE_CRONTAB, LogLevel::NOTICE, "Cronjob is enabled : stop after $autostop and publish in private album", array(basename(__FILE__)), $asset);
 
         $getRunningRecorder = $ffmpeg->getRunningRecorder();
-        $logger->log(EventType::ASSET_CREATED, LogLevel::NOTICE,"Starting recorders by $username request. Requested type: $getRunningRecorder", array(basename(__FILE__)), $asset, $username, $rec , $course, $config["classroom"]);
+        $logger->log(EventType::ASSET_CREATED, LogLevel::NOTICE,"Starting recorders by $username request. Requested type: $getRunningRecorder", array(basename(__FILE__)), $asset, $username, $rec , $course, $config["main"]->classroom);
         echo "- Recording started now :)";
         */
     }

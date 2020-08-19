@@ -1,7 +1,7 @@
 <?php
     include __DIR__ . "/../global_config.inc";
     $logger       = new RecorderLogger();
-    include  $config["lib"] . "/cli.class.php";
+    include  $config["main"]->lib . "/cli.class.php";
 
     $asset        = $system->getRecordingStatus("asset");
     $course       = $system->getRecordingStatus("course");
@@ -48,7 +48,7 @@
         else
             $recordingStatus = "open";
         //END OF THE PATCH
-        if(!file_exists($config["var"] . "/" . $config["statusfile"])){
+        if(!file_exists($config["var"] . "/" . $config["main"]->statusfile)){
             $status = "";
         }
         else{
@@ -99,7 +99,7 @@
         static $segments_array = array();
         static $previous_status;
 
-        $m3u8_file = $system->getRecordingAssetDir() . "/" . $module . "/" . $quality . "/" . $config["moviefile"] . ".m3u8";
+        $m3u8_file = $system->getRecordingAssetDir() . "/" . $module . "/" . $quality . "/" . $config["main"]->moviefile . ".m3u8";
         if (file_exists($m3u8_file)) {
             clearstatcache(false, $m3u8_file);
             // verifies that the m3u8 file has been modified
@@ -150,7 +150,7 @@
                         $previous_status = $status;
                         // adapts the .ts segment to deliver, according to the current
                         // status of the recorder
-                        $ts_folder = $config["lib"] . "/ffmpeg/streaming/videos/";
+                        $ts_folder = $config["main"]->lib . "/ffmpeg/streaming/videos/";
                         switch ($status) {
                             case 'open' :
                                 $m3u8_segment = $ts_folder . "init.ts";

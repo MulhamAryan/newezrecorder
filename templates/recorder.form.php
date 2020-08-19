@@ -64,6 +64,7 @@
                         }
                         ?>
                     </div>
+                    <?php if($config["main"]->advancedOptions == true){ ?>
                     <hr>
                     <label class="switch">
                         <input type="checkbox" name="advancedoptions" id="autostop" value="1" <?php echo $tmp->isChecked($lastAdvancedOptions,1);?> />
@@ -78,6 +79,7 @@
                             <label for="publicalbum" class="publicalbum"><input type="radio" name="publishin" value="2" id="publicalbum" <?php echo $tmp->isChecked($lastAutoPublishIn,2) ?> required/> <?php echo $lang["public_album"];?> </label>
                         </div>
                     </div>
+                    <?php } ?>
                 </div>
                 <hr>
                 <div class="float-right">
@@ -86,7 +88,7 @@
                 </div>
                 <div class="float-left">
                         <?php
-                            if($config["enablestreaming"] == true){
+                            if($config["main"]->enablestreaming == true){
                         ?>
                         <label class="switch">
                             <input type="checkbox" id="streaming" name="streaming" value="1">

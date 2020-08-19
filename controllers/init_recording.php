@@ -29,7 +29,8 @@
         $recorderInfo = $system->getRecorderArray($recorder);
 
         if ($system->getRecordingStatus() == false) {
-            $ffmpeg = new ffmpeg($asset,$recorderInfo,$streaming);
+
+            $ffmpeg = new ffmpeg(array("asset" => $asset, "recorder_info" => $recorderInfo, "streaming" => $streaming));
             $ffmpeg->launch();
             $getRunningRecorder = $ffmpeg->getRunningRecorder();
             if($ffmpeg->isRunning("init_check") == "all") {
@@ -69,7 +70,7 @@
             // END OF THE PATCH
             $metaInfo = array(
                 "course_name" => "" . $course . "",
-                "origin" => "" . $config["classroom"] . "",
+                "origin" => "" . $config["main"]->classroom . "",
                 "title" => "" . $title . "",
                 "description" => " ",
                 "record_type" => "" . $record_type . "",

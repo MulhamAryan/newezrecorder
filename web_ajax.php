@@ -6,11 +6,11 @@
 
     if(empty($_SESSION["language"])){
         $_SESSION["language"] = "fr";
-        include $config["languages"] . "/francais.php";
+        include $config["main"]->languages . "/francais.php";
     }
     else{
         $selectedLang = $_SESSION["language"];
-        include $config["languages"] . "/" . $languagesList[$selectedLang]["file"];
+        include $config["main"]->languages . "/" . $languagesList[$selectedLang]["file"];
     }
 
     $input = array_merge($_GET, $_POST);

@@ -1,12 +1,12 @@
 <?php
     include __DIR__ . "/../global_config.inc";
     $array = array(
-        "classroom" => $config["classroom"],
-        "ip"        => $config["recorderip"],
+        "classroom" => $config["main"]->classroom,
+        "ip"        => $config["main"]->recorderip,
         "date"      => time(),
         "info"      => array()
     );
-    $scanRecordMainDir = array($config["local_processing"],$config["upload_to_server"]);
+    $scanRecordMainDir = array($config["main"]->local_processing,$config["main"]->upload_to_server);
     foreach ($scanRecordMainDir as $smd){
         $scanDir = exec("ls " . $config["recordermaindir"] . "/" . $smd,$scanDirOutput,$stat2);
         $array["info"][$smd] = $scanDirOutput;

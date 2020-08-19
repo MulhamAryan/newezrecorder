@@ -54,7 +54,7 @@
 
             $recorderInfo = $system->getRecorderArray($recorder);
 
-            $ffmpeg = new ffmpeg($asset,$recorderInfo);
+            $ffmpeg = new ffmpeg(array("asset" => $asset, "recorder_info" => $recorderInfo));
 
             if(!empty($recordingInfo["start_time"]) && !empty($recordingInfo["auto_stop"])) {
                 $recordingInfo["stop_time"] = explode(":", $recordingInfo["stop_time"]);

@@ -1,6 +1,6 @@
 <?php
 
-    if($_SESSION["forced_recorder_logged"] == md5($randomSecurityNumber * date("dmY")) && !empty($_SESSION["forced_user_login"])){
+    if($_SESSION["forced_recorder_logged"] == md5($config["main"]->randomsecurenumber * date("dmY")) && !empty($_SESSION["forced_user_login"])){
 
         $nowrecording = json_decode($system->getRecordingStatus(),true);
         $logger->log(EventType::RECORDER_FORCE_QUIT, LogLevel::NOTICE, "Record was forcefully cancelled", array(basename(__FILE__)), $nowrecording["asset"]);

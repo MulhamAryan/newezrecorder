@@ -2,7 +2,7 @@
     $type = $system->removeCharacters($input["type"]);
     $getRecorder = $system->getRecorderArray($type);
     if(!empty($getRecorder) && $getRecorder[0]["enabled"] == true){
-        $ch = curl_init($config["ping"]);
+        $ch = curl_init($config["main"]->ping);
         curl_setopt($ch, CURLOPT_NOBODY, true);
         curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
         curl_exec($ch);
