@@ -2,11 +2,12 @@
   {
     "enabled":true,
     "module":"camrecord",
-    "ip":"",
+    "ip":"10.0.2.3",
     "type":"rtsp",
     "quality":
     {
-      "high":"jvc:0000@192.168.0.10:554/stream -r 30 -crf 1 -profile:v main -preset faster -b:v 1M -maxrate 1M -bufsize 2M -c:v libx264"
+      "high": "-f rtsp -rtsp_transport tcp -thread_queue_size 127 -threads 1 -fflags nobuffer -flags low_delay -strict experimental -r 25 -i rtsp://10.0.2.3:554/1 -c:v copy -c:a copy",
+      "low": "-f rtsp -rtsp_transport tcp -thread_queue_size 127 -threads 1 -fflags nobuffer -flags low_delay -strict experimental -r 25 -i rtsp://10.0.2.3:554/2 -c:v copy -c:a copy"
     },
     "icon":"film",
     "tempname":"Camera"
@@ -14,10 +15,11 @@
   {
     "enabled":true,
     "module":"sliderecord",
-    "ip":"",
+    "ip":"10.0.2.2",
     "type":"rtsp",
     "quality": {
-      "high":"[ip] -c:v copy -c:a copy"
+      "high": "-f rtsp -rtsp_transport tcp -thread_queue_size 127 -threads 1 -fflags nobuffer -flags low_delay -strict experimental -r 25 -i rtsp://10.0.2.2/stream1 -c:v copy -c:a copy",
+      "low": "-f rtsp -rtsp_transport tcp -thread_queue_size 127 -threads 1 -fflags nobuffer -flags low_delay -strict experimental -r 25 -i rtsp://10.0.2.2/stream1 -c:v copy -c:a copy"
     },
     "icon":"image",
     "tempname":"Slide"
