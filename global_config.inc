@@ -52,7 +52,7 @@
     $config["cli_sync_logs"]         = $config["basedir"] . "/" . $config["main"]->clidir . "/cli_sync_logs.php"; // This is the log synchronize file
 
     // Main server urls ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-    $config["ezmanagerurl"]          = "http://" . $config["main"]->serverurl . "/ezmanager/"; // Main url of the server
+    $config["ezmanagerurl"]          = "https://" . $config["main"]->serverurl . "/ezmanager/"; // Main url of the server
     $config["ezcast_submit_url"]     = $config["ezmanagerurl"] . "recorder/index.php"; // Command file for recording options
     $config["ezcast_logs_url"]       = $config["ezmanagerurl"] . "recorder/logs.php"; // Log file for recording options
     $config["last_log_sent_get_url"] = $config["ezcast_logs_url"] . "?action=last_log_sent&source=".$config["main"]->classroom; // Log file for recording options
