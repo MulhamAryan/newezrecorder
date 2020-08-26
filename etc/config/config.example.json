@@ -36,7 +36,7 @@
   "streamprotocol" : "http",
   "streamquality" : "highlow",
   "debug_mode" : false,
-  "ffmpegcli" : "/usr/local/ffmpeg/ffmpeg",
+  "ffmpegcli" : "/usr/bin/ffmpeg",
   "ffmpegPid" : "init.pid",
   "ffmpegLog" : "ffmpeg.log",
   "streamPid" : "_stream.pid",
