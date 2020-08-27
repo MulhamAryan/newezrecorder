@@ -74,6 +74,8 @@ class LoggerSyncDaemon {
         curl_setopt($handle, CURLOPT_POST, 1); //activate POST parameters
         curl_setopt($handle, CURLOPT_POSTFIELDS, $post_array);
         curl_setopt($handle, CURLOPT_RETURNTRANSFER, 1); //don't send answer to stdout but in returned string
+        curl_setopt($handle, CURLOPT_SSL_VERIFYPEER, FALSE);
+        curl_setopt($handle, CURLOPT_SSL_VERIFYHOST,  2);
         curl_setopt($handle, CURLOPT_CONNECTTIMEOUT, 10); 
         curl_setopt($handle, CURLOPT_TIMEOUT, 30); //timeout in seconds
 
