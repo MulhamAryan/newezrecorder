@@ -330,7 +330,13 @@ class SQLiteDatabase
     {
         global $config;
 
-        $last_id_sent = @file_get_contents($config["last_log_sent_get_url"]);
+        $param = array(
+            "ssl"=>array(
+                "verify_peer"=>false,
+                "verify_peer_name"=>false,
+            ),
+        );
+        $last_id_sent = @file_get_contents($config["last_log_sent_get_url"],false,$param);
 
         if ($last_id_sent == false) {
             //logger may not yet be init // $this->log(EventType::LOGGER, LogLevel::ERROR, "Failed to get last log sent from $this->last_log_sent_get_url", array("RecorderLogger"));
