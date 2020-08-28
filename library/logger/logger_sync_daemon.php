@@ -17,7 +17,7 @@ class LoggerSyncDaemon {
         global $config;
         global $system;
         if($this->is_running() == false) {
-            $system->bashCommandLine($config["main"]->phpcli . " ". $this->cli_sync_daemon . " > " . $config["var"] . "/log_sync_daemon 2>&1 &");
+            $system->bashCommandLine($config["main"]->phpcli . " ". $config["cli_sync_logs"] . " > " . $config["var"] . "/log_sync_daemon 2>&1 &");
         }
     }
     
@@ -82,7 +82,7 @@ class LoggerSyncDaemon {
         $result = curl_exec($handle);
 
         if(!$result !== false) {
-            $logger->log(EventType::RECORDER_LOG_SYNC, LogLevel::ERROR, "Failed to exec curl for " . $config["log_push_url"] . " Result $result", array(basename(__FILE__)));
+            $logger->log(EventType::RECORDER_LOG_SYNC, LogLevel::ERROR, "curl error : " . curl_error($handle) . "", array(basename(__FILE__)));
             return 4;
         }
 

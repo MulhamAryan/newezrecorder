@@ -337,7 +337,6 @@ class SQLiteDatabase
             ),
         );
         $last_id_sent = @file_get_contents($config["last_log_sent_get_url"],false,stream_context_create($param));
-
         if ($last_id_sent == false) {
             //logger may not yet be init // $this->log(EventType::LOGGER, LogLevel::ERROR, "Failed to get last log sent from $this->last_log_sent_get_url", array("RecorderLogger"));
             return false;

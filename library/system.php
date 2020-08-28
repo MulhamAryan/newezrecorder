@@ -232,9 +232,12 @@
             $ch = curl_init($server_url);
             curl_setopt($ch, CURLOPT_POST, 1); //activate POST parameters
             curl_setopt($ch, CURLOPT_POSTFIELDS, $recorder_array);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); //don't send answer to stdout but in returned string
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE); //don't send answer to stdout but in returned string
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYHOST,  FALSE);
             curl_setopt($ch, CURLOPT_CONNECTTIMEOUT ,30);
             curl_setopt($ch, CURLOPT_TIMEOUT, 30); //timeout in seconds
+
             $res = curl_exec($ch);
             $curlinfo = curl_getinfo($ch);
             curl_close($ch);
