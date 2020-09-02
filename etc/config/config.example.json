@@ -4,7 +4,7 @@
   "apacheusername" : "podclient",
   "recorderip" : "xx.xx.xx.xx",
   "htdocspath" : "ezrecorder",
-  "serverurl" : "podcast.ulb.ac.be",
+  "serverurl" : "https://podcast.ulb.ac.be",
   "webbasedir" : "/var/www/html/",
   "recorderdata" : "/var/www/recorderdata/",
   "controllers"  : "controllers",

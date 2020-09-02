@@ -35,4 +35,3 @@
     }
 
     include $tmp->loadTempFile("footer.php");
-?>

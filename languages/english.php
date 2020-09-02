@@ -11,8 +11,8 @@
     $lang["no_login_found"] = "Error incorrect NetID !";
     $lang["help"] = "Help";
     $lang["need_help"] = "Need help ?";
-    $lang["forgot_password_text"] = "forgot password text";
-    $lang["no_courses_found"] = "No course available, <a href=\"?acttion=help&select=no_courses\" target=\"_blank\">Click here for more information</a>";
+    $lang["forgot_password_text"] = "Please contact : 02.650.29.26";
+    $lang["no_courses_found"] = "No course available, <a href=\"?action=help&select=no_courses\" target=\"_blank\">Click here for more information</a>";
     $lang["date_hour"] = "Date and hour";
     $lang["author"] = "Author";
     $lang["course"] = "Course";
@@ -49,5 +49,4 @@
     $lang["options"] = "Options";
     $lang["recorder_in_use"] = "Attention: recording in progress! \\nDo you want to stop the actually recording in progress and start a new one ?\\n";
     //New translation goes here
-
 ?>

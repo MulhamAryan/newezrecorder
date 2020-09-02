@@ -358,6 +358,17 @@ class SQLiteDatabase
     {
         global $config;
 
+        /* ---- PATCH -----*/
+        if($recorder_event["cam_slide"] == "camrecord")
+            $recorder_event["cam_slide"] = "cam";
+
+        elseif($recorder_event["cam_slide"] == "sliderecord")
+            $recorder_event["cam_slide"] = "slide";
+
+        else
+            $recorder_event["cam_slide"] = "camslide";
+        /* ---Patch END ---*/
+
         $server_event                     = new ServersideLogEntry();
         $server_event->id                 = $recorder_event["id"];
         $server_event->asset              = $recorder_event["asset"];

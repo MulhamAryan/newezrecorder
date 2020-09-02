@@ -109,7 +109,41 @@
             foreach ($this->getIsRecFileContent() as $recinfoKey => $recinfoValue){
                 $recDir = $this->assetDir . $recinfoKey;
                 $cut_list = trim(file_get_contents($recDir . "/_cut_list.txt"));
-                $cut_list_file = explode(PHP_EOL, $cut_list);
+                $line = preg_split("/((\r?\n)|(\r\n?))/", $cut_list);
+
+                $count = 0;
+                for ($i = 1; $i < count($line); $i++) {
+                    $export = explode(":", $line[$i]);
+                    if ($i < count($line) - 1) {
+                        $exportplus = explode(":", $line[$i + 1]);
+                    }
+                    if ($export[0] == "play" or $export[0] == "resume") {
+                        $array[$count][] = $export[3];
+                        if ($exportplus[0] == "pause") {
+                            $array[$count][] = $exportplus[3];
+                            $count++;
+                        }
+                        else{
+                            $array[$count][] = $exportplus[3];
+                            break;
+                        }
+                    }
+                }
+
+                foreach ($recinfoValue as $qualityMerge) {
+                    $qualityDir = $recDir . "/" . $qualityMerge . "/";
+                    foreach ($array as $l) {
+                        unset($concatTextFile);
+                        $concatTextFile = "";
+                        for ($i = $l[0]; $i <= $l[1]; $i++) {
+                            $concatTextFile .= "file '" . $qualityDir . $this->common_movie_name . $i . ".ts'" . PHP_EOL;
+                        }
+                        file_put_contents($recDir . "/" . $qualityMerge . "concat.txt", $concatTextFile, FILE_APPEND | LOCK_EX);
+                        file_put_contents($recDir . "/init.log", "-- [" . date("d/m/Y - H:i:s",time()) ."] : Concat file `". $qualityMerge . "concat.txt` generated for $recinfoKey $qualityMerge successfully" . PHP_EOL, FILE_APPEND | LOCK_EX);
+                    }
+                    break; //Use this to stop concat of other qualities not needed
+                }
+                /*$cut_list_file = explode(PHP_EOL, $cut_list);
 
                 foreach ($cut_list_file as $content){
                     $contentExplode = explode(":",$content);
@@ -132,7 +166,7 @@
                     file_put_contents($recDir . "/" . $qualityMerge . "concat.txt", $concatTextFile, FILE_APPEND | LOCK_EX);
                     file_put_contents($recDir . "/init.log", "-- [" . date("d/m/Y - H:i:s",time()) ."] : Concat file `". $qualityMerge . "concat.txt` generated for $recinfoKey $qualityMerge successfully" . PHP_EOL, FILE_APPEND | LOCK_EX);
                     break; //Use this to stop concat of other qualities not needed
-                }
+                }*/
             }
         }
 
