@@ -2,8 +2,12 @@
     /* ------
         Refracted EZrecorder Beta Test Version
     * -------*/
+    //ini_set('display_errors', 1);
+    //ini_set('display_startup_errors', 1);
+    //error_reporting(E_ALL);
+
     date_default_timezone_set("Europe/Brussels");
-    $config_version = "20200080601";
+    $config_version = "20200083101";
     $input = array_merge($_GET, $_POST);
     if(isset($input['action']) && !empty($input['action'])) {
         $action = $input['action'];
@@ -33,15 +37,15 @@
     $config["courselist"]            = $config["basedir"] . "etc/users/courselist.php"; // local users courses
 
     // Main EZrecorder configuration -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-    $config["main"]->lib                   = $config["basedir"] . "/" . $config["main"]->lib . "/";
-    $config["main"]->controllers           = $config["basedir"] . "/" . $config["main"]->controllers . "/";
+    $config["main"]->lib             = $config["basedir"] . "/" . $config["main"]->lib . "/";
+    $config["main"]->controllers     = $config["basedir"] . "/" . $config["main"]->controllers . "/";
     $config["ajax"]                  = $config["main"]->controllers . "/" . $config["main"]->ajaxdir; // Ajax files controllers
     $config["recorder"]              = $config["basedir"] . "/etc/config/recorder.json"; // Recorders information and qualities can be changed from this files
     $config["listplugins"]           = $config["basedir"] . "/etc/config/plugins.json"; // Active plugins and plugins list are stocked in this file
     $config["languagesls"]           = $config["basedir"] . "/etc/config/languages.json"; // Active plugins and plugins list are stocked in this file
     $config["alert_msg_file"]        = $config["var"] . "/alert.json"; // When this file exist it mean there is an alert for the user before starting recording
     $config["database_file"]         = $config["var"] . "/db.sqlite"; // SQLite database file
-    $config["main"]->languages             = $config["basedir"] . "/" . $config["main"]->languages; // All languages files directory
+    $config["main"]->languages       = $config["basedir"] . "/" . $config["main"]->languages; // All languages files directory
     $config["curenttheme"]           = $config["main"]->templates . "/" . $config["main"]->theme; // Main theme directory
     $config["playerlink"]            = $config["recorderurl"] . "/" . $config["main"]->player; // M3U8 direct player while recording
 
@@ -52,7 +56,7 @@
     $config["cli_sync_logs"]         = $config["basedir"] . "/" . $config["main"]->clidir . "/cli_sync_logs.php"; // This is the log synchronize file
 
     // Main server urls ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-    $config["ezmanagerurl"]          = "https://" . $config["main"]->serverurl . "/ezmanager/"; // Main url of the server
+    $config["ezmanagerurl"]          = $config["main"]->serverurl . "/ezmanager/"; // Main url of the server
     $config["ezcast_submit_url"]     = $config["ezmanagerurl"] . "recorder/index.php"; // Command file for recording options
     $config["ezcast_logs_url"]       = $config["ezmanagerurl"] . "recorder/logs.php"; // Log file for recording options
     $config["last_log_sent_get_url"] = $config["ezcast_logs_url"] . "?action=last_log_sent&source=".$config["main"]->classroom; // Log file for recording options
@@ -65,7 +69,6 @@
 
     // Recorders and qualities info getter -------------------------------------------------
     $recorder_modules = json_decode(file_get_contents($config["recorder"]),true);
-
 
     // Plugins list info getter ------------------------------------------------------------
     $plugins_list     = json_decode(file_get_contents($config["listplugins"]),true);

@@ -11,8 +11,8 @@
     $lang["no_login_found"] = "Onjuist NetID !";
     $lang["help"] = "Helpen";
     $lang["need_help"] = "Hulp nodig ?";
-    $lang["forgot_password_text"] = "forgot password text";
-    $lang["no_courses_found"] = "Er is geen cursus beschikbaar op uw lijst, <a href=\"?acttion=help&select=no_courses\" target=\"_blank\">Click here for more information</a>";
+    $lang["forgot_password_text"] = "Gelieve contact op te nemen : 02.650.29.26";
+    $lang["no_courses_found"] = "Er is geen cursus beschikbaar op uw lijst, <a href=\"?action=help&select=no_courses\" target=\"_blank\">Click here for more information</a>";
     $lang["date_hour"] = "Datum en uur";
     $lang["author"] = "Auteur";
     $lang["course"] = "Cursus";
@@ -49,5 +49,4 @@
     $lang["options"] = "Opties";
     $lang["recorder_in_use"] = "Attentie: bezig met opnemen! \\nWilt u de lopende opname stoppen en een nieuwe beginnen ?\\n";
     //New translation goes here
-
 ?>

@@ -38,19 +38,21 @@ $(document).ready( function () {
 
 //Recording fonctions
 function recordStatus(fnct){
-    if(fnct == "play"){
-        $("#play").css({display:'none'});
-        $("#pause").fadeIn();
-    }
-    else if(fnct == "pause"){
-        $("#pause").css({display:'none'});
-        $("#play").fadeIn();
-    }
     $.ajax({
         type: 'GET',
         url: "ajax.php?action=recording&status=" + fnct,
         cache: false,
         timeout: 10000,
+        success: function(){
+            if(fnct === "play"){
+                $("#play").css({display:'none'});
+                $("#pause").fadeIn();
+            }
+            else if(fnct === "pause"){
+                $("#pause").css({display:'none'});
+                $("#play").fadeIn();
+            }
+        },
         error: function(){
             alert("Warning: This action could not be executed.\n\nVerify that you are still connected to PODC and refresh the page in your web browser (ctrl+R / cmd+R) before retrying.");
         }

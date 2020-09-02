@@ -11,8 +11,8 @@
     $lang["no_login_found"] = "Votre NetID est incorrect !";
     $lang["help"] = "Aide";
     $lang["need_help"] = "Besoin d'aide ?";
-    $lang["forgot_password_text"] = "forgot password text";
-    $lang["no_courses_found"] = "Aucun cours disponible, <a href=\"?acttion=help&select=no_courses\" target=\"_blank\">Cliquez ici pour plus d'information</a>";
+    $lang["forgot_password_text"] = "Veuillez contacter le numéro suivant : 02.650.29.26";
+    $lang["no_courses_found"] = "Aucun cours disponible, <a href=\"?action=help&select=no_courses\" target=\"_blank\">Cliquez ici pour plus d'information</a>";
     $lang["date_hour"] = "Date et heure";
     $lang["author"] = "Auteur";
     $lang["course"] = "Cours";
@@ -48,4 +48,5 @@
     $lang["start_new"] = "Commencer un nouvel enregistrement";
     $lang["options"] = "Options";
     $lang["recorder_in_use"] = "Attention : enregistrement en cours! \\nVoulez-vous arrêter l'enregistrement en cours et en lancer un nouveau ?\\n";
+    //New translation goes here
 ?>

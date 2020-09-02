@@ -111,6 +111,15 @@
             return $metadata;
         }
 
+        public function getMetadaFile(string $local = null, string $asset = null){
+            if(empty($local) || empty($asset)){
+                $recordInfo = json_decode($this->getRecordingStatus());
+                $asset = $recordInfo->asset;
+                $local = $this->config["main"]->local_processing;
+            }
+            return  $this->config["recordermaindir"] . "/" . $local . "/" . $asset . "/_" . $this->config["main"]->metadata;
+        }
+
         public function bashCommandLine($command){
             exec($command, $output);
             $execArray = array(
@@ -149,6 +158,11 @@
                 if(file_exists($varDir . "/" . $this->config["main"]->statusfile)) {
                     $nowrecording["publishin"] = $moderation;
                     $newRecordingStatus = json_encode($nowrecording);
+                    if($this->getMetadata()->moderation != $moderation){
+                        $metadata = simplexml_load_file($this->getMetadaFile());
+                        $metadata->moderation = $moderation;
+                        $metadata->asXML($this->getMetadaFile());
+                    }
                     file_put_contents($varDir . "/" . $this->config["main"]->statusfile,$newRecordingStatus, LOCK_EX);
                     rename($varDir . "/" . $this->config["main"]->statusfile, $assetDir . "/info." . $this->config["main"]->statusfile);
                 }
