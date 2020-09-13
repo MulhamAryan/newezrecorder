@@ -55,14 +55,13 @@
                             if($recorderValue["enabled"] == true) {
                                 ?>
                                 <div style="display: inline-block;">
-                                    <input type="radio" name="recorder" value="<?php echo $recorderValue["module"]; ?>" id="r<?php echo $i; ?>" <?php echo $tmp->isChecked($lastRecorder,$recorderValue["module"]);?> required/>
+                                    <input type="radio" name="recorder" value="<?php echo $recorderValue["module"]; ?>" id="r<?php echo $i; ?>" <?php echo $tmp->isChecked($lastRecorder,$recorderValue["module"]); if($disableFullList != 0) echo "checked";?> required/>
                                     <label class="radio" for="r<?php echo $i; ?>"><i class="fas fa-<?php echo $recorderValue["icon"]; ?>"></i><br><?php echo $recorderValue["tempname"]; ?></label>
                                 </div>
                                 <?php
                             }
                             $i++;
-                        }
-                        ?>
+                        } ?>
                     </div>
                     <?php if($config["main"]->advancedOptions == true){ ?>
                     <hr>
