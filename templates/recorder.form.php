@@ -47,7 +47,7 @@
                     <div class="customRadio">
                         <?php $i = 1; if($disableFullList == 0){?>
                             <div style="display: inline-block">
-                                <input type="radio" name="recorder" value="all" id="r<?php echo $i;?>" <?php echo $tmp->isChecked($lastRecorder,"all");?>/>
+                                <input type="radio" name="recorder" value="all" id="r<?php echo $i;?>" <?php echo $tmp->isChecked($lastRecorder,"all");?> required/>
                                 <label class="radio" for="r<?php echo $i;?>"><i class="fas fa-photo-video"></i><br>Camera + Slide</label>
                             </div>
                             <?php $i++; }
@@ -55,7 +55,7 @@
                             if($recorderValue["enabled"] == true) {
                                 ?>
                                 <div style="display: inline-block;">
-                                    <input type="radio" name="recorder" value="<?php echo $recorderValue["module"]; ?>" id="r<?php echo $i; ?>" <?php echo $tmp->isChecked($lastRecorder,$recorderValue["module"]);?>/>
+                                    <input type="radio" name="recorder" value="<?php echo $recorderValue["module"]; ?>" id="r<?php echo $i; ?>" <?php echo $tmp->isChecked($lastRecorder,$recorderValue["module"]);?> required/>
                                     <label class="radio" for="r<?php echo $i; ?>"><i class="fas fa-<?php echo $recorderValue["icon"]; ?>"></i><br><?php echo $recorderValue["tempname"]; ?></label>
                                 </div>
                                 <?php
