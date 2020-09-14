@@ -8,6 +8,6 @@ if($argc != 2) {
 
 $presetName = $argv[1];
 
-require(__DIR__ . '/../library.php');
+$ptz = require(__DIR__ . '/../library.php');
 
-$CamController->positionSave($presetName);
+var_dump($ptz->positionSave($presetName));

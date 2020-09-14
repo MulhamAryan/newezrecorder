@@ -2,9 +2,6 @@
     /* ------
         Refracted EZrecorder Beta Test Version
     * -------*/
-    //ini_set('display_errors', 1);
-    //ini_set('display_startup_errors', 1);
-    //error_reporting(E_ALL);
 
     date_default_timezone_set("Europe/Brussels");
     $config_version = "20200083101";
@@ -72,5 +69,11 @@
 
     // Plugins list info getter ------------------------------------------------------------
     $plugins_list     = json_decode(file_get_contents($config["listplugins"]),true);
+
+    if($config["main"]->debug_mode == true){
+        ini_set('display_errors', 1);
+        ini_set('display_startup_errors', 1);
+        error_reporting(E_ALL);
+    }
 
     include $config["main"]->lib . "/loader.php";
