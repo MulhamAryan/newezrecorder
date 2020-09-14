@@ -7,7 +7,10 @@ if($argc != 2) {
 
 $presetName = $argv[1];
 
-require(__DIR__ . '/lib_cam.php');
+require(__DIR__ . '/../library.php');
 
-Logger::$print_logs = true;
-cam_ptzoptics_pos_delete($presetName);
+//Logger::$print_logs = true;
+
+$ptz = require(__DIR__ . '/../library.php');
+
+$ptz->positionDelete($presetName);
