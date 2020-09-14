@@ -106,8 +106,8 @@ class PtzController extends PTZOptics_CGI_API
 
 }
 
-//$CamController = new PtzController();
+$CamController = new PtzController();
 
-//return $CamController;
+return $CamController;
 
 ?>
