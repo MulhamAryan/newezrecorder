@@ -11,6 +11,6 @@ require(__DIR__ . '/../library.php');
 
 //Logger::$print_logs = true;
 
-$ptz = require(__DIR__ . '/../library.php');
+$CamController = new PtzController();
 
-$ptz->positionDelete($presetName);
+var_dump($CamController->positionDelete($presetName));

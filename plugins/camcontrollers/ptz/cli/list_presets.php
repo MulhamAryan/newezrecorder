@@ -1,6 +1,6 @@
 <?php
 
-$ptz = require(__DIR__ . '/../library.php');
-
-$presets = $ptz->getPresets();
+require(__DIR__ . '/../library.php');
+$CamController = new PtzController();
+$presets = $CamController->getPresets();
 var_dump($presets);
