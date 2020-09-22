@@ -427,7 +427,6 @@
         {
             foreach ($this->getIsRecFileContent() as $recinfoKey => $recinfoValue){
                 $recDir = $this->assetDir . $recinfoKey;
-
                 $cut_list = trim(file_get_contents($recDir . "/_cut_list.txt"));
                 $line = preg_split("/((\r?\n)|(\r\n?))/", $cut_list);
                 $line[0] = explode(":",$line[0]);
