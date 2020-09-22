@@ -128,6 +128,7 @@
                 "answer" => $output
             );
             file_put_contents($this->config["machinelog"] . "/cmd/" . date("d-m-Y",time()) . ".json", json_encode($execArray) . PHP_EOL, FILE_APPEND | LOCK_EX);
+            chmod($this->config["machinelog"] . "/cmd/" . date("d-m-Y",time()) . ".json",0777);
             return $output;
         }
 

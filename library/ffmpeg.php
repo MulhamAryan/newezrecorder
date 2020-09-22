@@ -106,6 +106,9 @@
         }
 
         public function generateConcatFile(){
+
+            $this->repairBeforeProcess(); // Launch this function to repair some errors before processing
+
             foreach ($this->getIsRecFileContent() as $recinfoKey => $recinfoValue){
                 $recDir = $this->assetDir . $recinfoKey;
                 $cut_list = trim(file_get_contents($recDir . "/_cut_list.txt"));
@@ -184,6 +187,7 @@
 
                 mkdir($this->assetDir . $module . "/" . $quality, 0777); //Create Quality Stream directory
             }
+            chmod($this->assetDir,0777);
         }
 
         // This function is used to create all the log files
@@ -418,6 +422,41 @@
             }
 
         }
+        //This function repair cutlist if the user forgot to click on record before processing
+        public function repairCutlist()
+        {
+            foreach ($this->getIsRecFileContent() as $recinfoKey => $recinfoValue){
+                $recDir = $this->assetDir . $recinfoKey;
+                $cut_list = trim(file_get_contents($recDir . "/_cut_list.txt"));
+                $line = preg_split("/((\r?\n)|(\r\n?))/", $cut_list);
+                $line[0] = explode(":",$line[0]);
+                $line[1] = explode(":",$line[1]);
+
+                if($line[0][0] == "init" and $line[1][0] == "stop"){
+                    var_dump($recDir);
+                    $new_file_value = "";
+                    $file_line = preg_split("/((\r?\n)|(\r\n?))/", $cut_list);
+                    foreach ($file_line as $line_number => $line_value){
+                        //var_dump($line_value);
+                        $new_file_value .= $line_value . PHP_EOL;
+                        if($line_number == 0){
+                            $newline = str_replace("init","play",$new_file_value);
+                            $newline = str_replace(":1",":3",$newline);
+                            $new_file_value .= $newline;
+                        }
+                    }
+                    file_put_contents($recDir . "/_cut_list.txt", $new_file_value,LOCK_EX);
+                    unset($new_file_value);
+                }
+
+            }
+        }
+
+        //This function should content all the repair functions inside
+        public function repairBeforeProcess()
+        {
+            $this->repairCutlist();
+        }
 
         public function getStreamPidFileName(){
             return $this->streamPid;
@@ -426,6 +465,7 @@
         public function getStreamLogFileName(){
             return $this->streamLog;
         }
+
     }
 
 ?>
