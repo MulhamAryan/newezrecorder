@@ -433,7 +433,6 @@
                 $line[1] = explode(":",$line[1]);
 
                 if($line[0][0] == "init" and $line[1][0] == "stop"){
-                    var_dump($recDir);
                     $new_file_value = "";
                     $file_line = preg_split("/((\r?\n)|(\r\n?))/", $cut_list);
                     foreach ($file_line as $line_number => $line_value){
