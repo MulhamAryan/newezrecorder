@@ -6,3 +6,4 @@ etc/config/config.json
 etc/users/admin.inc
 etc/users/courselist.php
 etc/users/htpasswd
+plugins/camcontrollers/ptz/presets
