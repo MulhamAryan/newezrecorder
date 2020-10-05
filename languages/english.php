@@ -6,13 +6,13 @@
     $lang["password"] = "Password";
     $lang["login"] = "Sign-in";
     $lang["forgot_password"] = "Forgot your password ?";
-    $lang["not_in_admin_list"] = "isn't on admin list";
+    $lang["not_in_admin_list"] = "isn\'t on admin list";
     $lang["wrong_password"] = "Error incorrect password!";
     $lang["no_login_found"] = "Error incorrect NetID !";
     $lang["help"] = "Help";
     $lang["need_help"] = "Need help ?";
     $lang["forgot_password_text"] = "Please contact : 02.650.29.26";
-    $lang["no_courses_found"] = "No course available, <a href=\"?action=help&select=no_courses\" target=\"_blank\">Click here for more information</a>";
+    $lang["no_courses_found"] = "No course available, <a href=\"?action=help&select=no_courses\" target=\"_blank\" style=\"color: #000000\">Click here for more information</a>";
     $lang["date_hour"] = "Date and hour";
     $lang["author"] = "Author";
     $lang["course"] = "Course";
@@ -47,6 +47,11 @@
     $lang["published_in_public"] = "Record saved and being processed. <br/> It will be added to your public album once the operation is complete.";
     $lang["start_new"] = "Start a new recording session";
     $lang["options"] = "Options";
-    $lang["recorder_in_use"] = "Attention: recording in progress! \\nDo you want to stop the actually recording in progress and start a new one ?\\n";
+    $lang["recorder_in_use"] = "Attention: recording in progress! <br>Do you want to stop the actually recording in progress and start a new one ?<br>";
+    $lang["please_wait"] = "Please wait ...";
+    $lang["check_internet_connection"] = "Problem during connection please check your internet connection.";
+    $lang["login_success"] = "You have successfully logged in";
+    $lang["yes_stop_record"] = "<a href=\"?action=recording_force_quit\"><button type=\"button\" class=\"btn btn-danger\">Yes stop current recording session !</button></a>";
     //New translation goes here
+
 ?>

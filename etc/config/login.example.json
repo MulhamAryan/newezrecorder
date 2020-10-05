@@ -1,0 +1,10 @@
+[
+  {
+    "enabled": {
+      "filesystem": true,
+      "curlsystem": false,
+      "cas": false,
+      "ldap": false
+    }
+  }
+]

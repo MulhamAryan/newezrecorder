@@ -12,7 +12,7 @@
     $lang["help"] = "Helpen";
     $lang["need_help"] = "Hulp nodig ?";
     $lang["forgot_password_text"] = "Gelieve contact op te nemen : 02.650.29.26";
-    $lang["no_courses_found"] = "Er is geen cursus beschikbaar op uw lijst, <a href=\"?action=help&select=no_courses\" target=\"_blank\">Click here for more information</a>";
+    $lang["no_courses_found"] = "Er is geen cursus beschikbaar op uw lijst, <a href=\"?action=help&select=no_courses\" target=\"_blank\" style=\"color: #000000\">Klik hier voor meer informatie</a>";
     $lang["date_hour"] = "Datum en uur";
     $lang["author"] = "Auteur";
     $lang["course"] = "Cursus";
@@ -47,6 +47,10 @@
     $lang["published_in_public"] = "Record opgeslagen en wordt verwerkt. <br/> Het wordt aan uw publiek album toegevoegd zodra de bewerking is voltooid.";
     $lang["start_new"] = "Start een nieuwe record sessie";
     $lang["options"] = "Opties";
-    $lang["recorder_in_use"] = "Attentie: bezig met opnemen! \\nWilt u de lopende opname stoppen en een nieuwe beginnen ?\\n";
+    $lang["recorder_in_use"] = "Attentie: bezig met opnemen! <br>Wilt u de lopende opname stoppen en een nieuwe beginnen ?<br>";
+    $lang["please_wait"] = "Een ogenblikje a.u.b ...";
+    $lang["check_internet_connection"] = "Probleem tijdens het verbinden, controleer uw internetverbinding.";
+    $lang["login_success"] = "Je bent succesvol ingelogd";
+    $lang["yes_stop_record"] = "<a href=\"?action=recording_force_quit\"><button type=\"button\" class=\"btn btn-danger\">Ja, stop de huidige opnamesessie!</button></a>";
     //New translation goes here
 ?>

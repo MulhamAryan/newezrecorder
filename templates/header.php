@@ -11,6 +11,7 @@
 
     <script src="<?php echo $config["curenttheme"];?>/js/jquery.js"></script>
     <script src="<?php echo $config["curenttheme"];?>/js/jquery-ui.js"></script>
+    <script src="<?php echo $config["curenttheme"];?>/js/rsa.js"></script>
     <script src="<?php echo $config["curenttheme"];?>/js/ezrecorder.js"></script>
 
     <link rel="stylesheet" href="<?php echo $config["curenttheme"];?>/css/bootstrap.min.css">

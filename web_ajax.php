@@ -37,6 +37,9 @@
         if($action == "api"){
             include $config["ajax"] . "/api.php";
         }
+        elseif($action == "login"){
+            include $config["ajax"] . "/login.php";
+        }
         else{
             header("LOCATION:index.php?ajax_not_found");
         }
