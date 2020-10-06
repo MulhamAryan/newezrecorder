@@ -1,5 +1,46 @@
+<script>
+    $(document).ready(function () {
+        $("#userlogin").submit(function (event) {
+            var public_key = "<?php echo $public_key_content; ?>";
+            // Encrypt with the public key...
+            var encrypt = new JSEncrypt();
+            encrypt.setPublicKey(public_key);
+            var answer  = "";
+            var message = $("#message");
+            var username = $("#username").val();
+            var password = $("#userpassword").val();
+            var encryptedUsername = encrypt.encrypt(username);
+            var encryptedPassword = encrypt.encrypt(password);
+
+            answer = '<div class="alert alert-warning" id="wait"><div class="spinner-border text-secondary" style="vertical-align: middle" role="status"></div><span style="vertical-align: middle"><?php echo $lang["please_wait"]; ?></span></div>';
+            message.html(answer);
+            $.ajax({
+                url: 'ajax.php?action=login',
+                type: 'POST',
+                cache: false,
+                data: {username:encryptedUsername,password:encryptedPassword},
+                dataType:"json",
+                success: function (data = []) {
+                    console.log(data);
+                    if(data["success"] === 1) {
+                        answer = '<div class="alert alert-success"><?php echo $lang["login_success"];?></div>';
+                        window.location.href = "index.php";
+                    }
+                    else{
+                        answer = '<div class="alert alert-danger">' + data["errorMsg"] + '</div>';
+                    }
+                    message.html(answer);
+                },
+                error: function(){
+                    message.html('<div class="alert alert-danger"><?php echo $lang["check_internet_connection"];?></div>');
+                }
+            });
+            return false;
+        });
+    });
+</script>
 <div class="login">
-    <form method="post" action="?action=login">
+    <form action="" id="userlogin">
         <div class="fields">
             <div class="divlogo">
                 <img src="<?php echo $config["curenttheme"] . '/img/ezrecorder.png';?>" style="width: 80%">
@@ -31,15 +72,16 @@
                 <hr>
             </div>
             <div id="loginForm">
+                <div id="message"></div>
                 <div class="form-group">
                     <label for="userlogin"><i class="fas fa-user"></i> <?php echo $lang["netid"];?> : </label>
-                    <input type="text" name="usernetid" autofocus="false" autocapitalize="off" autocorrect="off" tabindex="1" id="userlogin" placeholder="<?php echo $lang["netid"];?>">
+                    <input type="text" name="usernetid" autofocus="false" autocapitalize="off" autocorrect="off" tabindex="1" id="username" placeholder="<?php echo $lang["netid"];?>">
                 </div>
                 <div class="form-group">
                     <label for="userpassword"><i class="fas fa-lock"></i> <?php echo $lang["password"];?> : </label>
                     <input type="password" name="userpassword" autofocus="false"  autocapitalize="off" autocorrect="off" tabindex="2" id="userpassword" placeholder="<?php echo $lang["password"];?>">
                 </div>
-                <input type="submit" name="userlogin" value="<?php echo $lang["login"];?>" class="btn btn-success">
+                <input type="submit" name="userlogin" value="<?php echo $lang["login"];?>" class="btn btn-success" id="userlogin">
                 <br><br>
                 <div class="float-left">
                     <i class="fas fa-globe-europe"></i>

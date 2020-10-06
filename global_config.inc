@@ -40,6 +40,7 @@
     $config["recorder"]              = $config["basedir"] . "/etc/config/recorder.json"; // Recorders information and qualities can be changed from this files
     $config["listplugins"]           = $config["basedir"] . "/etc/config/plugins.json"; // Active plugins and plugins list are stocked in this file
     $config["languagesls"]           = $config["basedir"] . "/etc/config/languages.json"; // Active plugins and plugins list are stocked in this file
+    $config["loginsystem"]           = $config["basedir"] . "/etc/config/login.json"; // Configure the different login systems
     $config["alert_msg_file"]        = $config["var"] . "/alert.json"; // When this file exist it mean there is an alert for the user before starting recording
     $config["database_file"]         = $config["var"] . "/db.sqlite"; // SQLite database file
     $config["main"]->languages       = $config["basedir"] . "/" . $config["main"]->languages; // All languages files directory
@@ -56,6 +57,7 @@
     $config["ezmanagerurl"]          = $config["main"]->serverurl . "/ezmanager/"; // Main url of the server
     $config["ezcast_submit_url"]     = $config["ezmanagerurl"] . "recorder/index.php"; // Command file for recording options
     $config["ezcast_logs_url"]       = $config["ezmanagerurl"] . "recorder/logs.php"; // Log file for recording options
+    $config["ezcast_login_url"]      = $config["ezmanagerurl"] . "recorder/ezrecorder_login.php"; // Log file for recording options
     $config["last_log_sent_get_url"] = $config["ezcast_logs_url"] . "?action=last_log_sent&source=".$config["main"]->classroom; // Log file for recording options
     $config["log_push_url"]          = $config["ezcast_logs_url"] . "?action=push_logs"; // Log file for recording options
 

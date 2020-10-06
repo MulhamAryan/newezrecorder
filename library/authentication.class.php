@@ -23,72 +23,71 @@
         }
 
         //Check user information while login
-        public function checkUserInfo(string $username, string $password)
-        {
+        public function checkUserInfo(string $username, string $password){
             global $config;
             global $lang;
 
-            $admin = array();
-            $users = array();
+            require "encryption.class.php";
+            $enc = new Encryption();
 
-            // We could get a login of type "real_login/user_login"
-            // In that case, we split it into two different variables
-            if (strpos($username, '/') !== false) {
-                list($real_login, $user_login) = explode('/', $username);
-            } else {
-                $real_login = $username;
-                $user_login = $username;
-            }
-
-            // If there was a real_login and a user_login, that means somone is trying to take another's identity.
-            // The only persons allowed to do that are admins so we check if $real_login is in admin list
-            require_once $config["adminlist"];
-            if (($real_login != $user_login) && (!isset($admin[$real_login]) || !$admin[$real_login])) {
-                $ret["success"] = 0;
-                $ret["errorMsg"] = $real_login . " " . $lang["not_in_admin_list"];
-                return $ret;
-            }
-            else {
-                // 1) First we check that the user is in the .htpasswd file and has the right login/password combination
-                // For that, we read the entire .htpasswd
-                $htpasswd = file($config["passwordfile"]);
-                foreach ($htpasswd as $line) {
-                    // The information is stored as login:password in .htaccess, so it's easy
-                    // to retrieve using an explode
-                    list($flogin, $fpasswd) = explode(':', $line);
-                    if ($flogin == $real_login) {
-                        // We crypt the user-provided password to check if it's equal to the one
-                        // stored in the htpasswd
-                        $salt = substr($fpasswd, 0, 2);
-                        $cpasswd = crypt($password, $salt);
-                        $fpasswd = rtrim($fpasswd);
-
-                        // If not, that means the user has entered a wrong password. We don't log them in.
-                        if ($cpasswd != $fpasswd) {
-                            $ret["success"] = 0;
-                            $ret["errorMsg"] = $lang["wrong_password"];
-                            return $ret;
-                        } // In this case, we retrieve their information from pwfile, and return them.
-                        else {
-                            require_once $config["courselist"];
-                            $ret = $users[$user_login]; // We return all the information from courselist.php ...
-                            $ret['user_login'] = $user_login;
-                            $ret['real_login'] = $real_login; // ... To which we add the real_login and user_login
-                            $ret['full_name'] = $users[$user_login]['full_name'];
-                            $ret['email'] = $users[$user_login]['email'];
-                            $ret["success"] = 1;
-                            return $ret;
+            $loginFiles = json_decode(file_get_contents($config["loginsystem"]),true);
+            foreach ($loginFiles as $login){
+                foreach ($login as $type){
+                    if($type["enabled"] == true){
+                        $answer = require_once "authentication/" . $type["file"];
+                        if($answer["success"] == 1) {
+                            $createSession = $this->createSession($answer);
+                            break; //If information found
                         }
                     }
                 }
+            }
 
-                // If we arrive here, that means there is no user with the login provided
-                $ret["success"] = 0;
-                $ret["errorMsg"] = $lang["no_login_found"];
-                return $ret;
+            if($createSession == "create_session") //If there is no live session and user are able to use the system
+            {
+                return $answer;
+            }
+            elseif ($createSession["error"] == "live_session") //If there is a live session send confirmation message
+            {
+                $answer["success"] = 0;
+                $answer["errorMsg"] = nl2br($lang["recorder_in_use"] . " " . $lang["author"] . " : " . $createSession["current_user"] . "\r\n " . $lang["course"] . " : " . $createSession["course"] . "\r\n " . $lang["date_hour"] . " : " . $createSession["start_time"] . "\r\n" . $lang["yes_stop_record"]);
+                return $answer;
+            }
+            else{
+                $answer["success"] = 0;
+                $answer["errorMsg"] = $lang["no_courses_found"];
+                return $answer;
             }
         }
 
+        //Create user session
+        public function createSession($session = array()){
+            global $system;
+            global $config;
+            if($session["success"] == 1 && !empty($session["course_list"])){
+                $checkLock = json_decode($system->getRecordingStatus(),true);
+                $this->createUserCourseList($session["course_list"]);
+
+                if($checkLock != false && $checkLock["user_login"] != $session["user_login"]) {
+                    $checkAnswer["current_user"] = $checkLock["user_login"];
+                    $checkAnswer["course"]       = $checkLock["course"];
+                    $checkAnswer["start_time"]   = date("d/m/Y H:i:s", $checkLock["init_time"]);
+                    $checkAnswer["error"]        = "live_session";
+                    $_SESSION["forced_recorder_logged"] = md5($config["main"]->randomsecurenumber * date("dmY"));
+                    $_SESSION["forced_user_login"] = $session["user_login"];
+                    return $checkAnswer;
+                }
+                else {
+                    $_SESSION["user_login"] = $session["user_login"];
+                    $_SESSION["recorder_logged"] = true;
+                    return "create_session";
+                }
+            }
+            else{
+                session_destroy();
+                return false;
+            }
+        }
         //Get user session information
         public function userSession(string $parameter){
             if($parameter == "is_logged"){
@@ -112,6 +111,11 @@
             }
         }
 
+        //Create user course list
+        public function createUserCourseList($courseList = array()){
+            $_SESSION["course_list"] = $courseList;
+        }
+
         //Get user information and user courses
         public function getUserInfo(string $parameter,$user,$info = null){
             //global $logger;
@@ -125,23 +129,7 @@
                 return $users[$user][$info];
             }
             elseif($parameter == "courses"){
-
-                include $config["courselist"];
-                if(empty($user))
-                    $user = $this->userSession("logged_user");
-
-                if(!isset($course)) {
-                    //$logger->log(EventType::RECORDER_LOGIN, LogLevel::WARNING, "Could not get any course from file " . $config["courselist"] . ". Did the server pushed the course list?", array(__FUNCTION__));
-                    return array();
-                }
-
-                if(isset($course[$user]) && $info == null)
-                    return $course[$user];
-
-                elseif($info != null)
-                    return $course[$user][$info];
-
-                return array();
+                return $_SESSION["course_list"];
             }
             else{
                 return false;
