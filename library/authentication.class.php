@@ -26,6 +26,7 @@
         public function checkUserInfo(string $username, string $password){
             global $config;
             global $lang;
+            $createSession = "";
 
             require "encryption.class.php";
             $enc = new Encryption();
