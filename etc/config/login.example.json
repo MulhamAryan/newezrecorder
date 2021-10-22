@@ -1,10 +1,20 @@
 [
   {
-    "enabled": {
-      "filesystem": true,
-      "curlsystem": false,
-      "cas": false,
-      "ldap": false
+    "filesystem": {
+      "enabled": true,
+      "file": "filesystem.php"
+    },
+    "curlsystem": {
+      "enabled": true,
+      "file": "curlsystem.php"
+    },
+    "cas": {
+      "enabled": false,
+      "file": "cas.php"
+    },
+    "ldap": {
+      "enabled": false,
+      "file": "ldap.php"
     }
   }
 ]
